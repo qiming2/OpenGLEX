@@ -121,7 +121,7 @@ int main(void)
         "layout(location = 0) out vec4 color;\n"
         "void main()\n"
         "{\n"
-        "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "   color = vec4(0.1, 0.5, 0.8, 1.0);\n"
         "}\n";
 
 
