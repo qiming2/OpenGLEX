@@ -1,9 +1,25 @@
 
 #include <GL/glew.h>
-#include <iostream>
 #include <GLFW/glfw3.h>
 
-static unsigned int CompileShader(unsigned int type, const std::string& source) {
+#include <iostream>
+#include <fstream>
+
+static void ParseShader(const std::string& filePath) 
+{
+    std::ifstream stream(filePath);
+
+    std::string line;
+    while (getline(stream, line)) {
+        if (line.find("#shader") != std::string::npos) {
+
+        }
+    }
+}
+
+
+static unsigned int CompileShader(unsigned int type, const std::string& source) 
+{
     // Create the shader object with the corresponding type like Vertex shader or fragment shader
     unsigned int id = glCreateShader(type);
     const char* src = source.c_str();
@@ -20,7 +36,8 @@ static unsigned int CompileShader(unsigned int type, const std::string& source) 
     // A way to get status for a specific operation that has been done with opengl
     glGetShaderiv(id, GL_COMPILE_STATUS, &result);
     
-    if (result == GL_FALSE) {
+    if (result == GL_FALSE) 
+    {
         int length;
         // getting message from opengl
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
@@ -37,7 +54,8 @@ static unsigned int CompileShader(unsigned int type, const std::string& source) 
     return id;
 }
 
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
+static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) 
+{
     unsigned int program = glCreateProgram();
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
@@ -81,7 +99,8 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
 
-    float position[6] = {
+    float position[6] = 
+    {
         -0.5f, -0.5f,
          0.0f,  0.5f,
          0.5f, -0.5f,
@@ -103,26 +122,9 @@ int main(void)
     // Needs to enable the vertex attri
     glEnableVertexAttribArray(0);
 
-    // Write shaders
+    // Load shaders from file
 
-    // Better to write in a file and load them into c++ string
-    std::string vertexShader =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) in vec4 position;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = position;\n"
-        "}\n";
-
-    std::string fragmentShader =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) out vec4 color;\n"
-        "void main()\n"
-        "{\n"
-        "   color = vec4(0.1, 0.5, 0.8, 1.0);\n"
-        "}\n";
+    
 
 
     unsigned int shader = CreateShader(vertexShader, fragmentShader);
@@ -143,7 +145,8 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
     }
-
+    // Free memory of the shader program
+    glDeleteProgram(shader);
     glfwTerminate();
     return 0;
 }
