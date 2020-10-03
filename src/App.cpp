@@ -4,17 +4,51 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <sstream>
 
-static void ParseShader(const std::string& filePath) 
+struct ShaderProgramSource
+{
+    std::string VertexSource;
+    std::string FragmentSource;
+};
+
+static ShaderProgramSource ParseShader(const std::string& filePath) 
 {
     std::ifstream stream(filePath);
 
-    std::string line;
-    while (getline(stream, line)) {
-        if (line.find("#shader") != std::string::npos) {
+    enum class ShaderType
+    {
+        NONE = -1,
+        VERTEX = 0,
+        FRAGMENT = 1,
+    };
 
+    std::string line;
+    std::stringstream ss[2];
+    ShaderType type = ShaderType::NONE;
+    while (getline(stream, line)) {
+        if (line.find("#shader") != std::string::npos) 
+        {
+            if (line.find("vertex") != std::string::npos)
+            {
+                // Set mode to vertex
+                type = ShaderType::VERTEX;
+            }
+            else if (line.find("fragment") != std::string::npos)
+            {
+                // Set mode to fragment
+                type = ShaderType::FRAGMENT;
+
+            }
+        }
+        else
+        {
+            std::cout << line << std::endl;
+            ss[(int)type] << line << '\n';
         }
     }
+    return { ss[0].str(), ss[1].str() };
 }
 
 
@@ -125,9 +159,14 @@ int main(void)
     // Load shaders from file
 
     
+    ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
 
+    std::cout << "Vertex: " << std::endl;
+    std::cout << source.VertexSource << std::endl;
+    std::cout << "Fragment: " << std::endl;
+    std::cout << source.FragmentSource << std::endl;
 
-    unsigned int shader = CreateShader(vertexShader, fragmentShader);
+    unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
 
     // bind shader or select the shader to use
     glUseProgram(shader);
