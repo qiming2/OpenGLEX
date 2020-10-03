@@ -70,7 +70,7 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
     // A way to get status for a specific operation that has been done with opengl
     glGetShaderiv(id, GL_COMPILE_STATUS, &result);
     
-    if (result == GL_FALSE) 
+    if (result == GL_FALSE)
     {
         int length;
         // getting message from opengl
@@ -133,11 +133,17 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
 
-    float position[6] = 
+    float position[] = 
     {
         -0.5f, -0.5f,
-         0.0f,  0.5f,
          0.5f, -0.5f,
+         0.5f,  0.5f,
+        -0.5f,  0.5f,
+    };
+
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0,
     };
     // Creating buffer and getting an index
     unsigned int buffer;
@@ -146,7 +152,16 @@ int main(void)
     // bind buffer since we are going to work on it
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     // Pass and store the data t othe buffer
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), position, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), position, GL_STATIC_DRAW);
+
+    // Creating index buffer and getting an index
+    unsigned int ibo;
+    glGenBuffers(1, &ibo);
+
+    // bind buffer since we are going to work on it
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+    // Pass and store the data t othe buffer
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
     // Creates the vertex attribute like position, color, etc
     // index of the attri, how many components are the attribute, type of the component,
@@ -177,7 +192,7 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         // mode; start index of the enabled arrays, number of indices to be rendered
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
