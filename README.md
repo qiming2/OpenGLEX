@@ -100,7 +100,6 @@ glUseProgram(shader);
 ```
 
 - Then we can use index buffer in order to save memory, for example, we have two triangles that share some of the same vertexes. In this case, we don't need to store duplicate data but we'd rather use the same data again
-
 ```
 unsigned int indices[] = {
         0, 1, 2,
@@ -116,3 +115,27 @@ glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STAT
 // Draw call
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 ```
+
+- Compatible debugging! In order to use the glGetError to pinpoint the exact line of code that emits the error, we need to clear any error code staying in the error list in opengl by using a while or for loop before a gl function call, and then we place a glGetError right after the gl function we want to debug. Here for the sake of simplicity, we also used macro, which is not the best way but simple and straightforward
+```
+#define ASSERT(x) if ((!x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+    x;\
+    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+static void GLClearError()
+{
+    while (glGetError() != GL_NO_ERROR);
+}
+static bool GLLogCall(const char* function, const char* file, int line)
+{
+    while (GLenum error = glGetError())
+    {
+        std::cout << "[OpenGL Error] (" << error << "): " << function <<
+            " " << file << ":" << line << std::endl;
+        return false;
+    }
+    return true;
+}
+```
+
+- 
