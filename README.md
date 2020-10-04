@@ -137,5 +137,5 @@ static bool GLLogCall(const char* function, const char* file, int line)
     return true;
 }
 ```
-
-- 
+Later development would have corresponding detailed comments in code,
+you can check it out in the actual cpp files.
