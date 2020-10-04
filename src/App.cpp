@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 
-#define ASSERT(x) if ((!x)) __debugbreak();
+#define ASSERT(x) if ((!(x))) __debugbreak();
 #define GLCall(x) GLClearError();\
     x;\
     ASSERT(GLLogCall(#x, __FILE__, __LINE__))
@@ -207,14 +207,38 @@ int main(void)
     // bind shader or select the shader to use
     glUseProgram(shader);
 
+    // Send data from cpu to gpu or to shader program
+    
+    // First retriving location of the specified variable location
+    // then we can send data to the location with corresponding data
+    // int this case, we have a vec4 which we need to pick glUniform4f to
+    // send 4 floats
+    int location = glGetUniformLocation(shader, "u_Color");
+    ASSERT(location != -1);
+    glUniform4f(location, 0.9f, 0.9f, 0.7f, 1.0f);
+
+    float r = 0.0f;
+    float increment = 0.01f;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         GLClearError();
+
+        // animate the color
+        glUniform4f(location, r, 0.6f, 0.8f, 1.0f);
+        
+        if (r > 1.0f || r < 0.0f)
+            increment = -increment;
+
+        r += increment;
         // mode; start index of the enabled arrays, number of indices to be rendered
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
+        // type of indices in this case unsigned int, and pointer to the array of
+        // indices
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
