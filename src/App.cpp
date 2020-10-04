@@ -6,27 +6,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
-#define ASSERT(x) if ((!(x))) __debugbreak();
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-
-static void GLClearError()
-{
-    while (glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall(const char* function, const char* file, int line)
-{
-    while (GLenum error = glGetError())
-    {
-        std::cout << "[OpenGL Error] (" << error << "): " << function << 
-            " " << file << ":" << line << std::endl;
-        return false;
-    }
-    return true;
-}
+#include "Renderer.h"
+#include "IndexBuffer.h"
+#include "VertexBuffer.h"
 
 struct ShaderProgramSource
 {
@@ -160,139 +142,129 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-
-    float position[] = 
     {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f,
-    };
+        float position[] =
+        {
+            -0.5f, -0.5f,
+             0.5f, -0.5f,
+             0.5f,  0.5f,
+            -0.5f,  0.5f,
+        };
 
-    unsigned int indices[] = {
-        0, 1, 2,
-        2, 3, 0,
-    };
+        unsigned int indices[] = {
+            0, 1, 2,
+            2, 3, 0,
+        };
 
-    // In core profile, we need to bound a vertex array object
-    // to a vertexattriLayout
-    // we can create different vaos for each of geometry we want to
-    // draw, and we can basically switch between vaos instead of
-    // needing to bind different buffers and attributelayout every time
-    // we want to draw something differnt
+        // In core profile, we need to bound a vertex array object
+        // to a vertexattriLayout
+        // we can create different vaos for each of geometry we want to
+        // draw, and we can basically switch between vaos instead of
+        // needing to bind different buffers and attributelayout every time
+        // we want to draw something differnt
 
-    // Performance wise, it is difficult to detemine which way is better
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    // Creating buffer and getting an index
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-
-    // bind buffer since we are going to work on it
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    // Pass and store the data t othe buffer
-    glBufferData(GL_ARRAY_BUFFER,  4 * 2 * sizeof(float), position, GL_STATIC_DRAW);
-
-    // Creating index buffer and getting an index
-    unsigned int ibo;
-    glGenBuffers(1, &ibo);
-
-    // bind buffer since we are going to work on it
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    // Pass and store the data t othe buffer
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
-
-    // Creates the vertex attribute like position, color, etc
-    // index of the attri, how many components are the attribute, type of the component,
-    // bytes away from next the same attribute, bytes away from the next attribute
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
-    // Needs to enable the vertex attri
-    glEnableVertexAttribArray(0);
-
-    // Load shaders from file
-
-    
-    ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
-
-    std::cout << "Vertex: " << std::endl;
-    std::cout << source.VertexSource << std::endl;
-    std::cout << "Fragment: " << std::endl;
-    std::cout << source.FragmentSource << std::endl;
-
-    unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
-
-    // bind shader or select the shader to use
-    glUseProgram(shader);
-
-    // Send data from cpu to gpu or to shader program
-    
-    // First retriving location of the specified variable location
-    // then we can send data to the location with corresponding data
-    // int this case, we have a vec4 which we need to pick glUniform4f to
-    // send 4 floats
-    int location = glGetUniformLocation(shader, "u_Color");
-    ASSERT(location != -1);
-    glUniform4f(location, 0.9f, 0.9f, 0.7f, 1.0f);
-
-
-    // unbind
-    glBindVertexArray(0);
-    glUseProgram(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    float r = 0.0f;
-    float increment = 0.01f;
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-        GLClearError();
-
-        // Draw call loop in order to draw different objects
-        // We definitely need to bind different buffer, indices,
-        // vertexAttri and shader if necessary
-        // However vertex buffer is more useful for storing
-        // different attributeLayout into vertex buffers
-        glUseProgram(shader);
-        glUniform4f(location, r, 0.6f, 0.8f, 1.0f);
-
-        // Don't need to take these actions since we have
-        // vertex array object, which helps reduce a lot of
-        // operations
-        /*glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-        glEnableVertexAttribArray(0);*/
-
+        // Performance wise, it is difficult to detemine which way is better
+        unsigned int vao;
+        glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        // animate the color
-        
-        
-        // mode; start index of the enabled arrays, number of indices to be rendered
-        // type of indices in this case unsigned int, and pointer to the array of
-        // indices
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
-        if (r > 1.0f || r < 0.0f)
-            increment = -increment;
+        // Creating buffer and getting an index
+        VertexBuffer vb(position, 4 * 2 * sizeof(float));
 
-        r += increment;
+        // Creating index buffer and getting an index
+        IndexBuffer ib(indices, 6);
 
 
+        // Creates the vertex attribute like position, color, etc
+        // index of the attri, how many components are the attribute, type of the component,
+        // bytes away from next the same attribute, bytes away from the next attribute
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+        // Needs to enable the vertex attri
+        glEnableVertexAttribArray(0);
 
-        /* Poll for and process events */
-        glfwPollEvents();
+        // Load shaders from file
+
+
+        ShaderProgramSource source = ParseShader("res/shaders/Basic.shader");
+
+        std::cout << "Vertex: " << std::endl;
+        std::cout << source.VertexSource << std::endl;
+        std::cout << "Fragment: " << std::endl;
+        std::cout << source.FragmentSource << std::endl;
+
+        unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
+
+        // bind shader or select the shader to use
+        glUseProgram(shader);
+
+        // Send data from cpu to gpu or to shader program
+
+        // First retriving location of the specified variable location
+        // then we can send data to the location with corresponding data
+        // int this case, we have a vec4 which we need to pick glUniform4f to
+        // send 4 floats
+        int location = glGetUniformLocation(shader, "u_Color");
+        ASSERT(location != -1);
+        glUniform4f(location, 0.9f, 0.9f, 0.7f, 1.0f);
+
+
+        // unbind
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        float r = 0.0f;
+        float increment = 0.01f;
+        /* Loop until the user closes the window */
+        while (!glfwWindowShouldClose(window))
+        {
+            /* Render here */
+            glClear(GL_COLOR_BUFFER_BIT);
+            GLClearError();
+
+            // Draw call loop in order to draw different objects
+            // We definitely need to bind different buffer, indices,
+            // vertexAttri and shader if necessary
+            // However vertex buffer is more useful for storing
+            // different attributeLayout into vertex buffers
+            glUseProgram(shader);
+            glUniform4f(location, r, 0.6f, 0.8f, 1.0f);
+
+            // Don't need to take these actions since we have
+            // vertex array object, which helps reduce a lot of
+            // operations
+            /*glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+            glEnableVertexAttribArray(0);*/
+
+            glBindVertexArray(vao);
+            ib.Bind();
+            // animate the color
+
+
+            // mode; start index of the enabled arrays, number of indices to be rendered
+            // type of indices in this case unsigned int, and pointer to the array of
+            // indices
+            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+            if (r > 1.0f || r < 0.0f)
+                increment = -increment;
+
+            r += increment;
+
+
+
+            /* Swap front and back buffers */
+            glfwSwapBuffers(window);
+
+            /* Poll for and process events */
+            glfwPollEvents();
+        }
+        // Free memory of the shader program
+        glDeleteProgram(shader);
     }
-    // Free memory of the shader program
-    glDeleteProgram(shader);
     glfwTerminate();
     return 0;
 }
