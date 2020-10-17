@@ -77,13 +77,15 @@ int main(void)
         ib.Unbind();
         shader.Unbind();
 
+        Renderer renderer;
+
         float r = 0.0f;
         float increment = 0.01f;
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
-            glClear(GL_COLOR_BUFFER_BIT);
+            renderer.Clear();
            
 
             // Don't need to take these actions since we have
@@ -99,11 +101,10 @@ int main(void)
             // vertexAttri and shader if necessary
             // However vertex buffer is more useful for storing
             // different attributeLayout into vertex buffers
-            va.Bind();
-            ib.Bind();
-            shader.Bind();
+            
             // Sending uniform needs to be after the shader program has been bound
             // and it needs to be the right shader program definitely
+            shader.Bind();
             shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
             // animate the color
 
@@ -111,7 +112,7 @@ int main(void)
             // mode; start index of the enabled arrays, number of indices to be rendered
             // type of indices in this case unsigned int, and pointer to the array of
             // indices
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+            renderer.Draw(va, ib, shader);
 
             if (r > 1.0f || r < 0.0f)
                 increment = -increment;
