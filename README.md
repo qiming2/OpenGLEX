@@ -1,8 +1,10 @@
-# OpenGLEX
+# Purpose of OpenGLEX
 
-## Open GL Practice By Qiming Guan
+The purpose of this project is to render scenes, models, lights and other components with different rendering techniques and lighting models.
 
-## Open GL simple explanation of simple use case
+## Open GL Rendering Engine By Qiming Guan
+
+(Currently building infrastructures for the engine)
 
 ### Set up OpenGL workplace
 
