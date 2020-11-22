@@ -7,7 +7,7 @@ The purpose of this project is to render scenes, objects, lights and other compo
 Currently building infrastructures for the engine. Upon finishing the basic infrastructure, user may load models, create your own shaders, load textures
 and even manipulate any code you would like to experiment your own rendering methods.
 
-
+<br>
 
 /////////////////////////////////////////////////////////////////////// Learning Notes /////////////////////////////////////////////////////////
 
