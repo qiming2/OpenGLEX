@@ -34,7 +34,7 @@ ShaderProgramSource Shader::ParseShader(const std::string& filePath)
     };
 
     std::string line;
-    std::stringstream ss[2];
+    std::string ss[2];
     ShaderType type = ShaderType::NONE;
     while (getline(stream, line))
     {
@@ -55,10 +55,10 @@ ShaderProgramSource Shader::ParseShader(const std::string& filePath)
         else
         {
             std::cout << line << std::endl;
-            ss[(int)type] << line << '\n';
+            ss[(int)type] += line += '\n';
         }
     }
-    return { ss[0].str(), ss[1].str() };
+    return {ss[0], ss[1]};
 }
 
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source) 

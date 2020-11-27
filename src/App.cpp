@@ -60,13 +60,16 @@ int main(void)
         std::cout << "GlewInit Error!" << std::endl;
 
     std::cout << glGetString(GL_VERSION) << std::endl;
-
+    int maxAttri;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttri);
+    std::cout << "Max attris allowed: " << maxAttri << std::endl;
     {
         std::vector<float> position =
         {
-            -0.5f, -0.5f,
-             0.5f, -0.5f,
-             0.5f,  0.5f,
+            // positions         // colors
+             0.5f, -0.5f, 0.0f,  3.0f, 0.0f, 0.0f,   // bottom right
+            -0.5f, -0.5f, 0.0f,  0.0f, 3.0f, 0.0f,   // bottom left
+             0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 3.0f,
         };
 
         std::vector<unsigned int> indices = {
@@ -80,7 +83,8 @@ int main(void)
         // Creating index buffer and getting an index
         IndexBuffer ib(indices.data(), indices.size());
         VertexBufferLayout layout;
-        layout.Push<float>(2);
+        layout.Push<float>(3);
+        layout.Push<float>(3);
         va.AddBuffer(vb, layout);
 
         Shader shader("res/shaders/Basic.shader");
