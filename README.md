@@ -35,6 +35,7 @@ and even manipulate any code you would like to experiment your own rendering met
 ```
 // Creating buffer and getting an index
 unsigned int buffer;
+
 glGenBuffers(1, &buffer);
 ```
 - Bind buffer to GL_ARRAY_BUFFER and pass data into it
@@ -47,6 +48,7 @@ float position[6] =
     };
 // bind buffer since we are going to work on it
 glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
 // Pass and store the data t othe buffer
 glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), position, GL_STATIC_DRAW);
 ```
@@ -56,6 +58,7 @@ glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), position, GL_STATIC_DRAW);
 // index of the attri, how many components are the attribute, type of the component,
 // bytes away from next the same attribute, bytes away from the next attribute
 glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
 // Needs to enable the vertex attri
 glEnableVertexAttribArray(0);
 ```
@@ -79,21 +82,24 @@ Since we have two different shaders we want to write, we define a struct to stor
 - Then we need to actually create the shaders in our opengl, and link them together and bind them to shader program.
 ```
 unsigned int program = glCreateProgram();
+
 // CompileShader is a method for use create a shader and compile them gpu
 unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
 unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-//
-// Compile shader function
+
+// Overview of CompileShader(ShaderType, source) func:
 // type EX: GL_VERTEX_SHADER
 unsigned int id = glCreateShader(type);
 const char* src = source.c_str();
+
 // id: the shader whose source code would be replaced
 // size: how many number of strings in the array of strings
 // the pointer to the array of strings
-// pointer to an array of integers specifying the length of each string
-//      nullptr means that each string is terminated with null
+// string array: pointer to an array of integers specifying the length of each string
+// array of length of each string: nullptr means that each string is terminated with null
 glShaderSource(id, 1, &src, nullptr);
 glCompileShader(id);
+
 // Compile shader end
 // Attach shader objects to the program
 // Then we link them together
@@ -117,32 +123,11 @@ unsigned int ibo;
 glGenBuffers(1, &ibo);
 // bind buffer since we are going to work on it
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-// Pass and store the data t othe buffer
+// Pass and store the data to the buffer
 glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
-// Draw call
+// Draw call with indices array
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 ```
-
-- Compatible debugging! In order to use the glGetError to pinpoint the exact line of code that emits the error, we need to clear any error code staying in the error list in opengl by using a while or for loop before a gl function call, and then we place a glGetError right after the gl function we want to debug. Here for the sake of simplicity, we also used macro, which is not the best way but simple and straightforward
-```
-#define ASSERT(x) if ((!x)) __debugbreak();
-#define GLCall(x) GLClearError();\
-    x;\
-    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-static void GLClearError()
-{
-    while (glGetError() != GL_NO_ERROR);
-}
-static bool GLLogCall(const char* function, const char* file, int line)
-{
-    while (GLenum error = glGetError())
-    {
-        std::cout << "[OpenGL Error] (" << error << "): " << function <<
-            " " << file << ":" << line << std::endl;
-        return false;
-    }
-    return true;
-}
-```
+The code can change during development, and this is a showcase of basic usage of opengl.
 Later development would have corresponding detailed comments in code,
 you can check it out in the actual cpp files.
