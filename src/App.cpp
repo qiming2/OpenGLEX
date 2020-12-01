@@ -6,13 +6,15 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
-#include <vector>
+#include "m_Shader.h"
+
 
 // Width and height
 const int width = 640;
@@ -67,9 +69,9 @@ int main(void)
         std::vector<float> position =
         {
             // positions         // colors
-             0.5f, -0.5f, 0.0f,  3.0f, 0.0f, 0.0f,   // bottom right
-            -0.5f, -0.5f, 0.0f,  0.0f, 3.0f, 0.0f,   // bottom left
-             0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 3.0f,
+             0.5f, 0.5f, 0.0f,  3.0f, 0.0f, 0.0f,   // bottom right
+              0.0f,  -0.5f, 0.0f ,  0.0f, 3.0f, 0.0f,   // bottom left
+             -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 3.0f,
         };
 
         std::vector<unsigned int> indices = {
@@ -87,7 +89,8 @@ int main(void)
         layout.Push<float>(3);
         va.AddBuffer(vb, layout);
 
-        Shader shader("res/shaders/Basic.shader");
+        // Use relative path
+        m_Shader shader("../res/shaders/b_vert.shader", "../res/shaders/b_frag.shader");
         shader.Bind();
         shader.SetUniform4f("u_Color", 0.3f, 0.7f, 0.8f, 1.0f);
         // unbind
