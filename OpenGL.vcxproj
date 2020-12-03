@@ -162,7 +162,6 @@
     <ClCompile Include="src\Engine\IndexBuffer.cpp" />
     <ClCompile Include="src\Engine\m_Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer.cpp" />
-    <ClCompile Include="src\Engine\Shader.cpp" />
     <ClCompile Include="src\Engine\Texture.cpp" />
     <ClCompile Include="src\Engine\VertexArray.cpp" />
     <ClCompile Include="src\Engine\VertexBuffer.cpp" />
@@ -183,7 +182,6 @@
     <ClInclude Include="src\Engine\IndexBuffer.h" />
     <ClInclude Include="src\Engine\m_Shader.h" />
     <ClInclude Include="src\Engine\Renderer.h" />
-    <ClInclude Include="src\Engine\Shader.h" />
     <ClInclude Include="src\Engine\VertexArray.h" />
     <ClInclude Include="src\Engine\VertexBuffer.h" />
     <ClInclude Include="src\Engine\VertexBufferLayout.h" />
