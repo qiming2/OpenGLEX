@@ -12,7 +12,6 @@
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
-#include "Shader.h"
 #include "m_Shader.h"
 #include "Texture.h"
 
