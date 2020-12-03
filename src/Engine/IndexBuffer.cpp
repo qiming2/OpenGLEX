@@ -8,7 +8,7 @@ IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count)
 
     // bind buffer since we are going to work on it
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID));
-    // Pass and store the data t othe buffer
+    // Pass and store the data to the buffer
     GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
 }
 

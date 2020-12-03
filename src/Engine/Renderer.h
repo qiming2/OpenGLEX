@@ -1,9 +1,10 @@
 #pragma once
 
 #include <GL/glew.h>
-#include <IndexBuffer.h>
-#include <VertexArray.h>
-#include <m_Shader.h>
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "m_Shader.h"
+#include "Texture.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 // Abstracted renderer class
@@ -26,5 +27,5 @@ class Renderer
 public:
     void Clear() const;
     // The main function is the Draw function
-    void Draw(const VertexArray& va, const IndexBuffer& ib, const m_Shader& shader) const;
+    void Draw(const VertexArray& va, const IndexBuffer& ib) const;
 };

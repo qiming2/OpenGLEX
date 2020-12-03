@@ -23,6 +23,7 @@ m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
 	// Linking makes sure our in and out variables are reasonable
 	// in each programmable stage of rendering pipe
 	glLinkProgram(program);
+	glValidateProgram(program);
 
 	int success;
 	char log[512];
@@ -35,17 +36,19 @@ m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
 	// Delete Shader after successful linkage
 	glDeleteShader(vertex);
 	glDeleteShader(frag);
-	m_rID = program;
+	
+	m_RendererID = program;
+	Unbind();
 }
 
 m_Shader::~m_Shader()
 {
-	glDeleteProgram(m_rID);
+	glDeleteProgram(m_RendererID);
 }
 
 void m_Shader::Bind() const
 {
-	glUseProgram(m_rID);
+	glUseProgram(m_RendererID);
 }
 
 void m_Shader::Unbind() const
@@ -57,11 +60,23 @@ void m_Shader::SetUniform4f(const std::string& name, float v0, float v1, float v
 {
 	int location;
 	// Find whether the variable exists
-	if (location = GetUniformLocation(name) < 0)
+	if ((location = GetUniformLocation(name)) < 0)
 	{
 		return;
 	}
+	
 	glUniform4f(location, v0, v1, v2, v3);
+}
+
+void m_Shader::SetInt(const std::string& name, int v0)
+{
+	
+	int location;
+	if ((location = GetUniformLocation(name)) < 0)
+	{
+		return;
+	}
+	glUniform1i(location, v0);
 }
 
 unsigned int m_Shader::CompileShader(const char* code, unsigned int type)
@@ -98,11 +113,14 @@ unsigned int m_Shader::CompileShader(const char* code, unsigned int type)
 int m_Shader::GetUniformLocation(const std::string& name)
 {
 	std::unordered_map<std::string, int>::iterator it;
+	// Find out whether it is in the cache
 	if ((it = m_uniformLocation.find(name)) != m_uniformLocation.end())
 	{
 		return it->second;
 	}
-	int location = glGetUniformLocation(m_rID, name.c_str());
+
+	// If it is not in the cache, we retrive it and store it in the cache
+	int location = glGetUniformLocation(m_RendererID, name.c_str());
 	if (location == -1)
 	{
 		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << std::endl;

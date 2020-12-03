@@ -14,6 +14,7 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "m_Shader.h"
+#include "Texture.h"
 
 
 // Width and height
@@ -66,41 +67,55 @@ int main(void)
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttri);
     std::cout << "Max attris allowed: " << maxAttri << std::endl;
     {
-        std::vector<float> position =
+        std::vector<float> vertices =
         {
-            // positions         // colors
-             0.5f, 0.5f, 0.0f,  3.0f, 0.0f, 0.0f,   // bottom right
-              0.0f,  -0.5f, 0.0f ,  0.0f, 3.0f, 0.0f,   // bottom left
-             -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 3.0f,
+            // positions          // colors           // texture coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
 
         std::vector<unsigned int> indices = {
-            0, 1, 2,
+            0, 1, 3, // first triangle
+            1, 2, 3  // second triangle
         };
 
 
         VertexArray va;
         // Creating buffer and getting an index
-        VertexBuffer vb(position.data(), position.size() * sizeof(float));
+        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
         // Creating index buffer and getting an index
         IndexBuffer ib(indices.data(), indices.size());
         VertexBufferLayout layout;
+        // Position Attri
         layout.Push<float>(3);
+        // Color Attri
         layout.Push<float>(3);
+        // Texture Attri
+        layout.Push<float>(2);
+        // Add vertexbuffer using layout object functions
         va.AddBuffer(vb, layout);
 
         // Use relative path
         m_Shader shader("../res/shaders/b_vert.shader", "../res/shaders/b_frag.shader");
         shader.Bind();
-        shader.SetUniform4f("u_Color", 0.3f, 0.7f, 0.8f, 1.0f);
-        // unbind
-        vb.Unbind();
-        va.Unbind();
-        ib.Unbind();
-        shader.Unbind();
+        shader.SetInt("texture1", 0);
+
+        shader.SetInt("texture2", 1);
+        
+        // shader.SetUniform4f("u_Color", 0.3f, 0.7f, 0.8f, 1.0f);
+        // shader.SetUniform4f("a_Color", 0.1f, 0.1f, 0.1f, 1.0f);
+       
 
         Renderer renderer;
+        
+        
 
+        Texture texture1("../res/Texture/container.jpg", GL_TEXTURE0);
+        Texture texture2("../res/Texture/awesomeface.png", GL_TEXTURE1);
+        texture1.Bind();
+        texture2.Bind();
         float r = 0.0f;
         float increment = 0.01f;
         /* Loop until the user closes the window */
@@ -111,15 +126,18 @@ int main(void)
             
             // Sending uniform needs to be after the shader program has been bound
             // and it needs to be the right shader program definitely
+            
+            // shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
+            texture1.Bind();
+            texture2.Bind();
             shader.Bind();
-            shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
-            // animate the color
 
 
             // mode; start index of the enabled arrays, number of indices to be rendered
             // type of indices in this case unsigned int, and pointer to the array of
             // indices
-            renderer.Draw(va, ib, shader);
+            renderer.Draw(va, ib);
+           
 
             if (r > 1.0f || r < 0.0f)
                 increment = -increment;

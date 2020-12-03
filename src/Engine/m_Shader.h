@@ -12,9 +12,11 @@ public:
 	void Unbind() const;
 	// Set uniform variable
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+
+	void SetInt(const std::string& name, int v0);
 private:
 	// Render ID
-	unsigned int m_rID;
+	unsigned int m_RendererID;
 	// Uniform location caches for getting or setting uniform values
 	std::unordered_map<std::string, int> m_uniformLocation;
 

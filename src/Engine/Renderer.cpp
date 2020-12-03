@@ -20,14 +20,13 @@ bool GLLogCall(const char* function, const char* file, int line)
 
 void Renderer::Clear() const
 {
-    glClearColor(0.3f, 0.6f, 0.3f, 1.0f);
+    glClearColor(0.3f, 0.7f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const m_Shader& shader) const
+void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib) const
 {
     va.Bind();
     ib.Bind();
-    shader.Bind();
     GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
