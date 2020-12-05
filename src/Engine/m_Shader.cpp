@@ -68,6 +68,16 @@ void m_Shader::SetUniform4f(const std::string& name, float v0, float v1, float v
 	glUniform4f(location, v0, v1, v2, v3);
 }
 
+void m_Shader::Setfloat(const std::string& name, float v0)
+{
+	int location;
+	if ((location = GetUniformLocation(name)) < 0)
+	{
+		return;
+	}
+	glUniform1f(location, v0);
+}
+
 void m_Shader::SetInt(const std::string& name, int v0)
 {
 	

@@ -17,18 +17,13 @@
 
 
 // Width and height
-const int width = 640;
-const int height = 480;
+const int width = 1080;
+const int height = 1080;
 
 // callback when window is resized
 void frame_buffer_callback(GLFWwindow* window, int width, int height);
-
-// Process input
-void processInput(GLFWwindow* window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+void processInput(GLFWwindow* window);
+void processMix(GLFWwindow* window, float& mix);
 
 int main(void)
 {
@@ -69,10 +64,10 @@ int main(void)
         std::vector<float> vertices =
         {
             // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+         0.71f,  1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+         0.71f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+        -0.71f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+        -0.71f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
         };
 
         std::vector<unsigned int> indices = {
@@ -111,12 +106,11 @@ int main(void)
         
         
 
-        Texture texture1("../res/Texture/container.jpg", GL_TEXTURE0);
+        Texture texture1("../res/Texture/se_1.jpg", GL_TEXTURE0);
         Texture texture2("../res/Texture/awesomeface.png", GL_TEXTURE1);
         texture1.Bind();
         texture2.Bind();
-        float r = 0.0f;
-        float increment = 0.01f;
+        float mix = 0.0f;
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
@@ -130,21 +124,16 @@ int main(void)
             texture1.Bind();
             texture2.Bind();
             shader.Bind();
-
+            shader.Setfloat("mixVal", mix);
 
             // mode; start index of the enabled arrays, number of indices to be rendered
             // type of indices in this case unsigned int, and pointer to the array of
             // indices
             renderer.Draw(va, ib);
-           
-
-            if (r > 1.0f || r < 0.0f)
-                increment = -increment;
-
-            r += increment;
 
 
             processInput(window);
+            processMix(window, mix);
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
 
@@ -158,5 +147,27 @@ int main(void)
 
 void frame_buffer_callback(GLFWwindow* window, int width, int height)
 {
+    // std::cout << width << " " << height << std::endl;
     glViewport(0, 0, width, height);
+}
+
+// Process input
+void processInput(GLFWwindow* window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+   
+}
+
+void processMix(GLFWwindow* window, float& mix)
+{
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        mix += (float)0.05;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        mix -= (float)0.05;
+    }
 }

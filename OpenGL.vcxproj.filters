@@ -46,17 +46,6 @@
     <None Include="res\shaders\b_vert.shader" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\Texture\wall.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Texture\container.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Texture\awesomeface.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

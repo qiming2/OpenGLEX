@@ -19,20 +19,14 @@ Texture::Texture(const char* image, GLenum activeID)
 	// Usually we want to flip the picture
 	// May not be true for some cases, be careful!!
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load(image, &width, &height, &nChannels, 0);
+	// Always pad image to a multiple of 4 in width
+	unsigned char* data = stbi_load(image, &width, &height, &nChannels, 4);
+	// glPixelStorei(GL_UNPACK_ALIGHNMENT, #) maybe used if image width is not multiple of 4, this is very important!
 	if (data)
 	{
 		// Configure Texture
-	// pass loaded image data to bounded texture object
-		if (nChannels == 3)
-		{
-			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		}
-		else
-		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		}
+		// pass loaded image data to bounded texture object
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		
 		// Generate Mipmap for avoiding artifacts when objects are small
 		glGenerateMipmap(GL_TEXTURE_2D);
