@@ -4,6 +4,9 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 #include <iostream>
 #include <fstream>
@@ -17,127 +20,77 @@
 #include "VertexBufferLayout.h"
 #include "m_Shader.h"
 #include "Texture.h"
+#include "Scene\Scene.h"
+#include "Scene\TextureScene.h"
 
 
 
 // Width and height
 const int width = 1080;
 const int height = 1080;
+const char* glsl_version = "#version 130";
 
 // callback when window is resized
-void frame_buffer_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-void processMix(GLFWwindow* window, float& mix);
+static void frame_buffer_callback(GLFWwindow* window, int width, int height);
+static void processInput(GLFWwindow* window);
+static void processMix(GLFWwindow* window, float& mix);
+static void glfw_error_callback(int error, const char* description);
+static GLFWwindow* init();
+static void terminate(GLFWwindow* window);
 
 int main(void)
 {
-    GLFWwindow* window;
+    GLFWwindow* window = init();
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Hello World", NULL, NULL);
-    if (!window)
     {
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwSetFramebufferSizeCallback(window, frame_buffer_callback);
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-    // Set up viewport
-    glViewport(0, 0, width, height);
-    // vertical synchronization
-    glfwSwapInterval(1);
-
-    if (GLEW_OK != glewInit())
-        std::cout << "GlewInit Error!" << std::endl;
-
-    std::cout << glGetString(GL_VERSION) << std::endl;
-    int maxAttri;
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttri);
-    std::cout << "Max attris allowed: " << maxAttri << std::endl;
-    {
-        std::vector<float> vertices =
-        {
-            // positions          // colors           // texture coords
-         0.71f,  1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-         0.71f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.71f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-        -0.71f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
-        };
-
-        std::vector<unsigned int> indices = {
-            0, 1, 3, // first triangle
-            1, 2, 3  // second triangle
-        };
-
-
-        VertexArray va;
-        // Creating buffer and getting an index
-        VertexBuffer vb(vertices.data(), vertices.size() * sizeof(float));
-        // Creating index buffer and getting an index
-        IndexBuffer ib(indices.data(), indices.size());
-        VertexBufferLayout layout;
-        // Position Attri
-        layout.Push<float>(3);
-        // Color Attri
-        layout.Push<float>(3);
-        // Texture Attri
-        layout.Push<float>(2);
-        // Add vertexbuffer using layout object functions
-        va.AddBuffer(vb, layout);
-
-        // Use relative path
-        m_Shader shader("../res/shaders/b_vert.shader", "../res/shaders/b_frag.shader");
-        shader.Bind();
-        shader.SetInt("texture1", 0);
-
-        shader.SetInt("texture2", 1);
-        
-        // shader.SetUniform4f("u_Color", 0.3f, 0.7f, 0.8f, 1.0f);
-        // shader.SetUniform4f("a_Color", 0.1f, 0.1f, 0.1f, 1.0f);
-       
-
         Renderer renderer;
-        
-        
+        Scene::Scene* currentScene = nullptr;
+        Scene::SceneMenu* menu = new Scene::SceneMenu(currentScene);
 
-        Texture texture1("../res/Texture/se_1.jpg", GL_TEXTURE0);
-        Texture texture2("../res/Texture/awesomeface.png", GL_TEXTURE1);
-        texture1.Bind();
-        texture2.Bind();
-        float mix = 0.0f;
-        /* Loop until the user closes the window */
+        // Registering different scenes to be experimented
+        menu->Register<Scene::TextureScene>("Texture Scene");
+
+        // Set first scene as menu
+        currentScene = menu;
+
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
             renderer.Clear();
-            
-            // Sending uniform needs to be after the shader program has been bound
-            // and it needs to be the right shader program definitely
-            
-            // shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
-            texture1.Bind();
-            texture2.Bind();
-            shader.Bind();
-            shader.Setfloat("mixVal", mix);
+            // Start the Dear ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
-            // mode; start index of the enabled arrays, number of indices to be rendered
-            // type of indices in this case unsigned int, and pointer to the array of
-            // indices
-            renderer.Draw(va, ib);
+            if (currentScene)
+            {
+                // OnUpdate
+                currentScene->OnUpdate(0.0f);
+
+                // OnRendering
+                currentScene->OnRendering();
+                // Imgui rendering
+                ImGui::Begin("Scene");
+
+                // Add back button
+                if (currentScene != menu && ImGui::Button("Back"))
+                {
+                    delete currentScene;
+                    currentScene = menu;
+                }
+                currentScene->OnImGuiRendering();
+
+                ImGui::End();
+            }
+            
+
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 
 
             processInput(window);
-            processMix(window, mix);
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
 
@@ -145,25 +98,27 @@ int main(void)
             glfwPollEvents();
         }
     }
-    glfwTerminate();
+
+
+    terminate(window);
     return 0;
 }
 
-void frame_buffer_callback(GLFWwindow* window, int width, int height)
+static void frame_buffer_callback(GLFWwindow* window, int width, int height)
 {
     // std::cout << width << " " << height << std::endl;
     glViewport(0, 0, width, height);
 }
 
 // Process input
-void processInput(GLFWwindow* window)
+static void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
    
 }
 
-void processMix(GLFWwindow* window, float& mix)
+static void processMix(GLFWwindow* window, float& mix)
 {
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
@@ -174,4 +129,74 @@ void processMix(GLFWwindow* window, float& mix)
     {
         mix -= (float)0.05;
     }
+}
+
+static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
+static GLFWwindow* init()
+{
+    GLFWwindow* window;
+    /* Initialize the library */
+    if (!glfwInit())
+        exit(-1);
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    /* Create a windowed mode window and its OpenGL context */
+    window = glfwCreateWindow(width, height, "Lunar", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        exit(-1);
+    }
+
+    // Set glfw callback
+    glfwSetFramebufferSizeCallback(window, frame_buffer_callback);
+    glfwSetErrorCallback(glfw_error_callback);
+    /* Make the window's context current */
+    glfwMakeContextCurrent(window);
+    // Set up viewport
+    glViewport(0, 0, width, height);
+    // vertical synchronization
+    glfwSwapInterval(1);
+
+
+    // Imgui set up
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    // Set up theme, more themes can be chosen
+    ImGui::StyleColorsDark();
+
+    // Setup Platform and renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    //Can add different fonts. See example
+
+
+    if (GLEW_OK != glewInit())
+        std::cout << "GlewInit Error!" << std::endl;
+
+    std::cout << glGetString(GL_VERSION) << std::endl;
+    int maxAttri;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttri);
+    std::cout << "Max attris allowed: " << maxAttri << std::endl;
+    return window;
+}
+
+static void terminate(GLFWwindow* window)
+{
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 }
