@@ -70,6 +70,7 @@ int main(void)
                 // OnRendering
                 currentScene->OnRendering();
                 // Imgui rendering
+                ImGui::SetWindowCollapsed(false);
                 ImGui::Begin("Scene");
 
                 // Add back button
