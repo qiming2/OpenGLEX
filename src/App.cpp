@@ -65,6 +65,7 @@ int main(void)
             if (currentScene)
             {
                 // OnUpdate
+                // Todo Need to change deltaTime
                 currentScene->OnUpdate(0.0f);
 
                 // OnRendering
