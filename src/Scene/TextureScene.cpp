@@ -42,7 +42,7 @@ namespace Scene
         m_va->AddBuffer(*m_vb, layout);
 
         // Use relative path
-        m_shader = std::make_unique<m_Shader>("../res/shaders/b_vert.shader", "../res/shaders/b_frag.shader");
+        m_shader = std::make_unique<m_Shader>("res/shaders/b_vert.shader", "res/shaders/b_frag.shader");
         m_shader->Bind();
         m_shader->SetInt("texture1", 0);
 
@@ -56,8 +56,8 @@ namespace Scene
 
 
 
-        m_texture1 = std::make_unique<Texture>("../res/Texture/se_1.jpg", GL_TEXTURE0);
-        m_texture2 = std::make_unique<Texture>("../res/Texture/awesomeface.png", GL_TEXTURE1);
+        m_texture1 = std::make_unique<Texture>("res/Texture/se_1.jpg", GL_TEXTURE0);
+        m_texture2 = std::make_unique<Texture>("res/Texture/awesomeface.png", GL_TEXTURE1);
         m_texture1->Bind();
         m_texture2->Bind();
 	}

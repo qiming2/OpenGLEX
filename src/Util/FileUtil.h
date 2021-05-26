@@ -26,7 +26,7 @@ std::string readAll(const char* filePath)
 	}
 	catch (std::ifstream::failure e)
 	{
-		std::cout << "FILE::READ_FAILED\n" << " File: " << __FILE__ << std::endl;
+		std::cout << "FILE::READ_FAILED\n" << " File: " << __FILE__  << " Passed in: " << filePath << std::endl;
 	}
 	return content;
 }
