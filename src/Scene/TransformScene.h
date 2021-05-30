@@ -27,5 +27,6 @@ namespace Scene{
 		std::unique_ptr<Texture> m_texture1;
 		std::unique_ptr<Texture> m_texture2;
 		glm::mat4 transform;
+		std::string currTransformation;
 	};
 }

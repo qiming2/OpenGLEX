@@ -9,7 +9,7 @@ namespace Scene
         m_mix(0.0f),
         m_clear_color(0.45f, 0.55f, 0.60f, 1.00f),
         m_show_another_window(false),
-        m_show_demo_window(true)
+        m_show_demo_window(false)
 	{
         std::vector<float> vertices =
         {
@@ -56,7 +56,7 @@ namespace Scene
 
 
 
-        m_texture1 = std::make_unique<Texture>("res/Texture/se_1.jpg", GL_TEXTURE0);
+        m_texture1 = std::make_unique<Texture>("res/Texture/wall.jpg", GL_TEXTURE0);
         m_texture2 = std::make_unique<Texture>("res/Texture/awesomeface.png", GL_TEXTURE1);
         m_texture1->Bind();
         m_texture2->Bind();

@@ -15,6 +15,7 @@ public:
 
 	void SetInt(const std::string& name, int v0);
 	void Setfloat(const std::string& name, float v0);
+	void SetMat4fv(const std::string& name, const float* ptr);
 private:
 	// Render ID
 	unsigned int m_RendererID;

@@ -22,6 +22,7 @@
 #include "Texture.h"
 #include "Scene\Scene.h"
 #include "Scene\TextureScene.h"
+#include "Scene\TransformScene.h"
 
 
 
@@ -49,7 +50,8 @@ int main(void)
 
         // Registering different scenes to be experimented
         menu->Register<Scene::TextureScene>("Texture Scene");
-
+        menu->Register<Scene::TransformScene>("Transform Scene");
+        
         // Set first scene as menu
         currentScene = menu;
 
@@ -64,16 +66,16 @@ int main(void)
 
             if (currentScene)
             {
-                // OnUpdate
-                // Todo Need to change deltaTime
-                currentScene->OnUpdate(0.0f);
-
-                // OnRendering
-                currentScene->OnRendering();
+                
                 // Imgui rendering
                 ImGui::SetWindowCollapsed(false);
                 ImGui::Begin("Scene");
+				// OnUpdate
+				// Todo Need to change deltaTime
+				currentScene->OnUpdate(0.0f);
 
+				// OnRendering
+				currentScene->OnRendering();
                 // Add back button
                 if (currentScene != menu && ImGui::Button("Back"))
                 {
