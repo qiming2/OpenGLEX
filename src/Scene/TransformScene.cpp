@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "TransformScene.h"
+#include <GLFW/glfw3.h>
 #include "Engine/Renderer.h"
 #include "Engine/VertexBufferLayout.h"
 
@@ -10,6 +11,8 @@
 
 
 namespace Scene {
+	
+
 	TransformScene::TransformScene()
 	{
 		std::vector<float> vertices =
@@ -88,18 +91,44 @@ namespace Scene {
 	void TransformScene::OnImGuiRendering()
 	{
 		if (ImGui::TreeNode("Transformations")) {
-			if (ImGui::Button("Scale")) {
-				// First create a identity matrix
-				glm::mat4 trans = glm::mat4(1.0f);
+			if (ImGui::Button("Rotate")) {
+				currTransformation = "Rotate";
+				//std::cout << currTransformation << std::endl;
+			}
 
-				// Do whatever transformations we want on the previous matrix
-				// Order matters a lot!
-				transform = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
-				transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-				
+			if (ImGui::Button("Translate")) {
+				currTransformation = "Translate";
+				//std::cout << currTransformation << std::endl;
 			}
 			ImGui::TreePop();
 		}
+
+		if (currTransformation == "Rotate") {
+			Rotate();
+			
+		} else if (currTransformation == "Translate") {
+			Translate();
+		} else {
+			// Identity matrix
+			transform = glm::mat4(1.0f);
+		}
+	}
+
+	void TransformScene::Rotate() {
+		// First create a identity matrix
+		glm::mat4 trans = glm::mat4(1.0f);
+
+		// Do whatever transformations we want on the previous matrix
+		// Order matters a lot!
+		transform = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+
+	void TransformScene::Translate() {
+		glm::mat4 trans = glm::mat4(1.0f);
+
+		// Do whatever transformations we want on the previous matrix
+		// Order matters a lot!
+		transform = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
 	}
 }
 

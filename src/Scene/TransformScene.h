@@ -19,6 +19,8 @@ namespace Scene{
 		void OnImGuiRendering() override;
 
 	private:
+		void Rotate();
+		void Translate();
 		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<VertexArray> m_va;
 		std::unique_ptr<VertexBuffer> m_vb;
