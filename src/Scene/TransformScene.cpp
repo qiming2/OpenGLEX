@@ -78,6 +78,7 @@ namespace Scene {
 
 	void TransformScene::OnRendering()
 	{
+		m_renderer->Clear();
 		m_texture1->Bind();
 		m_texture2->Bind();
 		m_shader->Bind();

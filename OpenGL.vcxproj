@@ -171,14 +171,20 @@
     <ClCompile Include="src\Engine\Texture.cpp" />
     <ClCompile Include="src\Engine\VertexArray.cpp" />
     <ClCompile Include="src\Engine\VertexBuffer.cpp" />
+    <ClCompile Include="src\Scene\CoordinateScene.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\TextureScene.cpp" />
+    <ClCompile Include="src\Scene\TransformScene.cpp" />
     <ClCompile Include="src\Util\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
     <None Include="res\shaders\b_frag.shader" />
+    <None Include="res\shaders\b_frag_coordinate.shader" />
+    <None Include="res\shaders\b_frag_transform.shader" />
     <None Include="res\shaders\b_vert.shader" />
+    <None Include="res\shaders\b_vert_coordinate.shader" />
+    <None Include="res\shaders\b_vert_transform.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\imgui\imconfig.h" />
@@ -196,8 +202,10 @@
     <ClInclude Include="src\Engine\VertexArray.h" />
     <ClInclude Include="src\Engine\VertexBuffer.h" />
     <ClInclude Include="src\Engine\VertexBufferLayout.h" />
+    <ClInclude Include="src\Scene\CoordinateScene.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\TextureScene.h" />
+    <ClInclude Include="src\Scene\TransformScene.h" />
     <ClInclude Include="src\Util\FileUtil.h" />
   </ItemGroup>
   <ItemGroup>
