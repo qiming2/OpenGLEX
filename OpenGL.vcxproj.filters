@@ -63,11 +63,21 @@
     <ClCompile Include="src\Scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\TransformScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\CoordinateScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
     <None Include="res\shaders\b_frag.shader" />
     <None Include="res\shaders\b_vert.shader" />
+    <None Include="res\shaders\b_frag_transform.shader" />
+    <None Include="res\shaders\b_vert_transform.shader" />
+    <None Include="res\shaders\b_vert_coordinate.shader" />
+    <None Include="res\shaders\b_frag_coordinate.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -122,6 +132,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\TextureScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\TransformScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\CoordinateScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

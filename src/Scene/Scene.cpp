@@ -9,9 +9,12 @@ namespace Scene
 		m_currentScene(currentScene),
 		m_clear_color(0.55f, 0.55f, 0.9f, 1.0f)
 	{
-
+		m_renderer = std::make_unique<Renderer>();
 	}
-
+	void SceneMenu::OnRendering()
+	{
+		m_renderer->Clear();
+	}
 	void SceneMenu::OnImGuiRendering()
 	{
 		for (auto kv : m_scenes)

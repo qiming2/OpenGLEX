@@ -23,6 +23,7 @@
 #include "Scene\Scene.h"
 #include "Scene\TextureScene.h"
 #include "Scene\TransformScene.h"
+#include "Scene\CoordinateScene.h"
 
 
 
@@ -44,21 +45,21 @@ int main(void)
     GLFWwindow* window = init();
 
     {
-        Renderer renderer;
+        //Renderer renderer;
         Scene::Scene* currentScene = nullptr;
         Scene::SceneMenu* menu = new Scene::SceneMenu(currentScene);
 
         // Registering different scenes to be experimented
         menu->Register<Scene::TextureScene>("Texture Scene");
         menu->Register<Scene::TransformScene>("Transform Scene");
-        
+        menu->Register<Scene::CoordinateScene>("Coordinate Scene");
         // Set first scene as menu
         currentScene = menu;
 
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
-            renderer.Clear();
+            //renderer.Clear();
             // Start the Dear ImGui frame
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();

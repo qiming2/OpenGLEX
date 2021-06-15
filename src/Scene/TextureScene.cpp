@@ -73,7 +73,7 @@ namespace Scene
 	{
         // Sending uniform needs to be after the shader program has been bound
         // and it needs to be the right shader program definitely
-
+        m_renderer->Clear();
         m_texture1->Bind();
         m_texture2->Bind();
         m_shader->Bind();
