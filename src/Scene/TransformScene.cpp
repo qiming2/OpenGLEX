@@ -18,10 +18,10 @@ namespace Scene {
 		std::vector<float> vertices =
 		{
 			// positions          // colors           // texture coords
-		 0.71f,  1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		 0.71f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-		-0.71f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-		-0.71f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+		 1.0f,  1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		 1.0f, -1.0f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+		-1.0f, -1.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+		-1.0f,  1.0f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 		};
 
 		std::vector<unsigned int> indices = {
@@ -110,7 +110,7 @@ namespace Scene {
 			Translate();
 		} else {
 			// Identity matrix
-			transform = glm::mat4(1.0f);
+			transform = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f, 0.5f, 0.5f));
 		}
 	}
 
@@ -120,6 +120,7 @@ namespace Scene {
 
 		// Do whatever transformations we want on the previous matrix
 		// Order matters a lot!
+		trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 		transform = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 
@@ -128,6 +129,7 @@ namespace Scene {
 
 		// Do whatever transformations we want on the previous matrix
 		// Order matters a lot!
+		trans = glm::scale(trans, glm::vec3(0.5f, 0.5f, 0.5f));
 		transform = glm::translate(trans, glm::vec3(0.5f, 0.5f, 0.0f));
 	}
 }
