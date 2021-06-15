@@ -2,19 +2,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "CoordinateScene.h"
+#include "CameraScene.h"
 #include <GLFW/glfw3.h>
 #include "Engine/Renderer.h"
 #include "Engine/VertexBufferLayout.h"
-#include "FileUtil.h"
 #include "Geometryutil.h"
 
+namespace Scene{
+	CameraScene::CameraScene() {
+		std::vector<float> vertices = CreateCube();
 
-namespace Scene
-{
-	CoordinateScene::CoordinateScene()
-	{
-		std::vector<float> vertices = std::move(CreateCube());
 		std::vector<unsigned int> indices = {
 			0, 1, 3, // first triangle
 			1, 2, 3  // second triangle
@@ -22,16 +19,16 @@ namespace Scene
 
 
 		m_va = std::make_unique<VertexArray>();
-// 		// Creating buffer and getting an index
+		// Creating buffer and getting an index
 		m_vb = std::make_unique<VertexBuffer>(vertices.data(), vertices.size() * sizeof(float));
-// 		// Creating index buffer and getting an index
-// 		m_ib = std::make_unique<IndexBuffer>(indices.data(), indices.size());
+		// Creating index buffer and getting an index
+		m_ib = std::make_unique<IndexBuffer>(indices.data(), indices.size());
 		VertexBufferLayout layout;
-// 		// Position Attri
+		// Position Attri
 		layout.Push<float>(3);
-// 		// Texture Attri
+		// Texture Attri
 		layout.Push<float>(2);
-// 		// Add vertexbuffer using layout object functions
+		// Add vertexbuffer using layout object functions
 		m_va->AddBuffer(*m_vb, layout);
 
 		// Use relative path
@@ -53,10 +50,19 @@ namespace Scene
 		m_texture2 = std::make_unique<Texture>("res/Texture/awesomeface.png", GL_TEXTURE1);
 		m_texture1->Bind();
 		m_texture2->Bind();
-
-		// view matrix
-		view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-		// projection matrix
+// 		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); 
+// 		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+// 		// Actually this is a reversed direction of what we have intended
+// 		glm::vec3 cameraDirection = glm::vec3(cameraPos - cameraTarget);
+// 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+// 		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+// 		// Remember that cameraDirection is reversed
+// 		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+// 		// This is a view matrix calcualted by up, cameraRight and front direction
+// 		// Transposed rotation matrix * negated translation matrix
+		view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f));
 		projection = glm::perspective(glm::radians(45.0f), 1080.0f / 1080.0f, 0.1f, 100.0f);
 		// model
 		model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
@@ -74,24 +80,25 @@ namespace Scene
 		};
 		glEnable(GL_DEPTH_TEST);
 	}
-	CoordinateScene::~CoordinateScene()
-	{
-		// Unique pointer helps to manage memory deletion
 
+	CameraScene::~CameraScene() {
+	
 	}
 
-	void CoordinateScene::OnUpdate(float deltaTime)
-	{
+	void CameraScene::OnUpdate(float deltaTime) {
 		model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		// Rotate around y axis
+		const float radius = 20.0f;
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
+		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	}
 
-	void CoordinateScene::OnImGuiRendering()
-	{
-		// Nothing for now
+	void CameraScene::OnRendering() {
+		
 	}
 
-	void CoordinateScene::OnRendering()
-	{
+	void CameraScene::OnImGuiRendering() {
 		m_va->Bind();
 		m_renderer->Clear();
 		m_texture1->Bind();
@@ -118,6 +125,7 @@ namespace Scene
 		}
 		// shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
 		// Draw
-		
 	}
 }
+
+

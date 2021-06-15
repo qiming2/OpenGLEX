@@ -7,20 +7,16 @@
 #include "Scene.h"
 #include "Engine/Renderer.h"
 
-
-namespace Scene
-{
-	class CoordinateScene : public Scene
+namespace Scene {
+	class CameraScene : public Scene 
 	{
 	public:
-		CoordinateScene();
-		~CoordinateScene();
+		CameraScene();
+		~CameraScene();
 		void OnUpdate(float deltaTime) override;
 		void OnRendering() override;
 		void OnImGuiRendering() override;
 	private:
-		void Rotate();
-		void Translate();
 		std::unique_ptr<Renderer> m_renderer;
 		std::unique_ptr<VertexArray> m_va;
 		std::unique_ptr<VertexBuffer> m_vb;

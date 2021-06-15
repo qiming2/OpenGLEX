@@ -24,6 +24,7 @@
 #include "Scene\TextureScene.h"
 #include "Scene\TransformScene.h"
 #include "Scene\CoordinateScene.h"
+#include "Scene\CameraScene.h"
 
 
 
@@ -53,14 +54,17 @@ int main(void)
         menu->Register<Scene::TextureScene>("Texture Scene");
         menu->Register<Scene::TransformScene>("Transform Scene");
         menu->Register<Scene::CoordinateScene>("Coordinate Scene");
+        menu->Register<Scene::CameraScene>("Camera Scene");
         // Set first scene as menu
         currentScene = menu;
-
+        double prevTime = glfwGetTime();
+        double currTime = 0.0;
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
             //renderer.Clear();
             // Start the Dear ImGui frame
+            currTime = glfwGetTime();
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
@@ -73,7 +77,7 @@ int main(void)
                 ImGui::Begin("Scene");
 				// OnUpdate
 				// Todo Need to change deltaTime
-				currentScene->OnUpdate(0.0f);
+				currentScene->OnUpdate((float) currTime - prevTime);
 
 				// OnRendering
 				currentScene->OnRendering();

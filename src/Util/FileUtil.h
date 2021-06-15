@@ -8,7 +8,7 @@
 	Functions handling files
 */
 
-std::string readAll(const char* filePath)
+inline std::string readAll(const char* filePath)
 {
 	std::ifstream in;
 	in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
