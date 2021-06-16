@@ -6,6 +6,7 @@
 #include <gtc/type_ptr.hpp>
 #include "Scene.h"
 #include "Engine/Renderer.h"
+#include <GLFW/glfw3.h>
 
 namespace Scene {
 	class CameraScene : public Scene 
@@ -28,5 +29,14 @@ namespace Scene {
 		glm::mat4 view;
 		glm::mat4 model;
 		glm::mat4 projection;
+		glm::vec3 cameraPos;
+		glm::vec3 cameraUp;
+		glm::vec3 cameraFront;
+		float yaw;
+		float pitch;
+		float lastX;
+		float lastY;
+		float sensitivity;
+		float cameraSpeed;
 	};
 }

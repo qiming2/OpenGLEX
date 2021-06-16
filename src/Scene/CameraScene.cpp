@@ -7,9 +7,31 @@
 #include "Engine/Renderer.h"
 #include "Engine/VertexBufferLayout.h"
 #include "Geometryutil.h"
+#include "Common.h"
 
 namespace Scene{
-	CameraScene::CameraScene() {
+	static float xPos = 0.0f;
+	static float yPos = 0.0f;
+	static bool firstTime = true;
+	static float fov = 45.0f;
+	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	static glm::mat4 ViewPractice(glm::vec3 pos, glm::vec3 target, glm::vec3 up);
+
+	CameraScene::CameraScene():
+		cameraPos(glm::vec3(0.0f, 0.0f, 0.0f)),
+		cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+		cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)),
+		yaw(-90.0f),
+		pitch(0.0f),
+		lastX(0.0f),
+		lastY(0.0f),
+		sensitivity(0.05f),
+		cameraSpeed(0.005f)
+	{
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetCursorPosCallback(window, mouse_callback);
+		glfwSetScrollCallback(window, scroll_callback); 
 		std::vector<float> vertices = CreateCube();
 
 		std::vector<unsigned int> indices = {
@@ -87,18 +109,49 @@ namespace Scene{
 
 	void CameraScene::OnUpdate(float deltaTime) {
 		model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		// Rotate around y axis
-		const float radius = 20.0f;
-		float camX = sin(glfwGetTime()) * radius;
-		float camZ = cos(glfwGetTime()) * radius;
-		view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+// 		Rotate around y axis
+// 				const float radius = 20.0f;
+// 				float camX = sin(glfwGetTime()) * radius;
+// 				float camZ = cos(glfwGetTime()) * radius;
+// 				view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+		// Move using inputkeys
+		if (!firstTime) {
+			yaw += (xPos - lastX) * sensitivity;
+			// ypos on computer ranges from bottom from top
+			pitch += (lastY - yPos) * sensitivity;
+		}
+		firstTime = false;
+		lastX = xPos;
+		lastY = yPos;
+		if (pitch > 89.0f) {
+			pitch = 89.0f;
+		} else if (pitch < -89.0f) {
+			pitch = -89.0f;
+		}
+
+		projection = glm::perspective(glm::radians(fov), 1080.0f / 1080.0f, 0.1f, 100.0f);
+		cameraFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		cameraFront.y = sin(glm::radians(pitch));
+		cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		cameraFront = glm::normalize(cameraFront);
+		if (window != nullptr) {
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+				cameraPos += cameraFront *  cameraSpeed * deltaTime;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+				cameraPos -= cameraFront * cameraSpeed * deltaTime;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+				cameraPos += glm::normalize(glm::cross(cameraUp, cameraFront)) * cameraSpeed * deltaTime;
+			}
+			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+				cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed * deltaTime;
+			}
+		}
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 	}
 
 	void CameraScene::OnRendering() {
-		
-	}
-
-	void CameraScene::OnImGuiRendering() {
 		m_va->Bind();
 		m_renderer->Clear();
 		m_texture1->Bind();
@@ -126,6 +179,29 @@ namespace Scene{
 		// shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
 		// Draw
 	}
+
+	void CameraScene::OnImGuiRendering() {
+		
+	}
+
+	void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+		xPos = xpos;
+		yPos = ypos;
+	}
+
+	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+		fov -= yoffset;
+		if (fov > 45.0f) {
+			fov = 45.0f;
+		} else if (fov < 1.0f) {
+			fov = 1.0f;
+		}
+	}
+
+	// Practice
+	static glm::mat4 ViewPractice(glm::vec3 pos, glm::vec3 target, glm::vec3 up) {
+		glm::mat4 ret(1.0f);
+
+		return ret;
+	}
 }
-
-

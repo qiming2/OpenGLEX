@@ -40,10 +40,11 @@ static void processMix(GLFWwindow* window, float& mix);
 static void glfw_error_callback(int error, const char* description);
 static GLFWwindow* init();
 static void terminate(GLFWwindow* window);
+GLFWwindow* window = nullptr;
 
 int main(void)
 {
-    GLFWwindow* window = init();
+    window = init();
 
     {
         //Renderer renderer;
