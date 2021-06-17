@@ -92,6 +92,7 @@ int main(void)
 
                 ImGui::End();
             }
+            prevTime = currTime;
             
 
 

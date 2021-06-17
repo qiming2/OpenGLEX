@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Engine/Renderer.h"
 #include <GLFW/glfw3.h>
+#include "CameraFps.h"
 
 namespace Scene {
 	class CameraScene : public Scene 
@@ -38,5 +39,6 @@ namespace Scene {
 		float lastY;
 		float sensitivity;
 		float cameraSpeed;
+		CameraFps camera;
 	};
 }

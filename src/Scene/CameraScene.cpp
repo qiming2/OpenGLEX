@@ -8,6 +8,7 @@
 #include "Engine/VertexBufferLayout.h"
 #include "Geometryutil.h"
 #include "Common.h"
+#include "CameraFps.h"
 
 namespace Scene{
 	static float xPos = 0.0f;
@@ -26,8 +27,8 @@ namespace Scene{
 		pitch(0.0f),
 		lastX(0.0f),
 		lastY(0.0f),
-		sensitivity(0.05f),
-		cameraSpeed(0.005f)
+		sensitivity(1.0f),
+		cameraSpeed(5.0f)
 	{
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glfwSetCursorPosCallback(window, mouse_callback);
@@ -116,9 +117,9 @@ namespace Scene{
 // 				view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 		// Move using inputkeys
 		if (!firstTime) {
-			yaw += (xPos - lastX) * sensitivity;
+			yaw += (xPos - lastX) * sensitivity * deltaTime;
 			// ypos on computer ranges from bottom from top
-			pitch += (lastY - yPos) * sensitivity;
+			pitch += (lastY - yPos) * sensitivity * deltaTime;
 		}
 		firstTime = false;
 		lastX = xPos;
@@ -148,7 +149,9 @@ namespace Scene{
 				cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed * deltaTime;
 			}
 		}
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		camera.pos = cameraPos;
+		camera.target = cameraPos + cameraFront;
+		camera.up = cameraUp;
 	}
 
 	void CameraScene::OnRendering() {
@@ -158,8 +161,12 @@ namespace Scene{
 		m_texture2->Bind();
 		m_shader->Bind();
 
-		m_shader->SetMat4fv("view", glm::value_ptr(view));
+		m_shader->SetMat4fv("view", glm::value_ptr(camera.getView()));
 		m_shader->SetMat4fv("projection", glm::value_ptr(projection));
+		// simple third person camera
+// 		camera.pos = positions[0] + glm::vec3(glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(10.0f, 0.0f, 0.0f, 0.0f));
+// 		camera.target = positions[0];
+		m_shader->SetMat4fv("view", glm::value_ptr(camera.getView()));
 		for (int i = 0; i < positions.size(); i++)
 		{
 			glm::vec3 cur_pos = positions[i];
@@ -201,7 +208,25 @@ namespace Scene{
 	// Practice
 	static glm::mat4 ViewPractice(glm::vec3 pos, glm::vec3 target, glm::vec3 up) {
 		glm::mat4 ret(1.0f);
+		
+		glm::vec3 zaxis = glm::normalize(pos - target);
+		glm::vec3 xaxis = glm::normalize(glm::cross(up, zaxis));
+		glm::vec3 yaxis = glm::normalize(glm::cross(zaxis, xaxis));
+		
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), -pos);
 
-		return ret;
+		glm::mat4 rotation = glm::mat4(1.0f);
+
+		rotation[0][0] = xaxis[0];
+		rotation[1][0] = xaxis[1];
+		rotation[2][0] = xaxis[2];
+		rotation[0][1] = yaxis[0];
+		rotation[1][1] = yaxis[1];
+		rotation[2][1] = yaxis[2];
+		rotation[0][2] = zaxis[0];
+		rotation[1][2] = zaxis[1];
+		rotation[2][2] = zaxis[2];
+
+		return rotation * translation;
 	}
 }
