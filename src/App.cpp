@@ -26,6 +26,7 @@
 #include "Scene\TransformScene.h"
 #include "Scene\CoordinateScene.h"
 #include "Scene\CameraScene.h"
+#include "Scene\LightScene.h"
 
 
 
@@ -59,6 +60,7 @@ int main(void)
         menu->Register<Scene::TransformScene>("Transform Scene");
         menu->Register<Scene::CoordinateScene>("Coordinate Scene");
         menu->Register<Scene::CameraScene>("Camera Scene");
+        menu->Register<Scene::LightScene>("Light Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

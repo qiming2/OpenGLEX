@@ -165,16 +165,21 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\Engine\CameraFps.cpp" />
     <ClCompile Include="src\Engine\IndexBuffer.cpp" />
     <ClCompile Include="src\Engine\m_Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer.cpp" />
     <ClCompile Include="src\Engine\Texture.cpp" />
     <ClCompile Include="src\Engine\VertexArray.cpp" />
     <ClCompile Include="src\Engine\VertexBuffer.cpp" />
+    <ClCompile Include="src\Scene\CameraScene.cpp" />
     <ClCompile Include="src\Scene\CoordinateScene.cpp" />
+    <ClCompile Include="src\Scene\LightScene.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\TextureScene.cpp" />
     <ClCompile Include="src\Scene\TransformScene.cpp" />
+    <ClCompile Include="src\Util\FileUtil.cpp" />
+    <ClCompile Include="src\Util\GeometryUtil.cpp" />
     <ClCompile Include="src\Util\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +190,7 @@
     <None Include="res\shaders\b_vert.shader" />
     <None Include="res\shaders\b_vert_coordinate.shader" />
     <None Include="res\shaders\b_vert_transform.shader" />
+    <None Include="res\shaders\light_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\imgui\imconfig.h" />
@@ -195,6 +201,7 @@
     <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Engine\CameraFps.h" />
     <ClInclude Include="src\Engine\Texture.h" />
     <ClInclude Include="src\Engine\IndexBuffer.h" />
     <ClInclude Include="src\Engine\m_Shader.h" />
@@ -202,17 +209,24 @@
     <ClInclude Include="src\Engine\VertexArray.h" />
     <ClInclude Include="src\Engine\VertexBuffer.h" />
     <ClInclude Include="src\Engine\VertexBufferLayout.h" />
+    <ClInclude Include="src\Scene\CameraScene.h" />
     <ClInclude Include="src\Scene\CoordinateScene.h" />
+    <ClInclude Include="src\Scene\LightScene.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\TextureScene.h" />
     <ClInclude Include="src\Scene\TransformScene.h" />
+    <ClInclude Include="src\Util\Common.h" />
     <ClInclude Include="src\Util\FileUtil.h" />
+    <ClInclude Include="src\Util\GeometryUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png" />
     <Image Include="res\Texture\container.jpg" />
     <Image Include="res\Texture\se_1.jpg" />
     <Image Include="res\Texture\wall.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shaders\light_vert.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

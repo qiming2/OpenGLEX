@@ -109,7 +109,7 @@ namespace Scene{
 		// simple third person camera
 // 		camera.pos = positions[0] + glm::vec3(glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(10.0f, 0.0f, 0.0f, 0.0f));
 // 		camera.target = positions[0];
-		m_shader->SetMat4fv("view", glm::value_ptr(camera.getView()));
+		//m_shader->SetMat4fv("view", glm::value_ptr(camera.getView()));
 		for (unsigned int i = 0; i < positions.size(); i++)
 		{
 			glm::vec3 cur_pos = positions[i];

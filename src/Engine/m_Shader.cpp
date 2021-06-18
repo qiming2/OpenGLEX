@@ -68,6 +68,15 @@ void m_Shader::SetUniform4f(const std::string& name, float v0, float v1, float v
 	glUniform4f(location, v0, v1, v2, v3);
 }
 
+void m_Shader::SetVec3fv(const std::string& name, const float* ptr) {
+	int location;
+	if ((location = GetUniformLocation(name)) < 0) {
+		return;
+	}
+
+	glUniform3fv(location, 1, ptr);
+}
+
 void m_Shader::Setfloat(const std::string& name, float v0)
 {
 	int location;
@@ -143,7 +152,7 @@ int m_Shader::GetUniformLocation(const std::string& name)
 	int location = glGetUniformLocation(m_RendererID, name.c_str());
 	if (location == -1)
 	{
-		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << "AT LINE: " << __LINE__ << std::endl;
+		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << std::endl;
 	}
 	m_uniformLocation[name] = location;
 	return location;

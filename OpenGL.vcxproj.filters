@@ -69,6 +69,21 @@
     <ClCompile Include="src\Scene\CoordinateScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\CameraScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\FileUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\GeometryUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\CameraFps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\LightScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -78,6 +93,7 @@
     <None Include="res\shaders\b_vert_transform.shader" />
     <None Include="res\shaders\b_vert_coordinate.shader" />
     <None Include="res\shaders\b_frag_coordinate.shader" />
+    <None Include="res\shaders\light_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -140,6 +156,21 @@
     <ClInclude Include="src\Scene\CoordinateScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\CameraScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\GeometryUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\CameraFps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\LightScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png">
@@ -154,5 +185,8 @@
     <Image Include="res\Texture\wall.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shaders\light_vert.shader" />
   </ItemGroup>
 </Project>

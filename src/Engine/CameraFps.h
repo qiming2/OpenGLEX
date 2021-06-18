@@ -31,5 +31,6 @@ private:
 	float lastY;
 	float sensitivity;
 	float cameraSpeed;
+	bool firstTime;
 	void CameraCallBackInit();
 };

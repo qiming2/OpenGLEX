@@ -5,7 +5,6 @@
 
 static float xPos = 0.0f;
 static float yPos = 0.0f;
-static bool firstTime = true;
 static float fov = 45.0f;
 static void mouse_callback(GLFWwindow* Window, double xpos, double ypos);
 static void scroll_callback(GLFWwindow* Window, double xoffset, double yoffset);
@@ -23,7 +22,8 @@ CameraFps::CameraFps():
 	width(Width),
 	height(Height),
 	near(0.1f),
-	far(100.0f)
+	far(100.0f),
+	firstTime(true)
 {
 	CameraCallBackInit();
 }
@@ -99,6 +99,12 @@ void CameraFps::processInput() {
 	cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(cameraFront);
 	if (Window != nullptr) {
+		if (glfwGetKey(Window, GLFW_KEY_LEFT_ALT)) {
+			glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		} else {
+			glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
 		if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS) {
 			pos += cameraFront * cameraSpeed * DeltaTime;
 		}
@@ -118,7 +124,6 @@ void CameraFps::processInput() {
 }
 
 void CameraFps::CameraCallBackInit() {
-	glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(Window, mouse_callback);
 	glfwSetScrollCallback(Window, scroll_callback);
 }
