@@ -11,28 +11,10 @@
 #include "CameraFps.h"
 
 namespace Scene{
-	static float xPos = 0.0f;
-	static float yPos = 0.0f;
-	static bool firstTime = true;
-	static float fov = 45.0f;
-	static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-	static glm::mat4 ViewPractice(glm::vec3 pos, glm::vec3 target, glm::vec3 up);
+	
 
-	CameraScene::CameraScene():
-		cameraPos(glm::vec3(0.0f, 0.0f, 0.0f)),
-		cameraUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-		cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)),
-		yaw(-90.0f),
-		pitch(0.0f),
-		lastX(0.0f),
-		lastY(0.0f),
-		sensitivity(1.0f),
-		cameraSpeed(5.0f)
+	CameraScene::CameraScene()
 	{
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		glfwSetCursorPosCallback(window, mouse_callback);
-		glfwSetScrollCallback(window, scroll_callback); 
 		std::vector<float> vertices = CreateCube();
 
 		std::vector<unsigned int> indices = {
@@ -68,11 +50,11 @@ namespace Scene{
 		m_renderer = std::make_unique<Renderer>();
 
 
-
 		m_texture1 = std::make_unique<Texture>("res/Texture/wall.jpg", GL_TEXTURE0);
 		m_texture2 = std::make_unique<Texture>("res/Texture/awesomeface.png", GL_TEXTURE1);
 		m_texture1->Bind();
 		m_texture2->Bind();
+
 // 		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); 
 // 		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 // 		// Actually this is a reversed direction of what we have intended
@@ -83,12 +65,9 @@ namespace Scene{
 // 		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 // 		// This is a view matrix calcualted by up, cameraRight and front direction
 // 		// Transposed rotation matrix * negated translation matrix
-		view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f));
-		projection = glm::perspective(glm::radians(45.0f), 1080.0f / 1080.0f, 0.1f, 100.0f);
+
 		// model
-		model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		//model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		positions = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
 			glm::vec3(2.0f,  5.0f, -15.0f),
@@ -109,49 +88,14 @@ namespace Scene{
 	}
 
 	void CameraScene::OnUpdate(float deltaTime) {
-		model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		camera.processInput();
 // 		Rotate around y axis
 // 				const float radius = 20.0f;
 // 				float camX = sin(glfwGetTime()) * radius;
 // 				float camZ = cos(glfwGetTime()) * radius;
 // 				view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 		// Move using inputkeys
-		if (!firstTime) {
-			yaw += (xPos - lastX) * sensitivity * deltaTime;
-			// ypos on computer ranges from bottom from top
-			pitch += (lastY - yPos) * sensitivity * deltaTime;
-		}
-		firstTime = false;
-		lastX = xPos;
-		lastY = yPos;
-		if (pitch > 89.0f) {
-			pitch = 89.0f;
-		} else if (pitch < -89.0f) {
-			pitch = -89.0f;
-		}
-
-		projection = glm::perspective(glm::radians(fov), 1080.0f / 1080.0f, 0.1f, 100.0f);
-		cameraFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		cameraFront.y = sin(glm::radians(pitch));
-		cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		cameraFront = glm::normalize(cameraFront);
-		if (window != nullptr) {
-			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-				cameraPos += cameraFront *  cameraSpeed * deltaTime;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-				cameraPos -= cameraFront * cameraSpeed * deltaTime;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-				cameraPos += glm::normalize(glm::cross(cameraUp, cameraFront)) * cameraSpeed * deltaTime;
-			}
-			else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-				cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed * deltaTime;
-			}
-		}
-		camera.pos = cameraPos;
-		camera.target = cameraPos + cameraFront;
-		camera.up = cameraUp;
+		
 	}
 
 	void CameraScene::OnRendering() {
@@ -161,13 +105,12 @@ namespace Scene{
 		m_texture2->Bind();
 		m_shader->Bind();
 
-		m_shader->SetMat4fv("view", glm::value_ptr(camera.getView()));
-		m_shader->SetMat4fv("projection", glm::value_ptr(projection));
+		camera.SetViewProjectMat(m_shader.get());
 		// simple third person camera
 // 		camera.pos = positions[0] + glm::vec3(glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(10.0f, 0.0f, 0.0f, 0.0f));
 // 		camera.target = positions[0];
 		m_shader->SetMat4fv("view", glm::value_ptr(camera.getView()));
-		for (int i = 0; i < positions.size(); i++)
+		for (unsigned int i = 0; i < positions.size(); i++)
 		{
 			glm::vec3 cur_pos = positions[i];
 			model = glm::translate(glm::mat4(1.0f), cur_pos);
@@ -175,6 +118,8 @@ namespace Scene{
 			if (i < 3)
 			{
 				model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
+				
+
 			}
 			else
 			{
@@ -191,42 +136,5 @@ namespace Scene{
 		
 	}
 
-	void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-		xPos = xpos;
-		yPos = ypos;
-	}
-
-	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-		fov -= yoffset;
-		if (fov > 45.0f) {
-			fov = 45.0f;
-		} else if (fov < 1.0f) {
-			fov = 1.0f;
-		}
-	}
-
-	// Practice
-	static glm::mat4 ViewPractice(glm::vec3 pos, glm::vec3 target, glm::vec3 up) {
-		glm::mat4 ret(1.0f);
-		
-		glm::vec3 zaxis = glm::normalize(pos - target);
-		glm::vec3 xaxis = glm::normalize(glm::cross(up, zaxis));
-		glm::vec3 yaxis = glm::normalize(glm::cross(zaxis, xaxis));
-		
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), -pos);
-
-		glm::mat4 rotation = glm::mat4(1.0f);
-
-		rotation[0][0] = xaxis[0];
-		rotation[1][0] = xaxis[1];
-		rotation[2][0] = xaxis[2];
-		rotation[0][1] = yaxis[0];
-		rotation[1][1] = yaxis[1];
-		rotation[2][1] = yaxis[2];
-		rotation[0][2] = zaxis[0];
-		rotation[1][2] = zaxis[1];
-		rotation[2][2] = zaxis[2];
-
-		return rotation * translation;
-	}
+	
 }

@@ -15,4 +15,5 @@ public:
 	void Unbind() const;
 private:
 	unsigned int m_RendererID;
+	unsigned int attriLoc;
 };

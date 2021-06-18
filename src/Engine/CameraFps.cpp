@@ -1,11 +1,31 @@
+#include "GLFW/glfw3.h"
 #include "CameraFps.h"
+#include "Common.h"
+
+
+static float xPos = 0.0f;
+static float yPos = 0.0f;
+static bool firstTime = true;
+static float fov = 45.0f;
+static void mouse_callback(GLFWwindow* Window, double xpos, double ypos);
+static void scroll_callback(GLFWwindow* Window, double xoffset, double yoffset);
 
 CameraFps::CameraFps():
 	pos(glm::vec3(0.0f, 0.0f, 0.0f)),
 	target(glm::vec3(0.0f, 0.0f, -1.0f)),
-	up(glm::vec3(0.0f, 1.0f, 0.0f))
+	up(glm::vec3(0.0f, 1.0f, 0.0f)),
+	yaw(-90.0f),
+	pitch(0.0f),
+	lastX(0.0f),
+	lastY(0.0f),
+	sensitivity(1.0f),
+	cameraSpeed(5.0f),
+	width(Width),
+	height(Height),
+	near(0.1f),
+	far(100.0f)
 {
-
+	CameraCallBackInit();
 }
 
 CameraFps::~CameraFps()
@@ -16,11 +36,22 @@ CameraFps::~CameraFps()
 CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 	pos(pos),
 	target(target),
-	up(up)
+	up(up),
+	yaw(-90.0f),
+	pitch(0.0f),
+	lastX(0.0f),
+	lastY(0.0f),
+	sensitivity(1.0f),
+	cameraSpeed(5.0f),
+	width(Width),
+	height(Height),
+	near(0.1f),
+	far(100.0f)
 {
-
+	CameraCallBackInit();
 }
 
+// View matrix practice
 glm::mat4 CameraFps::getView() {
 	glm::mat4 ret(1.0f);
 
@@ -43,4 +74,71 @@ glm::mat4 CameraFps::getView() {
 	rotation[2][2] = zaxis[2];
 
 	return rotation * translation;
+}
+
+void CameraFps::processInput() {
+	if (!firstTime) {
+		yaw += (xPos - lastX) * sensitivity * DeltaTime;
+		// ypos on computer ranges from bottom from top
+		pitch += (lastY - yPos) * sensitivity * DeltaTime;
+	}
+	firstTime = false;
+	lastX = xPos;
+	lastY = yPos;
+	if (pitch > 89.0f) {
+		pitch = 89.0f;
+	}
+	else if (pitch < -89.0f) {
+		pitch = -89.0f;
+	}
+
+	projection = glm::perspective(glm::radians(fov), width / height, near, far);
+	glm::vec3 cameraFront;
+	cameraFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront.y = sin(glm::radians(pitch));
+	cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(cameraFront);
+	if (Window != nullptr) {
+		if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS) {
+			pos += cameraFront * cameraSpeed * DeltaTime;
+		}
+		else if (glfwGetKey(Window, GLFW_KEY_S) == GLFW_PRESS) {
+			pos -= cameraFront * cameraSpeed * DeltaTime;
+		}
+		else if (glfwGetKey(Window, GLFW_KEY_A) == GLFW_PRESS) {
+			pos += glm::normalize(glm::cross(up, cameraFront)) * cameraSpeed * DeltaTime;
+		}
+		else if (glfwGetKey(Window, GLFW_KEY_D) == GLFW_PRESS) {
+			pos += glm::normalize(glm::cross(cameraFront, up)) * cameraSpeed * DeltaTime;
+		}
+	}
+	pos = pos;
+	target = pos + cameraFront;
+	up = up;
+}
+
+void CameraFps::CameraCallBackInit() {
+	glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(Window, mouse_callback);
+	glfwSetScrollCallback(Window, scroll_callback);
+}
+
+void CameraFps::SetViewProjectMat(m_Shader* const m_shader) {
+	m_shader->SetMat4fv("view", glm::value_ptr(getView()));
+	m_shader->SetMat4fv("projection", glm::value_ptr(projection));
+}
+
+static void mouse_callback(GLFWwindow* Window, double xpos, double ypos) {
+	xPos = xpos;
+	yPos = ypos;
+}
+
+static void scroll_callback(GLFWwindow* Window, double xoffset, double yoffset) {
+	fov -= yoffset;
+	if (fov > 45.0f) {
+		fov = 45.0f;
+	}
+	else if (fov < 1.0f) {
+		fov = 1.0f;
+	}
 }

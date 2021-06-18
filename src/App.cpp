@@ -20,6 +20,7 @@
 #include "VertexBufferLayout.h"
 #include "m_Shader.h"
 #include "Texture.h"
+#include "Common.h"
 #include "Scene\Scene.h"
 #include "Scene\TextureScene.h"
 #include "Scene\TransformScene.h"
@@ -28,23 +29,25 @@
 
 
 
+
 // Width and height
-const int width = 1080;
-const int height = 1080;
+int Width = 1080;
+int Height = 1080;
 const char* glsl_version = "#version 130";
 
 // callback when window is resized
-static void frame_buffer_callback(GLFWwindow* window, int width, int height);
+static void frame_buffer_callback(GLFWwindow* window, int Width, int height);
 static void processInput(GLFWwindow* window);
 static void processMix(GLFWwindow* window, float& mix);
 static void glfw_error_callback(int error, const char* description);
 static GLFWwindow* init();
 static void terminate(GLFWwindow* window);
-GLFWwindow* window = nullptr;
+GLFWwindow* Window = nullptr;
+float DeltaTime = 0.0f;
 
 int main(void)
 {
-    window = init();
+    Window = init();
 
     {
         //Renderer renderer;
@@ -60,7 +63,7 @@ int main(void)
         currentScene = menu;
         double prevTime = glfwGetTime();
         double currTime = 0.0;
-        while (!glfwWindowShouldClose(window))
+        while (!glfwWindowShouldClose(Window))
         {
             /* Render here */
             //renderer.Clear();
@@ -78,7 +81,8 @@ int main(void)
                 ImGui::Begin("Scene");
 				// OnUpdate
 				// Todo Need to change deltaTime
-				currentScene->OnUpdate((float) currTime - prevTime);
+                DeltaTime = (float) currTime - prevTime;
+				currentScene->OnUpdate(DeltaTime);
 
 				// OnRendering
 				currentScene->OnRendering();
@@ -101,9 +105,9 @@ int main(void)
 
 
 
-            processInput(window);
+            processInput(Window);
             /* Swap front and back buffers */
-            glfwSwapBuffers(window);
+            glfwSwapBuffers(Window);
 
             /* Poll for and process events */
             glfwPollEvents();
@@ -111,32 +115,32 @@ int main(void)
     }
 
 
-    terminate(window);
+    terminate(Window);
     return 0;
 }
 
-static void frame_buffer_callback(GLFWwindow* window, int width, int height)
+static void frame_buffer_callback(GLFWwindow* Window, int width, int height)
 {
     // std::cout << width << " " << height << std::endl;
     glViewport(0, 0, width, height);
 }
 
 // Process input
-static void processInput(GLFWwindow* window)
+static void processInput(GLFWwindow* Window)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(Window, true);
    
 }
 
-static void processMix(GLFWwindow* window, float& mix)
+static void processMix(GLFWwindow* Window, float& mix)
 {
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    if (glfwGetKey(Window, GLFW_KEY_UP) == GLFW_PRESS)
     {
         mix += (float)0.05;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    if (glfwGetKey(Window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         mix -= (float)0.05;
     }
@@ -159,7 +163,7 @@ static GLFWwindow* init()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Lunar", NULL, NULL);
+    window = glfwCreateWindow(Width, Height, "Lunar", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -172,7 +176,7 @@ static GLFWwindow* init()
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     // Set up viewport
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, Width, Height);
     // vertical synchronization
     glfwSwapInterval(1);
 
@@ -202,12 +206,12 @@ static GLFWwindow* init()
     return window;
 }
 
-static void terminate(GLFWwindow* window)
+static void terminate(GLFWwindow* Window)
 {
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(Window);
     glfwTerminate();
 }

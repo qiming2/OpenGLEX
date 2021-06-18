@@ -10,7 +10,8 @@
 // we want to draw something differnt
 // Performance wise, it is difficult to detemine which way is better
 
-VertexArray::VertexArray()
+VertexArray::VertexArray():
+	attriLoc(0)
 {
 	GLCall(glGenVertexArrays(1, &m_RendererID));
 }
@@ -31,12 +32,13 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 		Bind();
 		const auto& element = elements[i];
 		// Needs to enable the vertex attri
-		GLCall(glEnableVertexAttribArray(i));
+		GLCall(glEnableVertexAttribArray(attriLoc));
 		// Creates the vertex attribute like position, color, etc
 		// index of the attri, how many components are the attribute, type of the component,
 		// bytes away from next the same attribute, bytes away from the next attribute
-		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset));
+		GLCall(glVertexAttribPointer(attriLoc, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset));
 		offset += element.count * VertexBufferElement::GetSizeOfType(element.type);
+		attriLoc++;
 	}
 }
 
