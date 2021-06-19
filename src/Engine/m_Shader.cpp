@@ -87,6 +87,16 @@ void m_Shader::Setfloat(const std::string& name, float v0)
 	glUniform1f(location, v0);
 }
 
+void m_Shader::SetMat3fv(const std::string& name, const float* ptr)
+{
+	int location;
+	if ((location = GetUniformLocation(name)) < 0)
+	{
+		return;
+	}
+	glUniformMatrix3fv(location, 1, GL_FALSE, ptr);
+}
+
 void m_Shader::SetMat4fv(const std::string& name, const float* ptr)
 {
 	int location;
