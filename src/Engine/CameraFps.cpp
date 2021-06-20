@@ -92,7 +92,7 @@ void CameraFps::processInput() {
 		pitch = -89.0f;
 	}
 
-	projection = glm::perspective(glm::radians(fov), width / height, near, far);
+	projection = glm::perspective(glm::radians(fov), (float) Width / Height, near, far);
 	glm::vec3 cameraFront;
 	cameraFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront.y = sin(glm::radians(pitch));

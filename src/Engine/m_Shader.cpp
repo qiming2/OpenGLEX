@@ -77,7 +77,18 @@ void m_Shader::SetVec3fv(const std::string& name, const float* ptr) {
 	glUniform3fv(location, 1, ptr);
 }
 
-void m_Shader::Setfloat(const std::string& name, float v0)
+void m_Shader::SetVec3fv(const std::string& name, const float v1, float v2, float v3)
+{
+	int location;
+	if ((location = GetUniformLocation(name)) < 0)
+	{
+		return;
+	}
+
+	glUniform3f(location, v1, v2, v3);
+}
+
+void m_Shader::SetFloat(const std::string& name, float v0)
 {
 	int location;
 	if ((location = GetUniformLocation(name)) < 0)

@@ -93,7 +93,9 @@
     <None Include="res\shaders\b_vert_transform.shader" />
     <None Include="res\shaders\b_vert_coordinate.shader" />
     <None Include="res\shaders\b_frag_coordinate.shader" />
-    <None Include="res\shaders\light_frag.shader" />
+    <None Include="res\shaders\phong_frag.shader" />
+    <None Include="res\shaders\light_cube_vert.shader" />
+    <None Include="res\shaders\light_cube_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -187,6 +189,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="res\shaders\light_vert.shader" />
+    <Text Include="res\shaders\phong_vert.shader" />
   </ItemGroup>
 </Project>

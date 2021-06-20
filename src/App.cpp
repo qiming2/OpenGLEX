@@ -124,6 +124,8 @@ int main(void)
 static void frame_buffer_callback(GLFWwindow* Window, int width, int height)
 {
     // std::cout << width << " " << height << std::endl;
+    Width = width;
+    Height = height;
     glViewport(0, 0, width, height);
 }
 

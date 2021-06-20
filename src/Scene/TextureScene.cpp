@@ -77,7 +77,7 @@ namespace Scene
         m_texture1->Bind();
         m_texture2->Bind();
         m_shader->Bind();
-        m_shader->Setfloat("mixVal", m_mix);
+        m_shader->SetFloat("mixVal", m_mix);
         // shader.SetUniform4f("u_Color", r, 0.6f, 0.8f, 1.0f);
 
         // Draw
