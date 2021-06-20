@@ -29,6 +29,7 @@ LightScene::LightScene():
 	layout.Push<float>(3);
 	layout.Push<float>(2);
 	m_va->AddBuffer(*m_vb, layout);
+	m_shader2 = std::make_unique<m_Shader>("res/shaders/light_cube_vert.shader", "res/shaders/light_cube_frag.shader");
 	m_shader = std::make_unique<m_Shader>("res/shaders/phong_vert.shader", "res/shaders/phong_frag.shader");
 	m_shader->Bind();
 
@@ -103,13 +104,13 @@ void LightScene::OnRendering() {
 	m_shader->SetVec3fv("light.specular", 1.0f, 1.0f, 1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	m_shader->SetVec3fv("material.ambient", glm::value_ptr(glm::vec3(1.0f)));
-	m_shader->SetVec3fv("material.diffuse", glm::value_ptr(glm::vec3(1.0f)));
-	m_shader->SetVec3fv("material.specular", glm::value_ptr(glm::vec3(1.0f)));
-	m_shader->SetFloat("material.shininess", 0.0f);
-
-	m_shader->SetMat4fv("model", glm::value_ptr(modelRotate));
+	m_va->Bind();
+	m_shader2->Bind();
+	camera.SetViewProjectMat(m_shader2.get());
+	m_shader2->SetMat4fv("model", glm::value_ptr(modelRotate));
+	m_shader2->SetVec3fv("lightColor", glm::value_ptr(lightColor));
 	m_texture1->Bind();
+
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	modelRotate = glm::mat4(1.0f);
@@ -119,7 +120,7 @@ void LightScene::OnRendering() {
 	modelRotate = glm::translate(modelRotate, glm::vec3(-1.0f, -1.0f, -1.0f));
 
 	modelRotate = glm::scale(modelRotate, glm::vec3(0.3f, 0.3f, 0.3f));
-	m_shader->SetMat4fv("model", glm::value_ptr(modelRotate));
+	m_shader2->SetMat4fv("model", glm::value_ptr(modelRotate));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 

@@ -23,6 +23,7 @@ namespace Scene {
 		std::unique_ptr<VertexBuffer> m_vb;
 		std::unique_ptr<IndexBuffer> m_ib;
 		std::unique_ptr<m_Shader> m_shader;
+		std::unique_ptr<m_Shader> m_shader2;
 		std::unique_ptr<Texture> m_texture;
 		std::unique_ptr<Texture> m_texture1;
 		std::vector<glm::vec3> positions;
