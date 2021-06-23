@@ -224,6 +224,10 @@
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png" />
     <Image Include="res\Texture\container.jpg" />
+    <Image Include="res\Texture\container2.png" />
+    <Image Include="res\Texture\container2_specular.png" />
+    <Image Include="res\Texture\lighting_maps_specular_color.png" />
+    <Image Include="res\Texture\matrix.jpg" />
     <Image Include="res\Texture\se_1.jpg" />
     <Image Include="res\Texture\wall.jpg" />
   </ItemGroup>

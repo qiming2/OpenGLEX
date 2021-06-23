@@ -88,7 +88,7 @@ namespace Scene{
 	}
 
 	void CameraScene::OnUpdate(float deltaTime) {
-		camera.processInput();
+		
 // 		Rotate around y axis
 // 				const float radius = 20.0f;
 // 				float camX = sin(glfwGetTime()) * radius;
@@ -99,6 +99,7 @@ namespace Scene{
 	}
 
 	void CameraScene::OnRendering() {
+		camera.processInput();
 		m_va->Bind();
 		m_renderer->Clear();
 		m_texture1->Bind();

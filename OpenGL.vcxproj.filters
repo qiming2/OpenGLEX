@@ -187,6 +187,18 @@
     <Image Include="res\Texture\wall.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\Texture\container2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\lighting_maps_specular_color.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\matrix.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\shaders\phong_vert.shader" />

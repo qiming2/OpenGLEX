@@ -25,7 +25,10 @@ namespace Scene {
 		std::unique_ptr<m_Shader> m_shader;
 		std::unique_ptr<m_Shader> m_shader2;
 		std::unique_ptr<Texture> m_texture;
+		std::unique_ptr<Texture> m_texture_container;
+		std::unique_ptr<Texture> m_texture_specular;
 		std::unique_ptr<Texture> m_texture1;
+		std::unique_ptr<Texture> m_texture_emission;
 		std::vector<glm::vec3> positions;
 		glm::mat4 model;
 		glm::mat4 modelRotate;

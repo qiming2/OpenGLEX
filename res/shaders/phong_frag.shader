@@ -7,9 +7,9 @@ in vec2 UV;
 
 struct Material
 {
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	sampler2D texture_container;
+	sampler2D texture_specular;
+	sampler2D texture_emission;
 	float shininess;
 };
 
@@ -21,7 +21,8 @@ struct Light
 	vec3 specular;
 };
 
-uniform sampler2D texture1;
+#define PI 3.1415926538
+uniform float u_time;
 uniform Light light;
 uniform vec3 viewPos;
 uniform Material material;
@@ -29,25 +30,34 @@ uniform Material material;
 void main() {
 	vec3 lightDir = normalize(light.pos - Pos);
 	vec3 normal = normalize(Normal);
+	vec3 objColor = vec3(texture(material.texture_container, UV));
+	// Emission
+	vec3 emissionColor = texture(material.texture_emission, UV).rgb;
 
 	// Ambient
-	vec3 ambientColor = material.ambient * light.ambient;
+	vec3 ambientColor = objColor * light.ambient;
 
 	// Diffuse
 	float diffF = max(dot(normal, lightDir), 0.0);
-	vec3 diffuseColor = diffF * light.diffuse * material.diffuse;
+	vec3 diffuseColor = diffF * light.diffuse * objColor;
 
 	// Specular
-	float specularStrength = 0.5;
 	vec3 reflectDir = reflect(-lightDir, normal);
 	vec3 viewDir = normalize(viewPos - Pos);
-	int shinness = 64;
 	float specularF = pow(max(dot(reflectDir, viewDir), 0.0), material.shininess);
-	vec3 specularColor = specularF * light.specular * material.specular;
+	vec3 specularColor = specularF * light.specular * vec3(texture(material.texture_specular, UV)); 
 
 	//vec3 color = vec3(texture(texture1, UV));
 	//vec3 color = vec3(1.0);
-	vec3 color = diffuseColor + ambientColor + specularColor;
+	vec3 color = ambientColor + diffuseColor + specularColor;
+	if (vec3(texture(material.texture_specular, UV)) == vec3(0.0))
+	{
+		
+		float factor = max(sin(u_time * 5.0 + UV.y * 2.0 * PI), 0.0);
+		color += emissionColor * pow(factor, 10);
+		
+		
+	}
 	out_color = vec4(color.rgb, 1.0);
 }
 

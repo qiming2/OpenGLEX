@@ -41,7 +41,7 @@ CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 	pitch(0.0f),
 	lastX(0.0f),
 	lastY(0.0f),
-	sensitivity(1.0f),
+	sensitivity(0.1f),
 	cameraSpeed(5.0f),
 	width(Width),
 	height(Height),
@@ -108,13 +108,13 @@ void CameraFps::processInput() {
 		if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS) {
 			pos += cameraFront * cameraSpeed * DeltaTime;
 		}
-		else if (glfwGetKey(Window, GLFW_KEY_S) == GLFW_PRESS) {
+		if (glfwGetKey(Window, GLFW_KEY_S) == GLFW_PRESS) {
 			pos -= cameraFront * cameraSpeed * DeltaTime;
 		}
-		else if (glfwGetKey(Window, GLFW_KEY_A) == GLFW_PRESS) {
+		if (glfwGetKey(Window, GLFW_KEY_A) == GLFW_PRESS) {
 			pos += glm::normalize(glm::cross(up, cameraFront)) * cameraSpeed * DeltaTime;
 		}
-		else if (glfwGetKey(Window, GLFW_KEY_D) == GLFW_PRESS) {
+		if (glfwGetKey(Window, GLFW_KEY_D) == GLFW_PRESS) {
 			pos += glm::normalize(glm::cross(cameraFront, up)) * cameraSpeed * DeltaTime;
 		}
 	}
