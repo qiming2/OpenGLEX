@@ -40,7 +40,7 @@ LightScene::LightScene():
 	m_texture_container = std::make_unique<Texture>("res/Texture/container2.png", GL_TEXTURE0);
 	// some funky specular maps
 	m_texture_specular = std::make_unique<Texture>("res/Texture/container2_specular.png", GL_TEXTURE1);
-	m_texture_emission = std::make_unique<Texture>("res/Texture/matrix.jpg", GL_TEXTURE2);
+	m_texture_emission = std::make_unique<Texture>("res/Texture/starsky.jpeg", GL_TEXTURE2);
 	
 	glEnable(GL_DEPTH_TEST);
 }
@@ -58,10 +58,10 @@ void LightScene::OnUpdate(float deltaTime) {
 	model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));*/
 	modelRotate = glm::mat4(1.0f);
 	
-	/*modelRotate = glm::rotate(modelRotate, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+	modelRotate = glm::rotate(modelRotate, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 	modelRotate = glm::rotate(modelRotate, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 	modelRotate = glm::rotate(modelRotate, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-	*/
+	
 
 	modelRotate = glm::translate(modelRotate, lightColor);
 
@@ -99,7 +99,7 @@ void LightScene::OnRendering() {
 	m_shader->SetMat4fv("model", glm::value_ptr(model));
 
 	// Some experiment of light
-	lightColor = glm::vec3(1.0f);
+	lightColor = glm::vec3(1.5f);
 	// Change lightColor over time
 	/*lightColor.x = sin(glfwGetTime() * 2.0f);
 	lightColor.y = sin(glfwGetTime() * 0.7f);
@@ -112,7 +112,7 @@ void LightScene::OnRendering() {
 	glm::vec3 ambientColor = lightColor;
 	// Set Light Attributes
 	m_shader->SetVec3fv("light.pos", glm::value_ptr(lightPos));
-	m_shader->SetVec3fv("light.ambient", glm::value_ptr(0.2f * ambientColor));
+	m_shader->SetVec3fv("light.ambient", glm::value_ptr(0.3f * ambientColor));
 	m_shader->SetVec3fv("light.diffuse", glm::value_ptr(0.5f * diffuseColor)); // darken diffuse light a bit
 	m_shader->SetVec3fv("light.specular", 1.0f, 1.0f, 1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, 36);

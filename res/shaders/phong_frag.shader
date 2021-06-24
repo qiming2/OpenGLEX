@@ -53,9 +53,11 @@ void main() {
 	if (vec3(texture(material.texture_specular, UV)) == vec3(0.0))
 	{
 		
-		float factor = max(sin(u_time * 5.0 + UV.y * 2.0 * PI), 0.0);
-		color += emissionColor * pow(factor, 10);
-		
+		/*float factor = max(sin(u_time * 3.0 + UV.y * PI), 0.0);
+		color += emissionColor * pow(factor, 10);*/
+
+		// want to use the border but change the picture for the wood portion
+		color += emissionColor * light.ambient + emissionColor * diffF * light.diffuse - diffuseColor - ambientColor;
 		
 	}
 	out_color = vec4(color.rgb, 1.0);
