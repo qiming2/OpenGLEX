@@ -27,6 +27,7 @@
 #include "Scene\CoordinateScene.h"
 #include "Scene\CameraScene.h"
 #include "Scene\LightScene.h"
+#include "Scene\LightTypeScene.h"
 
 
 
@@ -61,6 +62,7 @@ int main(void)
         menu->Register<Scene::CoordinateScene>("Coordinate Scene");
         menu->Register<Scene::CameraScene>("Camera Scene");
         menu->Register<Scene::LightScene>("Light Scene");
+        menu->Register<Scene::LightTypeScene>("Light Type Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();
@@ -95,7 +97,7 @@ int main(void)
                     currentScene = menu;
                 }
                 currentScene->OnImGuiRendering();
-
+                ImGui::Text("Frame per second: %f", 1.0f / DeltaTime);
                 ImGui::End();
             }
             prevTime = currTime;

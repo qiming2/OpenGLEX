@@ -23,7 +23,6 @@ public:
 	void SetViewProjectMat(m_Shader* const m_shader);
 private:
 	glm::mat4 view;
-	glm::mat4 model;
 	glm::mat4 projection;
 	float yaw;
 	float pitch;

@@ -118,7 +118,6 @@ void LightScene::OnRendering() {
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// First one light cube
-	m_va->Bind();
 	m_shader2->Bind();
 	camera.SetViewProjectMat(m_shader2.get());
 	m_shader2->SetMat4fv("model", glm::value_ptr(modelRotate));

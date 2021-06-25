@@ -53,7 +53,6 @@ CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 
 // View matrix practice
 glm::mat4 CameraFps::getView() {
-	glm::mat4 ret(1.0f);
 
 	glm::vec3 zaxis = glm::normalize(pos - target);
 	glm::vec3 xaxis = glm::normalize(glm::cross(up, zaxis));

@@ -17,7 +17,6 @@ bool GLLogCall(const char* function, const char* file, int line)
     return true;
 }
 
-
 void Renderer::Clear() const
 {
     // Only clear the color bit

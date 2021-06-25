@@ -84,6 +84,9 @@
     <ClCompile Include="src\Scene\LightScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\LightTypeScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -96,6 +99,8 @@
     <None Include="res\shaders\phong_frag.shader" />
     <None Include="res\shaders\light_cube_vert.shader" />
     <None Include="res\shaders\light_cube_frag.shader" />
+    <None Include="res\shaders\light_type_vert.shader" />
+    <None Include="res\shaders\light_type_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -173,6 +178,9 @@
     <ClInclude Include="src\Scene\LightScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\LightTypeScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png">
@@ -197,6 +205,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Texture\matrix.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\starsky.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -173,7 +173,7 @@ int m_Shader::GetUniformLocation(const std::string& name)
 	int location = glGetUniformLocation(m_RendererID, name.c_str());
 	if (location == -1)
 	{
-		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << std::endl;
+		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << " Unknown Name: " << name << std::endl;
 	}
 	m_uniformLocation[name] = location;
 	return location;

@@ -175,6 +175,7 @@
     <ClCompile Include="src\Scene\CameraScene.cpp" />
     <ClCompile Include="src\Scene\CoordinateScene.cpp" />
     <ClCompile Include="src\Scene\LightScene.cpp" />
+    <ClCompile Include="src\Scene\LightTypeScene.cpp" />
     <ClCompile Include="src\Scene\Scene.cpp" />
     <ClCompile Include="src\Scene\TextureScene.cpp" />
     <ClCompile Include="src\Scene\TransformScene.cpp" />
@@ -192,6 +193,8 @@
     <None Include="res\shaders\b_vert_transform.shader" />
     <None Include="res\shaders\light_cube_frag.shader" />
     <None Include="res\shaders\light_cube_vert.shader" />
+    <None Include="res\shaders\light_type_frag.shader" />
+    <None Include="res\shaders\light_type_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +217,7 @@
     <ClInclude Include="src\Scene\CameraScene.h" />
     <ClInclude Include="src\Scene\CoordinateScene.h" />
     <ClInclude Include="src\Scene\LightScene.h" />
+    <ClInclude Include="src\Scene\LightTypeScene.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\TextureScene.h" />
     <ClInclude Include="src\Scene\TransformScene.h" />
@@ -229,6 +233,7 @@
     <Image Include="res\Texture\lighting_maps_specular_color.png" />
     <Image Include="res\Texture\matrix.jpg" />
     <Image Include="res\Texture\se_1.jpg" />
+    <Image Include="res\Texture\starsky.jpeg" />
     <Image Include="res\Texture\wall.jpg" />
   </ItemGroup>
   <ItemGroup>
