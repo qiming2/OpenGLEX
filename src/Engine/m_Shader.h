@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 class m_Shader
 {
@@ -19,6 +22,7 @@ public:
 	void SetVec3fv(const std::string& name, const float* ptr);
 	void SetMat3fv(const std::string& name, const float* ptr);
 	void SetVec3fv(const std::string& name, float v1, float v2, float v3);
+	void SetVec3fv(const std::string& name, const glm::vec3& val);
 private:
 	// Render ID
 	unsigned int m_RendererID;

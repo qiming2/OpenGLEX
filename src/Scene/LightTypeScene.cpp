@@ -50,7 +50,7 @@ namespace Scene {
 		// Use texture class since we can stb image_loading library
 		GLenum textureSlot = GL_TEXTURE0;
 		diffuseTexture = new Texture("res/Texture/starsky.jpeg", textureSlot++);
-		specularTexture = new Texture("res/Texture/lighting_maps_specular_color.png", textureSlot++);
+		specularTexture = new Texture("res/Texture/starsky.jpeg", textureSlot++);
 
 		// Use shader class to load
 		phong = new m_Shader("res/shaders/light_type_vert.shader", "res/shaders/light_type_frag.shader");
@@ -95,6 +95,9 @@ namespace Scene {
 	void LightTypeScene::OnRendering() {
 		renderer->Clear();
 
+		// Send diffuse texture
+		
+
 		// render main cube
 		glBindVertexArray(va_id);
 		//glBindBuffer(GL_ARRAY_BUFFER, vb_id);
@@ -104,8 +107,18 @@ namespace Scene {
 		light_cube->SetVec3fv("lightColor", glm::value_ptr(lightColor));
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		diffuseTexture->Bind();
+		specularTexture->Bind();
 		phong->Bind();
-		phong->SetMat4fv("normalM", glm::value_ptr(glm::mat3(glm::transpose(glm::inverse(model)))));
+		// Material
+		phong->SetInt("material.diffuse", 0);
+		phong->SetInt("material.specular", 1);
+		// Light
+		phong->SetVec3fv("light.direction", glm::vec3(-1.0f, -1.0f, -1.0f));
+		phong->SetVec3fv("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+		phong->SetVec3fv("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+		phong->SetVec3fv("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+		phong->SetMat3fv("normalM", glm::value_ptr(glm::transpose(glm::inverse(glm::mat3(model)))));
 		camera.SetViewProjectMat(phong);
 		phong->SetMat4fv("model", glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, 36);

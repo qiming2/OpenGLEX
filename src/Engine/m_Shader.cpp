@@ -3,6 +3,9 @@
 #include <iostream>
 #include "FileUtil.h"
 #include "m_Shader.h"
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
 
 m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
 {
@@ -77,6 +80,17 @@ void m_Shader::SetVec3fv(const std::string& name, const float* ptr) {
 	glUniform3fv(location, 1, ptr);
 }
 
+void m_Shader::SetVec3fv(const std::string& name, const glm::vec3& val)
+{
+	int location;
+	if ((location = GetUniformLocation(name)) < 0)
+	{
+		return;
+	}
+
+	glUniform3fv(location, 1, glm::value_ptr(val));
+}
+
 void m_Shader::SetVec3fv(const std::string& name, const float v1, float v2, float v3)
 {
 	int location;
@@ -97,6 +111,8 @@ void m_Shader::SetFloat(const std::string& name, float v0)
 	}
 	glUniform1f(location, v0);
 }
+
+
 
 void m_Shader::SetMat3fv(const std::string& name, const float* ptr)
 {

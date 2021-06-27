@@ -17,7 +17,7 @@ CameraFps::CameraFps():
 	pitch(0.0f),
 	lastX(0.0f),
 	lastY(0.0f),
-	sensitivity(1.0f),
+	sensitivity(2.0f),
 	cameraSpeed(5.0f),
 	width(Width),
 	height(Height),
