@@ -27,5 +27,6 @@ namespace Scene {
 		glm::mat4 model;
 		glm::mat4 model_light;
 		glm::vec3 lightColor;
+		glm::vec3 cubePositions[10];
 	};
 }
