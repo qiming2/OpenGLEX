@@ -16,6 +16,12 @@ namespace Scene {
 	static bool pointLight = false;
 	static bool directionalLight = false;
 	static bool spotLight = false;
+	glm::vec3 pointLightPositions[] = {
+		glm::vec3( 0.7f,  0.2f,  2.0f),
+		glm::vec3( 2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f,  2.0f, -12.0f),
+		glm::vec3( 0.0f,  0.0f, -3.0f)
+	}; 
 	LightTypeScene::LightTypeScene():
 		lightColor(glm::vec3(1.0f, 1.0f ,1.0f))
 	{
@@ -79,7 +85,7 @@ namespace Scene {
         glm::vec3( 1.5f,  0.2f, -1.5f),
         glm::vec3(-1.3f,  1.0f, -1.5f)
 		};
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < sizeof(cubePositions)/sizeof(glm::vec3); i++) {
 			cubePositions[i] = cubePositions1[i];
 		}
 		glEnable(GL_DEPTH_TEST);
@@ -112,18 +118,28 @@ namespace Scene {
 
 	void LightTypeScene::OnRendering() {
 		renderer->Clear();
-
+		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 		// Send diffuse texture
 		
 
 		// render main cube
 		glBindVertexArray(va_id);
 		//glBindBuffer(GL_ARRAY_BUFFER, vb_id);
-		/*light_cube->Bind();
-		camera.SetViewProjectMat(light_cube);
-		light_cube->SetMat4fv("model", glm::value_ptr(model_light));
-		light_cube->SetVec3fv("lightColor", glm::value_ptr(lightColor));
-		glDrawArrays(GL_TRIANGLES, 0, 36);*/
+		
+		if (pointLight) {
+			light_cube->Bind();
+			camera.SetViewProjectMat(light_cube);
+			light_cube->SetVec3fv("lightColor", glm::value_ptr(lightColor));
+			for (int i = 0; i < sizeof(pointLightPositions)/sizeof(glm::vec3); i++) {
+				model_light = glm::mat4(1.0f);
+				model_light = glm::translate(model_light, pointLightPositions[i]);
+				model_light = glm::scale(model_light, glm::vec3(0.1f, 0.1f ,0.1f));
+				light_cube->SetMat4fv("model", glm::value_ptr(model_light));
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+			}
+		}
+		
+		
 
 		diffuseTexture->Bind();
 		specularTexture->Bind();
@@ -143,16 +159,20 @@ namespace Scene {
 		
 
 		// point light
-		phong->SetInt("usePointLight", pointLight);
-		phong->SetVec3fv("pLight.pos", glm::vec3(0.0f, 0.0f, 2.0f));
-		phong->SetVec3fv("pLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-		phong->SetVec3fv("pLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		phong->SetVec3fv("pLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-		// values of atten depend on the distance coverage of the point light we are setting
-		// weblink: https://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
-		phong->SetFloat("pLight.constantAtten", 1.0f);
-		phong->SetFloat("pLight.linearAtten", 0.09f);
-		phong->SetFloat("pLight.quadraticAtten", 0.032f);
+		for (int i = 0; i < sizeof(pointLightPositions)/sizeof(glm::vec3); i++) {
+			phong->SetInt("usePointLight", pointLight);
+			std::string number = std::to_string(i);
+			phong->SetVec3fv("pLight[" + number + "].pos", pointLightPositions[i]);
+			phong->SetVec3fv("pLight[" + number + "].ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+			phong->SetVec3fv("pLight[" + number + "].specular", glm::vec3(1.0f, 1.0f, 1.0f));
+			phong->SetVec3fv("pLight[" + number + "].diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
+			// values of atten depend on the distance coverage of the point light we are setting
+			// weblink: https://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
+			phong->SetFloat("pLight[" + number + "].constantAtten", 1.0f);
+			phong->SetFloat("pLight[" + number + "].linearAtten", 0.09f);
+			phong->SetFloat("pLight[" + number + "].quadraticAtten", 0.032f);
+		}
+		
 
 		// Spot light
 		phong->SetInt("useSpotLight", spotLight);
@@ -162,7 +182,7 @@ namespace Scene {
 		phong->SetFloat("sLight.outerCutoff", glm::cos(glm::radians(17.5f)));
 		phong->SetVec3fv("sLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
 		phong->SetVec3fv("sLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		phong->SetVec3fv("sLight.diffuse", glm::vec3(0.7f, 0.7f, 0.7f));
+		phong->SetVec3fv("sLight.diffuse", glm::vec3(1.5f, 1.5f, 1.5f));
 		phong->SetFloat("sLight.constantAtten", 1.0f);
 		phong->SetFloat("sLight.linearAtten", 0.09f);
 		phong->SetFloat("sLight.quadraticAtten", 0.032f);

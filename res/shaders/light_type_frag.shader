@@ -41,6 +41,9 @@ struct SpotLight {
 	float linearAtten;
 	float quadraticAtten;
 };
+// four point lights
+#define NR_POINT_LIGHTS 4
+uniform PointLight pLight[NR_POINT_LIGHTS];
 
 struct Material
 {
@@ -54,7 +57,8 @@ uniform float shininess;
 uniform vec3 viewPos;
 uniform Material material;
 uniform Light light;
-uniform PointLight pLight;
+
+
 uniform SpotLight sLight;
 uniform int usePointLight;
 uniform int useDirectionalLight;
@@ -67,6 +71,51 @@ vec3 objSpecular;
 vec3 lightAmb;
 vec3 lightDiff;
 vec3 lightSpe;
+
+vec3 phong_shading();
+
+// light_dir: intuitive light direction, the function will inverse it if necessary
+vec3 calDirectionalLight(Light light) {
+	dir = normalize(-light.direction);
+	lightAmb = light.ambient;
+	lightDiff = light.diffuse;
+	lightSpe = light.specular;
+	return phong_shading();
+}
+
+vec3 calPointLight(PointLight light) {
+	float distance = length(light.pos - Pos);
+	float atten = 1.0 / (light.constantAtten + light.linearAtten * distance + light.quadraticAtten * distance * distance);
+
+	dir = normalize(light.pos - Pos);
+	lightAmb = light.ambient;
+	lightDiff = light.diffuse;
+	lightSpe = light.specular;
+	// output color needs to multiply by a attenuation factor
+	return phong_shading() * atten;
+}
+
+vec3 calSpotLight(SpotLight light) {
+	vec3 realLightDir = normalize(-light.direction);
+	vec3 toFragDir = normalize(light.pos - Pos);
+
+	// Outer cutoff for soft edges
+	float eps = light.cutoff - light.outerCutoff;
+	float theta = dot(realLightDir, toFragDir);
+
+	// Within spotlight range, do spotlight calculation, but we can just use a clamp to
+	// simulate cutoff effect
+	float intensity = clamp((theta - light.outerCutoff) / eps, 0.0, 1.0);
+	
+
+	float distance = length(light.pos - Pos);
+	float atten = 1.0 / (light.constantAtten + light.linearAtten * distance + light.quadraticAtten * distance * distance);
+	dir = normalize(light.pos - Pos);
+	lightAmb = light.ambient;
+	lightDiff = light.diffuse;
+	lightSpe = light.specular;
+	return phong_shading() * atten * intensity;
+}
 
 vec3 phong_shading() {
 	// emission currently none
@@ -96,11 +145,7 @@ void main() {
 
 	///////////////////////////////////////// Directional Light/////////////////////////
 	if (useDirectionalLight != 0) {
-		dir = normalize(-light.direction);
-		lightAmb = light.ambient;
-		lightDiff = light.diffuse;
-		lightSpe = light.specular;
-		color += phong_shading();
+		color += calDirectionalLight(light);
 	}
 	
 
@@ -108,36 +153,16 @@ void main() {
 
 	// Point light attenuation
 	if (usePointLight != 0) {
-		float distance = length(pLight.pos - Pos);
-		float atten = 1.0 / (pLight.constantAtten + pLight.linearAtten * distance + pLight.quadraticAtten * distance * distance);
-
-		// the rest computation is the same as except that the final color needs to multiply a attenuation value
-
-		dir = normalize(pLight.pos - Pos);
-		lightAmb = pLight.ambient;
-		lightDiff = pLight.diffuse;
-		lightSpe = pLight.specular;
-		color += phong_shading() * atten;
+		for (int i = 0; i < NR_POINT_LIGHTS; i++) {
+			color += calPointLight(pLight[i]);
+		}
 	}
 	
 
 	///////////////////////////////////////// Spot light ///////////////////////////
 	
 	if (useSpotLight != 0) {
-		vec3 realLightDir = normalize(-sLight.direction);
-		vec3 toFragDir = normalize(sLight.pos - Pos);
-		float eps = sLight.cutoff - sLight.outerCutoff;
-		float theta = dot(realLightDir, toFragDir);
-		float intensity = clamp((theta - sLight.outerCutoff) / eps, 0.0, 1.0);
-			// Within spotlight range, do spotlight calculation
-
-		float distance = length(sLight.pos - Pos);
-		float atten = 1.0 / (sLight.constantAtten + sLight.linearAtten * distance + sLight.quadraticAtten * distance * distance);
-		dir = normalize(sLight.pos - Pos);
-		lightAmb = sLight.ambient;
-		lightDiff = sLight.diffuse;
-		lightSpe = sLight.specular;
-		color += phong_shading() * atten * intensity;
+		color += calSpotLight(sLight);
 	}
 	out_color = vec4(color, 1.0);
 }
