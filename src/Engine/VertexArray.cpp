@@ -18,6 +18,10 @@ VertexArray::VertexArray():
 
 VertexArray::~VertexArray()
 {
+	
+}
+
+void VertexArray::Delete() const {
 	GLCall(glDeleteVertexArrays(1, &m_RendererID));
 }
 

@@ -13,6 +13,7 @@ public:
 	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 	void Bind() const;
 	void Unbind() const;
+	void Delete() const;
 private:
 	unsigned int m_RendererID;
 	unsigned int attriLoc;

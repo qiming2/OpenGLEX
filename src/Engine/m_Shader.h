@@ -10,9 +10,11 @@ class m_Shader
 public:
 	m_Shader(const char* vertexPath, const char* fragmentPath);
 	~m_Shader();
+	
 
 	void Bind() const;
 	void Unbind() const;
+	void Delete() const;
 	// Set uniform variable
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 

@@ -1,3 +1,4 @@
+#include "Common.h"
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,7 +8,6 @@
 #include "Engine/Renderer.h"
 #include "Engine/VertexBufferLayout.h"
 #include "Geometryutil.h"
-#include "Common.h"
 #include "CameraFps.h"
 
 namespace Scene{

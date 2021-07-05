@@ -28,6 +28,7 @@
 #include "Scene\CameraScene.h"
 #include "Scene\LightScene.h"
 #include "Scene\LightTypeScene.h"
+#include "Scene\SimpleModelScene.h"
 
 
 
@@ -46,6 +47,7 @@ static GLFWwindow* init();
 static void terminate(GLFWwindow* window);
 GLFWwindow* Window = nullptr;
 float DeltaTime = 0.0f;
+Renderer gl_renderer = Renderer();
 
 int main(void)
 {
@@ -63,10 +65,12 @@ int main(void)
         menu->Register<Scene::CameraScene>("Camera Scene");
         menu->Register<Scene::LightScene>("Light Scene");
         menu->Register<Scene::LightTypeScene>("Light Type Scene");
+        menu->Register<Scene::SimpleModelScene>("Simple Model Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();
         double currTime = 0.0;
+        glEnable(GL_DEPTH_TEST);
         while (!glfwWindowShouldClose(Window))
         {
             /* Render here */

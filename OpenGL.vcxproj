@@ -164,9 +164,12 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Scene\SimpleModelScene.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Engine\CameraFps.cpp" />
     <ClCompile Include="src\Engine\IndexBuffer.cpp" />
+    <ClCompile Include="src\Engine\Mesh.cpp" />
+    <ClCompile Include="src\Engine\Model.cpp" />
     <ClCompile Include="src\Engine\m_Shader.cpp" />
     <ClCompile Include="src\Engine\Renderer.cpp" />
     <ClCompile Include="src\Engine\Texture.cpp" />
@@ -204,6 +207,8 @@
     <None Include="res\shaders\light_type_frag.shader" />
     <None Include="res\shaders\light_type_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
+    <None Include="res\shaders\simple_model_frag.shader" />
+    <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\assimp\include\assimp\aabb.h" />
@@ -290,7 +295,10 @@
     <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Scene\SimpleModelScene.h" />
     <ClInclude Include="src\Engine\CameraFps.h" />
+    <ClInclude Include="src\Engine\Mesh.h" />
+    <ClInclude Include="src\Engine\Model.h" />
     <ClInclude Include="src\Engine\Texture.h" />
     <ClInclude Include="src\Engine\IndexBuffer.h" />
     <ClInclude Include="src\Engine\m_Shader.h" />

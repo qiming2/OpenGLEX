@@ -1,6 +1,7 @@
+#include "Common.h"
 #include "GLFW/glfw3.h"
 #include "CameraFps.h"
-#include "Common.h"
+
 
 
 static float xPos = 0.0f;
