@@ -30,6 +30,15 @@ Mesh::~Mesh() {
 
 }
 
+void Mesh::Delete() const {
+	va.Delete();
+	ib.Delete();
+	vb.Delete();
+	for (int i = 0; i < textures.size(); i++) {
+		textures[i].Delete();
+	}
+}
+
 void Mesh::Draw(m_Shader& shader) {
 	// set a convertion for binding textures to
 	// appropriate texture slot
@@ -39,7 +48,7 @@ void Mesh::Draw(m_Shader& shader) {
 	unsigned int specularNr = 1;
 	unsigned int normalNr = 1;
 	unsigned int heightNr = 1;
-	for (unsigned int i = 0; i < textures.size(); i++) {
+	for (int i = 0; i < textures.size(); i++) {
 		// change active texture slot number for this texture
 		// for a single mesh at any time, we rebind all the textures
 		// to appropriate slots

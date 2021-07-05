@@ -25,19 +25,13 @@ struct Vertex {
 class Mesh
 {
 public:
-	// mesh Data
-    /*std::vector<Vertex>       vertices;
-    std::vector<unsigned int> indices;
-    std::vector<Texture>      textures;
-    unsigned int VAO;*/
 	
 	// For educational purposes, might not be optimized
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
 	~Mesh();
 	void Draw(m_Shader& shader);
-	
+	void Delete() const;
 private:
-	/*unsigned int VBO, EBO;*/
 	 /*Mesh data
 	 use mesh class to structurize imported model
 	 with assimp*/
