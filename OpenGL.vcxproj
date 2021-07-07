@@ -135,6 +135,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\assimp\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc142-mtd.lib;glew32s.lib;glfw3.lib;User32.lib;opengl32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/gbk %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

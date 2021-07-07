@@ -7,6 +7,12 @@
 static std::unordered_map<std::string, Texture> loaded;
 
 Model::Model(const char* path) {
+	Texture::SetFlip(true);
+	LoadModel(path);
+}
+
+Model::Model(const char* path, bool flip) {
+	Texture::SetFlip(flip);
 	LoadModel(path);
 }
 
@@ -21,13 +27,21 @@ void Model::Draw(m_Shader& shader) {
 	}
 }
 
+void Model::Delete() {
+	for (int i = 0; i < meshes.size(); i++) {
+		meshes[i].Delete();
+	}
+	meshes.clear();
+	dir = "";
+}
+
 void Model::LoadModel(const std::string& path) {
 	Assimp::Importer importer;
 
 	// turn rendering primitives to triangles and flip uvs since
 	// opengl use reversed texture coordinates
 	// many more flags!
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		std::cout << "ERROR::ASSIMP::IMPORT MODEL FAILED: " << importer.GetErrorString() << std::endl;
@@ -36,6 +50,9 @@ void Model::LoadModel(const std::string& path) {
 	// store directory for later use
 	dir = path.substr(0, path.find_last_of('/'));
 	ProcessNode(scene->mRootNode, scene);
+
+	// Clean up loaded cache after finish loading
+	loaded.clear();
 }
 
 // Since model loaded via assimp follows a recursive pattern,

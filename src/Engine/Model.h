@@ -12,8 +12,10 @@ class Model
 {
 public:
 	Model(const char* path);
+	Model(const char* path, bool flip);
 	~Model();
 	void Draw(m_Shader& shader);
+	void Delete();
 private:
 	// model date
 	std::vector<Mesh> meshes;

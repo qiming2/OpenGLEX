@@ -30,7 +30,7 @@ public:
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
 	~Mesh();
 	void Draw(m_Shader& shader);
-	void Delete() const;
+	void Delete();
 private:
 	 /*Mesh data
 	 use mesh class to structurize imported model

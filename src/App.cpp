@@ -54,6 +54,7 @@ int main(void)
     Window = init();
 
     {
+        
         //Renderer renderer;
         Scene::Scene* currentScene = nullptr;
         Scene::SceneMenu* menu = new Scene::SceneMenu(currentScene);

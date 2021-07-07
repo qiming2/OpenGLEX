@@ -30,13 +30,14 @@ Mesh::~Mesh() {
 
 }
 
-void Mesh::Delete() const {
+void Mesh::Delete() {
 	va.Delete();
 	ib.Delete();
 	vb.Delete();
 	for (int i = 0; i < textures.size(); i++) {
 		textures[i].Delete();
 	}
+	textures.clear();
 }
 
 void Mesh::Draw(m_Shader& shader) {

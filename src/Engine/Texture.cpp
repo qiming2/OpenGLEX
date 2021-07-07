@@ -13,7 +13,7 @@ Texture::Texture(const char* image, GLenum activeID)
 	int width, height, nChannels;
 	// Usually we want to flip the picture
 	// May not be true for some cases, be careful!!
-	stbi_set_flip_vertically_on_load(true);
+	stbi_set_flip_vertically_on_load(Texture::flip);
 	// Always pad image to a multiple of 4 in width
 	unsigned char* data = stbi_load(image, &width, &height, &nChannels, 0);
 	//maybe used if image width is not multiple of 4, this is very important!
@@ -80,3 +80,8 @@ void Texture::Unbind() const
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+// Static members
+bool Texture::flip = true;
+void Texture::SetFlip(bool flip) {
+	Texture::flip = flip;
+}

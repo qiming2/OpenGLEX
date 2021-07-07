@@ -15,6 +15,7 @@ namespace Scene {
 	private:
 		CameraFps camera;
 		Model model;
+		Model barbara;
 		glm::mat4 model_m;
 		m_Shader shader;
 	};

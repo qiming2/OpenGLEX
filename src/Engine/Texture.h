@@ -5,6 +5,8 @@
 class Texture
 {
 public:
+	static bool flip;
+	static void SetFlip(bool flip);
 	Texture(const char* image, GLenum activeID);
 
 	~Texture();
