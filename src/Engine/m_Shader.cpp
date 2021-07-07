@@ -138,6 +138,16 @@ void m_Shader::SetMat4fv(const std::string& name, const float* ptr)
 	glUniformMatrix4fv(location, 1, GL_FALSE, ptr);
 }
 
+void m_Shader::SetMat4fv(const std::string& name, const glm::mat4& val)
+{
+	int location;
+	if ((location = GetUniformLocation(name)) < 0)
+	{
+		return;
+	}
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val));
+}
+
 void m_Shader::SetInt(const std::string& name, int v0)
 {
 	

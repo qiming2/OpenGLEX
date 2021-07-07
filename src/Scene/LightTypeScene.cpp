@@ -25,6 +25,7 @@ namespace Scene {
 	LightTypeScene::LightTypeScene():
 		lightColor(glm::vec3(1.0f, 1.0f ,1.0f))
 	{
+		Texture::SetFlip(true);
 		std::vector<float> vertices = CreateCubeWithNormal();
 
 		// sizeof could not determine the size of the array since

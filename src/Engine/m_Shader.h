@@ -23,6 +23,7 @@ public:
 	void SetMat4fv(const std::string& name, const float* ptr);
 	void SetVec3fv(const std::string& name, const float* ptr);
 	void SetMat3fv(const std::string& name, const float* ptr);
+	void SetMat4fv(const std::string& name, const glm::mat4& val);
 	void SetVec3fv(const std::string& name, float v1, float v2, float v3);
 	void SetVec3fv(const std::string& name, const glm::vec3& val);
 private:

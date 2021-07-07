@@ -18,6 +18,7 @@ LightScene::LightScene():
 	lightPos(glm::vec3(1.2f, 1.0f, 2.0f)),
 	modelRotate(glm::mat4(1.0f))
 {
+	Texture::SetFlip(true);
 	m_renderer = std::make_unique<Renderer>();
 	m_va = std::make_unique<VertexArray>();
 	m_va->Bind();
