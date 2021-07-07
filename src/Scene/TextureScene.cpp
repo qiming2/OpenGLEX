@@ -63,11 +63,19 @@ namespace Scene
         m_texture2->Bind();
 	}
 
-	TextureScene::~TextureScene() {}
+	TextureScene::~TextureScene() {
+        m_va->Delete();
+		m_vb->Delete();
+		m_ib->Delete();
+		m_shader->Delete();
+		m_texture1->Delete();
+		m_texture2->Delete();
+    }
 
 	void TextureScene::OnUpdate(float deltaTime)
 	{
         // Currently do nothing
+
 	}
 
 	void TextureScene::OnRendering()

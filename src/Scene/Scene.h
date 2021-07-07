@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <imgui/imgui.h>
+#include <map>
 #include "Renderer.h"
 
 namespace Scene
@@ -33,10 +34,15 @@ namespace Scene
 		}
 		void OnImGuiRendering() override;
 		void OnRendering() override;
+		void CleanUp();
 	private:
 		std::unique_ptr<Renderer> m_renderer;
 		Scene*& m_currentScene;
+		std::map<std::string, int> cacheNames;
 		std::unordered_map<std::string, std::function<Scene*()>> m_scenes;
+		std::unordered_map<std::string, Scene*> cache;
 		ImVec4 m_clear_color;
+		void ChangePriority(const std::string& name);
+		std::string lowestPriority();
 	};
 }

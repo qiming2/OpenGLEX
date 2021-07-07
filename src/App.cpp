@@ -13,6 +13,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <unordered_map>
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
@@ -41,8 +42,8 @@ const char* glsl_version = "#version 130";
 // callback when window is resized
 static void frame_buffer_callback(GLFWwindow* window, int Width, int height);
 static void processInput(GLFWwindow* window);
-static void processMix(GLFWwindow* window, float& mix);
 static void glfw_error_callback(int error, const char* description);
+static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 static GLFWwindow* init();
 static void terminate(GLFWwindow* window);
 GLFWwindow* Window = nullptr;
@@ -55,7 +56,6 @@ int main(void)
 
     {
         
-        //Renderer renderer;
         Scene::Scene* currentScene = nullptr;
         Scene::SceneMenu* menu = new Scene::SceneMenu(currentScene);
 
@@ -98,7 +98,7 @@ int main(void)
                 // Add back button
                 if (currentScene != menu && ImGui::Button("Back"))
                 {
-                    delete currentScene;
+                    menu->CleanUp();
                     currentScene = menu;
                 }
                 currentScene->OnImGuiRendering();
@@ -128,7 +128,7 @@ int main(void)
     return 0;
 }
 
-static void frame_buffer_callback(GLFWwindow* Window, int width, int height)
+static void frame_buffer_callback(GLFWwindow* window, int width, int height)
 {
     // std::cout << width << " " << height << std::endl;
     Width = width;
@@ -141,20 +141,19 @@ static void processInput(GLFWwindow* Window)
 {
     if (glfwGetKey(Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(Window, true);
-   
 }
 
-static void processMix(GLFWwindow* Window, float& mix)
-{
-    if (glfwGetKey(Window, GLFW_KEY_UP) == GLFW_PRESS)
-    {
-        mix += (float)0.05;
-    }
-
-    if (glfwGetKey(Window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    {
-        mix -= (float)0.05;
-    }
+// If we wish to be notified when a physical key is pressed or released or when it repeats, set a key callback.
+static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    static bool hideCursor = false;
+    
+    if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS && hideCursor) {
+        hideCursor = false;
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	} else if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS && !hideCursor) {
+        hideCursor = true;
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
 }
 
 static void glfw_error_callback(int error, const char* description)
@@ -181,9 +180,11 @@ static GLFWwindow* init()
         exit(-1);
     }
 
-    // Set glfw callback
+    // Set glfw callback and config
     glfwSetFramebufferSizeCallback(window, frame_buffer_callback);
     glfwSetErrorCallback(glfw_error_callback);
+    glfwSetKeyCallback(window, glfw_key_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     // Set up viewport

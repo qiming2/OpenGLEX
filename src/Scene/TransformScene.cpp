@@ -69,6 +69,12 @@ namespace Scene {
 	TransformScene::~TransformScene()
 	{
 		// Unique pointer helps to manage memory deletion
+		m_va->Delete();
+		m_vb->Delete();
+		m_ib->Delete();
+		m_shader->Delete();
+		m_texture1->Delete();
+		m_texture2->Delete();
 	}
 
 	void TransformScene::OnUpdate(float deltaTime)

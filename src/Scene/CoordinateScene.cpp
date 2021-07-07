@@ -22,19 +22,19 @@ namespace Scene
 
 
 		m_va = std::make_unique<VertexArray>();
-// 		// Creating buffer and getting an index
+ 		// Creating buffer and getting an index
 		m_vb = std::make_unique<VertexBuffer>(vertices.data(), vertices.size() * sizeof(float));
-// 		// Creating index buffer and getting an index
-// 		m_ib = std::make_unique<IndexBuffer>(indices.data(), indices.size());
+ 		// Creating index buffer and getting an index
+
 		VertexBufferLayout layout;
-// 		// Position Attri
+ 		// Position Attri
 		layout.Push<float>(3);
-// 		// Texture Attri
+ 		// Texture Attri
 		layout.Push<float>(2);
-// 		// Add vertexbuffer using layout object functions
+ 		// Add vertexbuffer using layout object functions
 		m_va->AddBuffer(*m_vb, layout);
 
-		// Use relative path
+		// Use r elative path
 		m_shader = std::make_unique<m_Shader>("res/shaders/b_vert_coordinate.shader", "res/shaders/b_frag_coordinate.shader");
 		m_shader->Bind();
 		m_shader->SetInt("texture1", 0);
@@ -77,7 +77,11 @@ namespace Scene
 	CoordinateScene::~CoordinateScene()
 	{
 		// Unique pointer helps to manage memory deletion
-
+		m_va->Delete();
+		m_vb->Delete();
+		m_shader->Delete();
+		m_texture1->Delete();
+		m_texture2->Delete();
 	}
 
 	void CoordinateScene::OnUpdate(float deltaTime)

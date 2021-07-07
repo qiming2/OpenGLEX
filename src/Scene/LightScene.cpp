@@ -46,7 +46,15 @@ LightScene::LightScene():
 }
 
 LightScene::~LightScene() {
-
+	m_va->Delete();
+	m_vb->Delete();
+	m_shader->Delete();
+	m_shader2->Delete();
+	m_texture->Delete();
+	m_texture1->Delete();
+	m_texture_container->Delete();
+	m_texture_specular->Delete();
+	m_texture_emission->Delete();
 }
 
 void LightScene::OnUpdate(float deltaTime) {

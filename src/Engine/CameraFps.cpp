@@ -99,12 +99,6 @@ void CameraFps::processInput() {
 	cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(cameraFront);
 	if (Window != nullptr) {
-		if (glfwGetKey(Window, GLFW_KEY_LEFT_ALT)) {
-			glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		} else {
-			glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
-
 		if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS) {
 			pos += cameraFront * cameraSpeed * DeltaTime;
 		}

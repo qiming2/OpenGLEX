@@ -84,7 +84,12 @@ namespace Scene{
 	}
 
 	CameraScene::~CameraScene() {
-	
+		m_va->Delete();
+		m_vb->Delete();
+		m_ib->Delete();
+		m_shader->Delete();
+		m_texture1->Delete();
+		m_texture2->Delete();
 	}
 
 	void CameraScene::OnUpdate(float deltaTime) {
