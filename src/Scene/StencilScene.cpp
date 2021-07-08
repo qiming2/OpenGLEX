@@ -26,6 +26,8 @@ namespace Scene {
 
 	void StencilScene::OnImGuiRendering() {
 		ImGui::SliderFloat("camera speed", &camera.cameraSpeed, 0.0f, 1000.0f);
+		ImGui::ColorEdit3("Outline Color 1", (float*)&color1);
+		ImGui::ColorEdit3("Outline Color 2", (float*)&color2);
 	}
 
 	void StencilScene::OnRendering() {
@@ -38,7 +40,7 @@ namespace Scene {
 
 		OutlineDrawSetting();
 		outlineShader.Bind();
-		outlineShader.SetVec3fv("outline_color", glm::vec3(0.7f, 0.2f, 0.6f));
+		outlineShader.SetVec3fv("outline_color", color1.x, color1.y, color1.z);
 		DrawSingleOutline(model_m, outlineShader);
 		OutlineEndSetting();
 
@@ -49,7 +51,7 @@ namespace Scene {
 
 		OutlineDrawSetting();
 		outlineShader.Bind();
-		outlineShader.SetVec3fv("outline_color", glm::vec3(0.0f, 0.6f, 0.6f));
+		outlineShader.SetVec3fv("outline_color", color2.x, color2.y, color2.z);
 		DrawSingleOutline(model_m, outlineShader);
 		OutlineEndSetting();
 		
@@ -116,7 +118,6 @@ namespace Scene {
 
 	void StencilScene::OutlineDrawSetting() {
 		// Now disable write to stencil and disable depth test
-		//glDisable(GL_DEPTH_TEST);
 		glStencilMask(0x00);
 		// Draw a scaled up version of all objects, check whether
 		// the stencil value is not set to 1

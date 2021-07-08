@@ -19,6 +19,8 @@ namespace Scene {
 		Model model;
 		glm::mat4 model_2;
 		glm::mat4 model_m;
+		ImVec4 color1;
+		ImVec4 color2;
 		void DrawObjects(m_Shader& shader);
 		void DrawOutline(m_Shader& shader);
 		void DrawSingleObject(glm::mat4& model_temp, m_Shader& shader);
