@@ -20,7 +20,7 @@ bool GLLogCall(const char* function, const char* file, int line)
 void Renderer::Clear() const
 {
     // Only clear the color bit
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     // Maybe need to clear other bits in the future
 }
 

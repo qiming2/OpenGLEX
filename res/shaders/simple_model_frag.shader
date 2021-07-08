@@ -15,7 +15,7 @@ void main() {
 	vec3 viewDir = normalize(viewPos - Pos);
 	out_color = texture(texture_diffuse1, UV);
 	//out_color = vec4(1.0, 1.0, 1.0, 1.0);
-	if (dot(viewDir, normal) < 0.10) {
+	/*if (dot(viewDir, normal) < 0.10) {
 		out_color = vec4(0.0, 0.0, 0.2, 1.0);
-	}
+	}*/
 }

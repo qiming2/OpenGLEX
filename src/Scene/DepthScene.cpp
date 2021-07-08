@@ -7,7 +7,7 @@ namespace Scene {
 	// Can learn more about z-fighting
 	DepthScene::DepthScene():
 		model_m(1.0f),
-		model("res/Model/simple_model/backpack.obj", false),
+		model("res/Model/Sponza/sponza.obj"),
 		shader("res/shaders/depth_vert.shader", "res/shaders/depth_frag.shader")
 	{
 		std::vector<float> plane = CreatePlane();
@@ -46,7 +46,8 @@ namespace Scene {
 	}
 
 	void DepthScene::OnImGuiRendering() {
-		ImGui::SliderFloat("camera far plane", &camera.far, 0.0f, 100.0f);  
+		ImGui::SliderFloat("camera far plane", &camera.far, 0.0f, 10000.0f);
+		ImGui::SliderFloat("camera speed", &camera.cameraSpeed, 0.0f, 1000.0f);
 	}
 
 	void DepthScene::OnRendering() {
@@ -54,15 +55,17 @@ namespace Scene {
 		// more precision close to near plane, low precision at far plane
 		gl_renderer.Clear();
 		shader.Bind();
+		shader.SetFloat("far", camera.far);
+		shader.SetFloat("near", camera.near);
 		camera.SetViewProjectMat(&shader);
-		model_m = glm::mat4(1.0f);
+		/*model_m = glm::mat4(1.0f);
 		model_m = glm::scale(model_m, glm::vec3(1.0f, 1.0f, 100.0f));
 		shader.SetMat4fv("model", model_m);
-		gl_renderer.Draw(*va, *ib);
+		gl_renderer.Draw(*va, *ib);*/
 
-		/*model_m = glm::mat4(1.0);
+		model_m = glm::mat4(1.0);
 		shader.SetMat4fv("model", model_m);
-		model.Draw(shader);*/
+		model.Draw(shader);
 	}
 
 }

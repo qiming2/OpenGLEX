@@ -19,6 +19,8 @@ public:
 	float height;
 	float near;
 	float far;
+	float sensitivity;
+	float cameraSpeed;
 	void processInput();
 	void SetViewProjectMat(m_Shader* const m_shader);
 private:
@@ -28,8 +30,6 @@ private:
 	float pitch;
 	float lastX;
 	float lastY;
-	float sensitivity;
-	float cameraSpeed;
 	bool firstTime;
 	void CameraCallBackInit();
 };

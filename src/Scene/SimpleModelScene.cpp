@@ -6,7 +6,7 @@ namespace Scene{
 	float timeToRotateACycle = 3.0f;
 	float radiansPerSec = 0.0;
 	SimpleModelScene::SimpleModelScene():
-		model("res/Model/simple_model/backpack.obj", false),
+		model("res/Model/Sponza/sponza.obj", true),
 		shader("res/shaders/simple_model_vert.shader", "res/shaders/simple_model_frag.shader"),
 		model_m(glm::mat4(1.0f)),
 		barbara("res/Model/Genshin/barbara/barbara.pmx")
@@ -46,6 +46,6 @@ namespace Scene{
 	}
 
 	void SimpleModelScene::OnImGuiRendering() {
-	
+		ImGui::SliderFloat("camera far plane", &camera.far, 0.0f, 10000.0f);  
 	}
 }

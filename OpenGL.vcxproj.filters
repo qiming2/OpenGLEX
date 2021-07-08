@@ -99,6 +99,9 @@
     <ClCompile Include="src\Scene\DepthScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\StencilScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -141,6 +144,8 @@
     <None Include="res\shaders\simple_model_frag.shader" />
     <None Include="res\shaders\depth_frag.shader" />
     <None Include="res\shaders\depth_vert.shader" />
+    <None Include="res\shaders\outline_frag.shader" />
+    <None Include="res\shaders\outline_vert.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -459,6 +464,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\DepthScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\StencilScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
