@@ -28,9 +28,11 @@ namespace Scene
 
         m_va = std::make_unique<VertexArray>();
         // Creating buffer and getting an index
-        m_vb = std::make_unique<VertexBuffer>(vertices.data(), vertices.size() * sizeof(float));
+        m_vb = std::make_unique<VertexBuffer>();
+        m_vb->ReMap(vertices.data(), vertices.size() * sizeof(float));
         // Creating index buffer and getting an index
-        m_ib = std::make_unique<IndexBuffer>(indices.data(), indices.size());
+        m_ib = std::make_unique<IndexBuffer>();
+        m_ib->ReMap(indices.data(), indices.size());
         VertexBufferLayout layout;
         // Position Attri
         layout.Push<float>(3);

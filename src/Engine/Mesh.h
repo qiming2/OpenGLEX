@@ -22,12 +22,20 @@ struct Vertex {
 	glm::vec3 bitangent;
 };
 
+
+enum class MeshType:char {
+	Quad,
+	Cube,
+	Sphere
+};
+
 class Mesh
 {
 public:
 	
 	// For educational purposes, might not be optimized
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
+	Mesh(MeshType type);
 	~Mesh();
 	void Draw(m_Shader& shader);
 	void Delete();
@@ -40,4 +48,5 @@ private:
 	IndexBuffer ib;
 	VertexArray va;
 	VertexBuffer vb;
+	void LoadRawVerticesWithNT(const std::vector<float>& vertices);
 };

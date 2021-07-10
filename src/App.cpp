@@ -32,6 +32,7 @@
 #include "Scene\SimpleModelScene.h"
 #include "Scene\DepthScene.h"
 #include "Scene\StencilScene.h"
+#include "Scene\BlendScene.h"
 
 
 
@@ -71,6 +72,7 @@ int main(void)
         menu->Register<Scene::SimpleModelScene>("Simple Model Scene");
         menu->Register<Scene::DepthScene>("Depth Scene");
         menu->Register<Scene::StencilScene>("Stencil Scene");
+        menu->Register<Scene::BlendScene>("Blend Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

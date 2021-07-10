@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include <string>
 #include <iostream>
+#include "GeometryUtil.h"
 #include "Common.h"
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures):
@@ -23,6 +24,66 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>&
 	// bitangent
 	layout.Push<float>(3);
 	va.AddBuffer(vb, layout);
+	va.Unbind();
+}
+
+Mesh::Mesh(MeshType type) {
+	if (type == MeshType::Quad) {
+		LoadRawVerticesWithNT(CreatePlane());
+	} else if (type == MeshType::Cube) {
+		LoadRawVerticesWithNT(CreateCubeWithNormal());
+	}
+}
+
+// Load vertices created from GeomtryUtil
+void Mesh::LoadRawVerticesWithNT(const std::vector<float>& vertices) {
+	va.Bind();
+	Vertex temp;
+	glm::vec3 v_temp;
+	glm::vec2 v_temp1;
+	std::vector<unsigned int> indices;
+	std::vector<Vertex> vertexData;
+	unsigned int index = 0;
+	unsigned int i = 0;
+	while (i < vertices.size()) {
+		///////////////////////////////////////// WARNING ///////////////////////////////////
+		// Don't use this!!!! order of which i++ takes place first is not defined!
+		//temp.position = glm::vec3(vertices[i++], vertices[i++], vertices[i++]);
+		///////////////////////////////////////// WARNING ///////////////////////////////////
+
+		// Pos
+		v_temp.x = vertices[i++];
+		v_temp.y = vertices[i++];
+		v_temp.z = vertices[i++];
+		temp.position = v_temp;
+
+		// Normal
+		v_temp.x = vertices[i++];
+		v_temp.y = vertices[i++];
+		v_temp.z = vertices[i++];
+		temp.normal = v_temp;
+
+		// Texture
+		v_temp1.x = vertices[i++];
+		v_temp1.y = vertices[i++];
+		temp.texCoord = v_temp1;
+		// Indices
+		indices.push_back(index++);
+		// Vertices remap
+		vertexData.push_back(temp);
+	}
+	ib.ReMap(indices.data(), indices.size());
+	vb.ReMap(vertexData.data(), vertexData.size() * sizeof(Vertex));
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	layout.Push<float>(3);
+	layout.Push<float>(2);
+	layout.Push<float>(3);
+	layout.Push<float>(3);
+	va.AddBuffer(vb, layout);
+	// Bind one default texture for now
+	textures.emplace_back("res/Texture/starsky.jpeg", GL_TEXTURE0);
+	textures[textures.size() - 1].type = "texture_diffuse";
 	va.Unbind();
 }
 

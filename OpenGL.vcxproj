@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\BlendScene.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_demo.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_draw.cpp" />
@@ -218,6 +219,7 @@
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\BlendScene.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\aabb.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\anim.h" />

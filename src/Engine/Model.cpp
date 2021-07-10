@@ -76,11 +76,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
-
+	Vertex vertex;
 	// Process vertices
 	for (int i = 0; i < mesh->mNumVertices; i++) {
-		Vertex vertex;
-
 		// position
 		glm::vec3 temp;
 		temp.x = mesh->mVertices[i].x;

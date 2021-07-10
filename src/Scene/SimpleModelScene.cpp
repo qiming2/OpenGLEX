@@ -2,9 +2,9 @@
 #include "Common.h"
 
 namespace Scene{
-	float radians = 0.0;
-	float timeToRotateACycle = 3.0f;
-	float radiansPerSec = 0.0;
+	static float radians = 0.0;
+	static float timeToRotateACycle = 3.0f;
+	static float radiansPerSec = 0.0;
 	SimpleModelScene::SimpleModelScene():
 		model("res/Model/Sponza/sponza.obj", true),
 		shader("res/shaders/simple_model_vert.shader", "res/shaders/simple_model_frag.shader"),
