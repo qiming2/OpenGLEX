@@ -33,7 +33,8 @@ namespace Scene{
 		glEnable(GL_BLEND);
 		// How we want to blend objects
 		// out_color = src.color.a * src.color + (1.0f - src.color.a) * des.color;
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	}
 
 	BlendScene::~BlendScene() {
@@ -70,11 +71,23 @@ namespace Scene{
 	
 		/////////////////////////////// Tips ////////////////////////////
 
+		// Simple Face culling understanding is not complex
+		// thus put it in BlendScene
+		glEnable(GL_CULL_FACE);
+		// Cull front face to see an interesting seeing through effect
+		glCullFace(GL_FRONT);
+		// Only render faces that are indexed in clockwise order
+		glFrontFace(GL_CCW);
+
+
+
 		model_m = glm::mat4(1.0f);
-		model_m = glm::translate(model_m, glm::vec3(-1.5f,  0.0f, -1.0f));
+		model_m = glm::translate(model_m, glm::vec3(-1.5f,  0.01f, -1.0f));
 		shader.SetMat4fv("model", glm::value_ptr(model_m));
 		cube.Draw(shader);
 
+		// For quads, we want to draw both faces
+		glDisable(GL_CULL_FACE);
 		model_m = glm::mat4(1.0f);
 		model_m = glm::translate(model_m, glm::vec3(0.0f,  -0.5f, 0.0f));
 		model_m = glm::scale(model_m, glm::vec3(5.0f, 5.0f, 5.0f));
