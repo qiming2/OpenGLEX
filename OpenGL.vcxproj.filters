@@ -504,6 +504,9 @@
     <Image Include="res\Texture\starsky.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\Texture\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\shaders\phong_vert.shader" />

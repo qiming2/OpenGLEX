@@ -82,13 +82,34 @@ void Mesh::LoadRawVerticesWithNT(const std::vector<float>& vertices) {
 	layout.Push<float>(3);
 	va.AddBuffer(vb, layout);
 	// Bind one default texture for now
-	textures.emplace_back("res/Texture/starsky.jpeg", GL_TEXTURE0);
-	textures[textures.size() - 1].type = "texture_diffuse";
+	textures.emplace_back("res/Texture/starsky.jpeg", GL_TEXTURE0, "texture_diffuse");
 	va.Unbind();
 }
 
 Mesh::~Mesh() {
 
+}
+
+void Mesh::ChangeTexture(const char* image, unsigned int index) {
+	// if index is greater than the texture size, we don't currently
+	// want this to happen
+	if (index > textures.size() - 1) {
+		std::cout << "ERROR::MESH::TEXTURE::CHANGE FAILED\n INDEX GREATER THAN CONTAINER SIZE " << __FILE__ << std::endl;
+		return;
+	}
+	textures[index].Delete();
+	textures[index] = Texture(image, GL_TEXTURE0 + index, "texture_diffuse");
+}
+
+void Mesh::ChangeTexture(const Texture& image, unsigned int index) {
+	// if index is greater than the texture size, we don't currently
+	// want this to happen
+	if (index > textures.size() - 1) {
+		std::cout << "ERROR::MESH::TEXTURE::CHANGE FAILED\n INDEX GREATER THAN CONTAINER SIZE " << __FILE__ << std::endl;
+		return;
+	}
+	textures[index].Delete();
+	textures[index] = image;
 }
 
 void Mesh::Delete() {

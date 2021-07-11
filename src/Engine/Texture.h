@@ -8,6 +8,7 @@ public:
 	static bool flip;
 	static void SetFlip(bool flip);
 	Texture(const char* image, GLenum activeID);
+	Texture(const char* image, GLenum activeID, const std::string& typeName);
 
 	~Texture();
 	void SetActiveID(GLenum activeID);

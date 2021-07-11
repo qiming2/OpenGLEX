@@ -104,12 +104,12 @@ std::vector<float> CreateCubeWithNormal()
 std::vector<float> CreatePlane() {
 	std::vector<float> planeVertices = {
         // positions         //Normal      // texture Coords
-         5.0f, 0.0f,  5.0f, 0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-        -5.0f, 0.0f,  5.0f, 0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-        -5.0f, 0.0f, -5.0f, 0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-         5.0f, 0.0f,  5.0f, 0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-        -5.0f, 0.0f, -5.0f, 0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-         5.0f, 0.0f, -5.0f, 0.0f,  1.0f,  0.0f,  1.0f, 1.0f								
+         0.5f, 0.0f,  0.5f, 0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f, 0.0f,  0.5f, 0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f, 0.0f, -0.5f, 0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, 0.0f,  0.5f, 0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f, 0.0f, -0.5f, 0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, 0.0f, -0.5f, 0.0f,  1.0f,  0.0f,  1.0f, 1.0f								
     };
 	return planeVertices;
 }

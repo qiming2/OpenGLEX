@@ -11,9 +11,14 @@ uniform sampler2D texture_normal1;
 uniform sampler2D texture_specular1;
 
 void main() {
-	vec3 normal = normalize(Normal);
-	vec3 viewDir = normalize(viewPos - Pos);
-	out_color = texture(texture_diffuse1, UV);
+	/*vec3 normal = normalize(Normal);
+	vec3 viewDir = normalize(viewPos - Pos);*/
+	vec4 tex_color = texture(texture_diffuse1, UV);
+	if (tex_color.a < 0.1) {
+		discard;
+	}
+	out_color = tex_color;
+	
 	//out_color = vec4(1.0, 1.0, 1.0, 1.0);
 	/*if (dot(viewDir, normal) < 0.10) {
 		out_color = vec4(0.0, 0.0, 0.2, 1.0);

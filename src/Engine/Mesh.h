@@ -37,6 +37,8 @@ public:
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures);
 	Mesh(MeshType type);
 	~Mesh();
+	void ChangeTexture(const char* image, unsigned int index);
+	void ChangeTexture(const Texture& image, unsigned int index);
 	void Draw(m_Shader& shader);
 	void Delete();
 private:

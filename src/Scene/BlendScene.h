@@ -18,6 +18,7 @@ namespace Scene {
 		m_Shader shader;
 		Mesh cube;
 		Mesh quad;
+		Mesh floor;
 	};
 }
 

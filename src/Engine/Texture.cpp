@@ -54,6 +54,18 @@ Texture::Texture(const char* image, GLenum activeID)
 
 }
 
+Texture::Texture(const char* image, GLenum activeID, const std::string& typeName)
+	:Texture(image, activeID)
+{
+	//////////////////////////////// WARNING /////////////////////////
+	// This is not Java!!!! Can not call this:
+	// 	   Texture(image, activeID)
+	// Have to delegating constructor!!!!!
+	///////////////////////////////// WARNING /////////////////////////
+	type = typeName;
+	
+}
+
 void Texture::SetActiveID(GLenum activeID)
 {
 	m_activeID = activeID;

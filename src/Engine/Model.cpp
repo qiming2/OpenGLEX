@@ -178,11 +178,10 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType 
 
 		if (!skip) {
 			// can optimize using emplace back potentially
-			Texture tex(path.c_str(), GL_TEXTURE0 + i);
+			Texture tex(path.c_str(), GL_TEXTURE0 + i, typeName);
 
 			// maybe path is not necessary
 			tex.path = path;
-			tex.type = typeName;
 			textures.push_back(tex);
 			loaded.emplace(path, tex);
 		}

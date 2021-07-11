@@ -113,12 +113,8 @@ int main(void)
             }
             prevTime = currTime;
             
-
-
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-
 
             processInput(Window);
             /* Swap front and back buffers */

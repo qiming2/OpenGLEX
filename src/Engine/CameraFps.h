@@ -23,6 +23,8 @@ public:
 	float cameraSpeed;
 	void processInput();
 	void SetViewProjectMat(m_Shader* const m_shader);
+	void SetViewProjectMat(m_Shader& m_shader);
+	void OnImGuiRendering();
 private:
 	glm::mat4 view;
 	glm::mat4 projection;

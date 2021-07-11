@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "GLFW/glfw3.h"
 #include "CameraFps.h"
+#include "imgui/imgui.h"
 
 
 
@@ -117,6 +118,13 @@ void CameraFps::processInput() {
 	up = up;
 }
 
+
+void CameraFps::OnImGuiRendering() {
+	ImGui::SliderFloat("camera far plane", &far, 0.0f, 10000.0f);
+	ImGui::SliderFloat("camera speed", &cameraSpeed, 0.0f, 1000.0f);
+}
+
+
 void CameraFps::CameraCallBackInit() {
 	glfwSetCursorPosCallback(Window, mouse_callback);
 	glfwSetScrollCallback(Window, scroll_callback);
@@ -125,6 +133,11 @@ void CameraFps::CameraCallBackInit() {
 void CameraFps::SetViewProjectMat(m_Shader* const m_shader) {
 	m_shader->SetMat4fv("view", glm::value_ptr(getView()));
 	m_shader->SetMat4fv("projection", glm::value_ptr(projection));
+}
+
+void CameraFps::SetViewProjectMat(m_Shader& m_shader) {
+	m_shader.SetMat4fv("view", glm::value_ptr(getView()));
+	m_shader.SetMat4fv("projection", glm::value_ptr(projection));
 }
 
 static void mouse_callback(GLFWwindow* Window, double xpos, double ypos) {
