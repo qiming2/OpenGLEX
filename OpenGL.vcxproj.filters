@@ -105,6 +105,15 @@
     <ClCompile Include="src\Scene\BlendScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\FramebufferScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -149,6 +158,8 @@
     <None Include="res\shaders\depth_vert.shader" />
     <None Include="res\shaders\outline_frag.shader" />
     <None Include="res\shaders\outline_vert.shader" />
+    <None Include="res\shaders\screen_quad_vert.shader" />
+    <None Include="res\shaders\screen_quad_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -473,6 +484,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\BlendScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\FramebufferScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -60,7 +60,7 @@ Texture::Texture(const char* image, GLenum activeID, const std::string& typeName
 	//////////////////////////////// WARNING /////////////////////////
 	// This is not Java!!!! Can not call this:
 	// 	   Texture(image, activeID)
-	// Have to delegating constructor!!!!!
+	// Have to use delegating constructor!!!!!
 	///////////////////////////////// WARNING /////////////////////////
 	type = typeName;
 	

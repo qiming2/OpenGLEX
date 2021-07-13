@@ -33,6 +33,7 @@
 #include "Scene\DepthScene.h"
 #include "Scene\StencilScene.h"
 #include "Scene\BlendScene.h"
+#include "Scene\FramebufferScene.h"
 
 
 
@@ -40,7 +41,7 @@
 // Width and height
 int Width = 1080;
 int Height = 1080;
-const char* glsl_version = "#version 130";
+const char* glsl_version = "#version 330";
 
 // callback when window is resized
 static void frame_buffer_callback(GLFWwindow* window, int Width, int height);
@@ -73,6 +74,7 @@ int main(void)
         menu->Register<Scene::DepthScene>("Depth Scene");
         menu->Register<Scene::StencilScene>("Stencil Scene");
         menu->Register<Scene::BlendScene>("Blend Scene");
+        menu->Register<Scene::FramebufferScene>("Framebuffer Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();
@@ -132,7 +134,7 @@ int main(void)
 
 static void frame_buffer_callback(GLFWwindow* window, int width, int height)
 {
-    // std::cout << width << " " << height << std::endl;
+    //std::cout << width << " " << height << std::endl;
     Width = width;
     Height = height;
     glViewport(0, 0, width, height);

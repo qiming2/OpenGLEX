@@ -2,6 +2,7 @@
 #include "BlendScene.h"
 #include "Common.h"
 
+
 namespace Scene{
 	static std::vector<glm::vec3> positions = {
 		glm::vec3(-1.5f,  0.0f, -0.48f),

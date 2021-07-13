@@ -92,6 +92,8 @@
       <PreprocessorDefinitions>GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)Dependencies;$(SolutionDir)Dependencies\glm;$(SolutionDir)Dependencies\stb;$(SolutionDir)src\Engine;$(SolutionDir)src\Util;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\assimp\include</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,6 +161,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\FramebufferScene.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\Engine\FrameBuffer.cpp" />
     <ClCompile Include="src\Scene\BlendScene.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_demo.cpp" />
@@ -215,10 +224,15 @@
     <None Include="res\shaders\outline_frag.shader" />
     <None Include="res\shaders\outline_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
+    <None Include="res\shaders\screen_quad_frag.shader" />
+    <None Include="res\shaders\screen_quad_vert.shader" />
     <None Include="res\shaders\simple_model_frag.shader" />
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\FramebufferScene.h" />
+    <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Engine\FrameBuffer.h" />
     <ClInclude Include="src\Scene\BlendScene.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\aabb.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
