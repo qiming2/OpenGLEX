@@ -53,6 +53,11 @@ CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 	CameraCallBackInit();
 }
 
+// projection matrix vector
+const glm::mat4& CameraFps::getPojection() {
+	return projection;
+}
+
 // View matrix practice
 glm::mat4 CameraFps::getView() {
 

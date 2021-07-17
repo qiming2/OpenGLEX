@@ -26,7 +26,8 @@ struct Vertex {
 enum class MeshType:char {
 	Quad,
 	Cube,
-	Sphere
+	Sphere,
+	Skybox
 };
 
 class Mesh

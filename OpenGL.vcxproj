@@ -161,6 +161,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\CubeMapScene.cpp" />
+    <ClCompile Include="src\Engine\CubeMap.cpp" />
     <ClCompile Include="src\Scene\FramebufferScene.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -215,8 +217,12 @@
     <None Include="res\shaders\b_vert.shader" />
     <None Include="res\shaders\b_vert_coordinate.shader" />
     <None Include="res\shaders\b_vert_transform.shader" />
+    <None Include="res\shaders\cube_map_frag.shader" />
+    <None Include="res\shaders\cube_map_vert.shader" />
     <None Include="res\shaders\depth_frag.shader" />
     <None Include="res\shaders\depth_vert.shader" />
+    <None Include="res\shaders\envmap_frag.shader" />
+    <None Include="res\shaders\envmap_vert.shader" />
     <None Include="res\shaders\light_cube_frag.shader" />
     <None Include="res\shaders\light_cube_vert.shader" />
     <None Include="res\shaders\light_type_frag.shader" />
@@ -230,6 +236,8 @@
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\CubeMapScene.h" />
+    <ClInclude Include="src\Engine\CubeMap.h" />
     <ClInclude Include="src\Scene\FramebufferScene.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Engine\FrameBuffer.h" />

@@ -114,6 +114,12 @@
     <ClCompile Include="src\Scene\FramebufferScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\CubeMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\CubeMapScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -160,6 +166,10 @@
     <None Include="res\shaders\outline_vert.shader" />
     <None Include="res\shaders\screen_quad_vert.shader" />
     <None Include="res\shaders\screen_quad_frag.shader" />
+    <None Include="res\shaders\cube_map_vert.shader" />
+    <None Include="res\shaders\cube_map_frag.shader" />
+    <None Include="res\shaders\envmap_vert.shader" />
+    <None Include="res\shaders\envmap_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -493,6 +503,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\FramebufferScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\CubeMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\CubeMapScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

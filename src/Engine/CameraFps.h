@@ -12,6 +12,7 @@ public:
 	CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up);
 	~CameraFps();
 	glm::mat4 getView();
+	const glm::mat4& getPojection();
 	glm::vec3 pos;
 	glm::vec3 target;
 	glm::vec3 up;
