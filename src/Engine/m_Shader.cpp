@@ -30,15 +30,61 @@ m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
 
 	int success;
 	char log[512];
-	glGetProgramiv(program, GL_COMPILE_STATUS, &success);
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
 	if (!success)
 	{
 		glGetProgramInfoLog(program, sizeof(log), NULL, log);
-		std::cout << "ERROR::SHADER::PROGRAMM::LINKING_FAILED\n" << log << std::endl;
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << log << std::endl;
 	}
 	// Delete Shader after successful linkage
 	glDeleteShader(vertex);
 	glDeleteShader(frag);
+	
+	m_RendererID = program;
+	Unbind();
+}
+
+m_Shader::m_Shader(const char* vPath, const char* fPath, const char* gPath) {
+	// read all shader code from files
+
+	// Since std::string is a temporary object, if using someString.c_str()
+	// the char* might point to garbage value 
+	/*const char* vcode = readAll(vPath).c_str();
+	const char* fcode = readAll(fPath).c_str();
+	const char* gcode = readAll(gPath).c_str();*/
+	
+	// Right way is to copy 
+	const std::string& vCode = readAll(vPath);
+	const std::string& fCode = readAll(fPath);
+	const std::string& gCode = readAll(gPath);
+	const char* vcode = vCode.c_str();
+	const char* fcode = fCode.c_str();
+	const char* gcode = gCode.c_str();
+
+	unsigned int vShader = CompileShader(vcode, GL_VERTEX_SHADER);
+	unsigned int fShader = CompileShader(fcode, GL_FRAGMENT_SHADER);
+	unsigned int gShader = CompileShader(gcode, GL_GEOMETRY_SHADER);
+
+	unsigned int program = glCreateProgram();
+
+	glAttachShader(program, vShader);
+	glAttachShader(program, fShader);
+	// Add our geometry shader
+	glAttachShader(program, gShader);
+
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+	int success;
+	char log[512];
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(program, sizeof(log), NULL, log);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING::FAILED\n" << log << std::endl;
+	}
+	glDeleteShader(vShader);
+	glDeleteShader(fShader);
+	glDeleteShader(gShader);
 	
 	m_RendererID = program;
 	Unbind();
@@ -176,6 +222,7 @@ unsigned int m_Shader::CompileShader(const char* code, unsigned int type)
 		std::string typeS;
 		if (type == GL_VERTEX_SHADER) typeS = "VERTEX";
 		else if (type == GL_FRAGMENT_SHADER) typeS = "FRAGMENT";
+		else if (type == GL_GEOMETRY_SHADER) typeS = "GEOMETRY";
 		else typeS = "UNKNOWN";
 
 		/*	1: id of shader

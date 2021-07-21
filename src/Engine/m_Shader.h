@@ -9,6 +9,7 @@ class m_Shader
 {
 public:
 	m_Shader(const char* vertexPath, const char* fragmentPath);
+	m_Shader(const char* vPath, const char* fPath, const char* gPath);
 	~m_Shader();
 	
 

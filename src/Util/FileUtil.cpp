@@ -22,3 +22,7 @@ std::string readAll(const char* filePath)
 	}
 	return content;
 }
+
+std::vector<std::string> concatFacePath(const std::string path) {
+	return {path + "right.jpg", path + "left.jpg", path + "top.jpg", path + "bottom.jpg", path + "front.jpg", path + "back.jpg"};
+}

@@ -120,6 +120,9 @@
     <ClCompile Include="src\Scene\CubeMapScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\GeometryScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -170,6 +173,9 @@
     <None Include="res\shaders\cube_map_frag.shader" />
     <None Include="res\shaders\envmap_vert.shader" />
     <None Include="res\shaders\envmap_frag.shader" />
+    <None Include="res\shaders\geometry_frag.shader" />
+    <None Include="res\shaders\geometry_geom.shader" />
+    <None Include="res\shaders\geometry_vert.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -509,6 +515,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\CubeMapScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\GeometryScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

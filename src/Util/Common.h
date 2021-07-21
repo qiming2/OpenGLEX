@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include <GLFW/glfw3.h>
 #include "GeometryUtil.h"
+#include "FileUtil.h"
 #define M_PI 3.14159265358979323846
 extern GLFWwindow* Window;
 extern float DeltaTime;

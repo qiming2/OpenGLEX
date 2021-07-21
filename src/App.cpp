@@ -35,6 +35,7 @@
 #include "Scene\BlendScene.h"
 #include "Scene\FramebufferScene.h"
 #include "Scene\CubeMapScene.h"
+#include "Scene\GeometryScene.h"
 
 
 
@@ -77,6 +78,7 @@ int main(void)
         menu->Register<Scene::BlendScene>("Blend Scene");
         menu->Register<Scene::FramebufferScene>("Framebuffer Scene");
         menu->Register<Scene::CubeMapScene>("CubeMap Scene");
+        menu->Register<Scene::GeometryScene>("Geometry Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();
