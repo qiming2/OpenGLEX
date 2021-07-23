@@ -7,7 +7,7 @@ namespace Scene {
 	// Can learn more about z-fighting
 	DepthScene::DepthScene():
 		model_m(1.0f),
-		model("res/Model/Sponza/sponza.obj"),
+		model("res/Model/Sponza/sponza.mobj"),
 		shader("res/shaders/depth_vert.shader", "res/shaders/depth_frag.shader")
 	{
 		std::vector<float> plane = CreatePlane();

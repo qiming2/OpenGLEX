@@ -7,7 +7,7 @@ namespace Scene {
 	// Can learn more about z-fighting
 	StencilScene::StencilScene():
 		model_m(1.0f),
-		model("res/Model/simple_model/backpack.obj", false),
+		model("res/Model/simple_model/backpack.mobj", false),
 		shader("res/shaders/simple_model_vert.shader", "res/shaders/simple_model_frag.shader"),
 		outlineShader("res/shaders/outline_vert.shader", "res/shaders/outline_frag.shader")
 	{

@@ -6,7 +6,7 @@ namespace Scene{
 	static float timeToRotateACycle = 3.0f;
 	static float radiansPerSec = 0.0;
 	SimpleModelScene::SimpleModelScene():
-		model("res/Model/Sponza/sponza.obj", true),
+		model("res/Model/Sponza/sponza.mobj", true),
 		shader("res/shaders/simple_model_vert.shader", "res/shaders/simple_model_frag.shader"),
 		model_m(glm::mat4(1.0f)),
 		barbara("res/Model/Genshin/barbara/barbara.pmx")
