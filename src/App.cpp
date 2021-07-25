@@ -22,20 +22,23 @@
 #include "m_Shader.h"
 #include "Texture.h"
 #include "Common.h"
-#include "Scene\Scene.h"
-#include "Scene\TextureScene.h"
-#include "Scene\TransformScene.h"
-#include "Scene\CoordinateScene.h"
-#include "Scene\CameraScene.h"
-#include "Scene\LightScene.h"
-#include "Scene\LightTypeScene.h"
-#include "Scene\SimpleModelScene.h"
-#include "Scene\DepthScene.h"
-#include "Scene\StencilScene.h"
-#include "Scene\BlendScene.h"
-#include "Scene\FramebufferScene.h"
-#include "Scene\CubeMapScene.h"
-#include "Scene\GeometryScene.h"
+
+// Scenes
+#include "Scene/Scene.h"
+#include "Scene/TextureScene.h"
+#include "Scene/TransformScene.h"
+#include "Scene/CoordinateScene.h"
+#include "Scene/CameraScene.h"
+#include "Scene/LightScene.h"
+#include "Scene/LightTypeScene.h"
+#include "Scene/SimpleModelScene.h"
+#include "Scene/DepthScene.h"
+#include "Scene/StencilScene.h"
+#include "Scene/BlendScene.h"
+#include "Scene/FramebufferScene.h"
+#include "Scene/CubeMapScene.h"
+#include "Scene/GeometryScene.h"
+#include "Scene/GeometryIIScene.h"
 
 
 
@@ -79,6 +82,7 @@ int main(void)
         menu->Register<Scene::FramebufferScene>("Framebuffer Scene");
         menu->Register<Scene::CubeMapScene>("CubeMap Scene");
         menu->Register<Scene::GeometryScene>("Geometry Scene");
+        menu->Register<Scene::GeometryIIScene>("GeometryII Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

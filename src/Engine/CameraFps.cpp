@@ -126,7 +126,7 @@ void CameraFps::processInput() {
 
 void CameraFps::OnImGuiRendering() {
 	ImGui::SliderFloat("camera far plane", &far, 0.0f, 10000.0f);
-	ImGui::SliderFloat("camera speed", &cameraSpeed, 0.0f, 1000.0f);
+	ImGui::SliderFloat("camera speed", &cameraSpeed, 0.0f, 100.0f);
 }
 
 

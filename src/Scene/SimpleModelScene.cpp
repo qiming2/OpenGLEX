@@ -6,16 +6,16 @@ namespace Scene{
 	static float timeToRotateACycle = 3.0f;
 	static float radiansPerSec = 0.0;
 	SimpleModelScene::SimpleModelScene():
-		model("res/Model/Sponza/sponza.mobj", true),
+		//model("res/Model/Sponza/sponza.mobj"),
 		shader("res/shaders/simple_model_vert.shader", "res/shaders/simple_model_frag.shader"),
 		model_m(glm::mat4(1.0f)),
-		barbara("res/Model/Genshin/barbara/barbara.pmx")
+		barbara("res/Model/Genshin/ayaka/ayaka.pmx")
 	{
 		radiansPerSec = 2 * M_PI / timeToRotateACycle; 
 	}
 
 	SimpleModelScene::~SimpleModelScene() {
-		model.Delete();
+		//model.Delete();
 		barbara.Delete();
 		shader.Delete();
 	}
@@ -35,11 +35,11 @@ namespace Scene{
 		shader.SetVec3fv("viewPos", camera.pos);
 		shader.SetMat4fv("model", glm::value_ptr(model_m));
 
-		model.Draw(shader);
+		//model.Draw(shader);
 
 		model_m = glm::mat4(1.0f);
 		model_m = glm::translate(model_m, glm::vec3(5.0f, -10.0f, 0.0f));
-		model_m = glm::rotate(model_m, radians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model_m = glm::rotate(model_m, radians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model_m = glm::scale(model_m, glm::vec3(0.7f, 0.7f, 0.7f));
 		shader.SetMat4fv("model", glm::value_ptr(model_m));
 		barbara.Draw(shader);

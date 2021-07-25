@@ -127,6 +127,7 @@ void Mesh::Draw(m_Shader& shader) {
 	// appropriate texture slot
 	// with this naming convertion
 	// we can define as many sampler in shader
+	shader.Bind();
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	unsigned int normalNr = 1;

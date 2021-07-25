@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\GeometryIIScene.cpp" />
     <ClCompile Include="src\Scene\GeometryScene.cpp" />
     <ClCompile Include="src\Scene\CubeMapScene.cpp" />
     <ClCompile Include="src\Engine\CubeMap.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="src\Util\GeometryUtil.cpp" />
     <ClCompile Include="src\Util\stb_image.cpp" />
     <ClCompile Include="src\Scene\StencilScene.cpp" />
+    <ClCompile Include="src\Engine\UniformBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependencies\assimp\include\assimp\color4.inl" />
@@ -224,8 +226,14 @@
     <None Include="res\shaders\depth_vert.shader" />
     <None Include="res\shaders\envmap_frag.shader" />
     <None Include="res\shaders\envmap_vert.shader" />
+    <None Include="res\shaders\geometryII_frag.shader" />
+    <None Include="res\shaders\geometryII_geom.shader" />
+    <None Include="res\shaders\geometryII_vert.shader" />
     <None Include="res\shaders\geometry_frag.shader" />
     <None Include="res\shaders\geometry_geom.shader" />
+    <None Include="res\shaders\geometry_normal_frag.shader" />
+    <None Include="res\shaders\geometry_normal_geom.shader" />
+    <None Include="res\shaders\geometry_normal_vert.shader" />
     <None Include="res\shaders\geometry_vert.shader" />
     <None Include="res\shaders\light_cube_frag.shader" />
     <None Include="res\shaders\light_cube_vert.shader" />
@@ -240,6 +248,7 @@
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\GeometryIIScene.h" />
     <ClInclude Include="src\Scene\GeometryScene.h" />
     <ClInclude Include="src\Scene\CubeMapScene.h" />
     <ClInclude Include="src\Engine\CubeMap.h" />
@@ -354,6 +363,7 @@
     <ClInclude Include="src\Util\FileUtil.h" />
     <ClInclude Include="src\Util\GeometryUtil.h" />
     <ClInclude Include="src\Scene\StencilScene.h" />
+    <ClInclude Include="src\Engine\UniformBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png" />

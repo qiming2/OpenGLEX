@@ -5,7 +5,8 @@
 // keep track of loaded texture, so that we don't need to
 // reload texture
 static std::unordered_map<std::string, Texture> loaded;
-
+static int vertex_count = 0;
+static int face_count = 0;
 Model::Model(const char* path) {
 	Texture::SetFlip(true);
 	LoadModel(path);
@@ -42,7 +43,6 @@ void Model::LoadModel(const std::string& path) {
 	// opengl use reversed texture coordinates
 	// many more flags!
 	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
-
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
 		std::cout << "ERROR::ASSIMP::IMPORT MODEL FAILED: " << importer.GetErrorString() << std::endl;
 		return;
@@ -50,8 +50,15 @@ void Model::LoadModel(const std::string& path) {
 	// store directory for later use
 	dir = path.substr(0, path.find_last_of('/'));
 	ProcessNode(scene->mRootNode, scene);
+	
+	// General information about this model
+	std::cout << "Model from path: " << path << " has " << vertex_count << " vertices in total" << std::endl;
+
+	std::cout << "Model from path: " << path << " has " << face_count << " faces in total" << std::endl;
 
 	// Clean up loaded cache after finish loading
+	vertex_count = 0;
+	face_count = 0;
 	loaded.clear();
 }
 
@@ -123,6 +130,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 			//std::cout << "No tex coord?" << std::endl;
 		}
 		vertices.push_back(vertex);
+
+		// vertices count
+		vertex_count++;
 	}
 
 	// Process indices
@@ -135,6 +145,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 		for (int j = 0; j < face.mNumIndices; j++) {
 			indices.push_back(face.mIndices[j]);
 		}
+
+		// face count
+		face_count++;
 	}
 
 	if (mesh->mMaterialIndex >= 0) {

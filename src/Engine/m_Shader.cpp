@@ -205,6 +205,14 @@ void m_Shader::SetInt(const std::string& name, int v0)
 	glUniform1i(location, v0);
 }
 
+void m_Shader::SetUniformBlock(const std::string& name, unsigned int bindPoint) {
+	int location;
+	if ((location = GetUniformBlock(name)) < 0) {
+		return;
+	}
+	glUniformBlockBinding(m_RendererID, location, bindPoint);
+}
+
 unsigned int m_Shader::CompileShader(const char* code, unsigned int type)
 {
 	unsigned int id;
@@ -255,4 +263,24 @@ int m_Shader::GetUniformLocation(const std::string& name)
 	m_uniformLocation[name] = location;
 	return location;
 	
+}
+
+int m_Shader::GetUniformBlock(const std::string& name)
+{
+	std::unordered_map<std::string, int>::iterator it;
+	// Find out whether it is in the cache
+	if ((it = m_uniformLocation.find(name)) != m_uniformLocation.end())
+	{
+		return it->second;
+	}
+
+	// If it is not in the cache, we retrive it and store it in the cache
+	int location = glGetUniformBlockIndex(m_RendererID, name.c_str());
+	if (location == -1)
+	{
+		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << " Unknown Name: " << name << std::endl;
+	}
+	m_uniformLocation[name] = location;
+	return location;
+
 }

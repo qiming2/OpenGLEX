@@ -14,6 +14,7 @@ void main() {
 	/*vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(viewPos - Pos);*/
 	vec4 tex_color = texture(texture_diffuse1, UV);
+	// tex_color = tex_color + texture(texture_diffuse2, UV);
 	if (tex_color.a < 0.1) {
 		discard;
 	}

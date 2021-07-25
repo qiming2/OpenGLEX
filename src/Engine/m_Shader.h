@@ -27,6 +27,8 @@ public:
 	void SetMat4fv(const std::string& name, const glm::mat4& val);
 	void SetVec3fv(const std::string& name, float v1, float v2, float v3);
 	void SetVec3fv(const std::string& name, const glm::vec3& val);
+	
+	void SetUniformBlock(const std::string& name, unsigned int bindPoint);
 private:
 	// Render ID
 	unsigned int m_RendererID;
@@ -37,4 +39,5 @@ private:
 	unsigned int CompileShader(const char* code, unsigned int type);
 
 	int GetUniformLocation(const std::string& name);
+	int GetUniformBlock(const std::string& name);
 };
