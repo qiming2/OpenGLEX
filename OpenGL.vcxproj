@@ -161,6 +161,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\InstanceIIScene.cpp" />
+    <ClCompile Include="src\Scene\InstanceScene.cpp" />
     <ClCompile Include="src\Scene\GeometryIIScene.cpp" />
     <ClCompile Include="src\Scene\GeometryScene.cpp" />
     <ClCompile Include="src\Scene\CubeMapScene.cpp" />
@@ -235,6 +237,10 @@
     <None Include="res\shaders\geometry_normal_geom.shader" />
     <None Include="res\shaders\geometry_normal_vert.shader" />
     <None Include="res\shaders\geometry_vert.shader" />
+    <None Include="res\shaders\instance_frag.shader" />
+    <None Include="res\shaders\instance_model_frag.shader" />
+    <None Include="res\shaders\instance_model_vert.shader" />
+    <None Include="res\shaders\instance_vert.shader" />
     <None Include="res\shaders\light_cube_frag.shader" />
     <None Include="res\shaders\light_cube_vert.shader" />
     <None Include="res\shaders\light_type_frag.shader" />
@@ -248,6 +254,8 @@
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\InstanceIIScene.h" />
+    <ClInclude Include="src\Scene\InstanceScene.h" />
     <ClInclude Include="src\Scene\GeometryIIScene.h" />
     <ClInclude Include="src\Scene\GeometryScene.h" />
     <ClInclude Include="src\Scene\CubeMapScene.h" />

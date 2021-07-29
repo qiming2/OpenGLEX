@@ -119,6 +119,7 @@ namespace Scene {
 
 	void LightTypeScene::OnRendering() {
 		renderer->Clear();
+		// Change background to dark color
 		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 		// Send diffuse texture
 		

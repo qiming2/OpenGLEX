@@ -39,6 +39,8 @@
 #include "Scene/CubeMapScene.h"
 #include "Scene/GeometryScene.h"
 #include "Scene/GeometryIIScene.h"
+#include "Scene/InstanceScene.h"
+#include "Scene/InstanceIIScene.h"
 
 
 
@@ -83,6 +85,8 @@ int main(void)
         menu->Register<Scene::CubeMapScene>("CubeMap Scene");
         menu->Register<Scene::GeometryScene>("Geometry Scene");
         menu->Register<Scene::GeometryIIScene>("GeometryII Scene");
+        menu->Register<Scene::InstanceScene>("Instance Scene");
+        menu->Register<Scene::InstanceIIScene>("InstanceII Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

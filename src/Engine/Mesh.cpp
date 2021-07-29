@@ -90,6 +90,10 @@ Mesh::~Mesh() {
 
 }
 
+VertexArray& Mesh::GetVa() {
+	return va;
+}
+
 void Mesh::ChangeTexture(const char* image, unsigned int index) {
 	// if index is greater than the texture size, we don't currently
 	// want this to happen
@@ -155,8 +159,58 @@ void Mesh::Draw(m_Shader& shader) {
 		shader.SetInt(name + number, i);
 		textures[i].Bind();
 	}
-	gl_renderer.Draw(va, ib);
+	va.Bind();
+	ib.Bind();
+	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, 0);
+	va.Unbind();
+	ib.Unbind();
     
+	// Reset everything
+	glActiveTexture(GL_TEXTURE0);
+}
+
+void Mesh::DrawInstances(m_Shader& shader, int num) {
+	// set a convertion for binding textures to
+	// appropriate texture slot
+	// with this naming convertion
+	// we can define as many sampler in shader
+	shader.Bind();
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	unsigned int normalNr = 1;
+	unsigned int heightNr = 1;
+	for (int i = 0; i < textures.size(); i++) {
+		// change active texture slot number for this texture
+		// for a single mesh at any time, we rebind all the textures
+		// to appropriate slots
+		textures[i].SetActiveID(GL_TEXTURE0 + i);
+		glActiveTexture(GL_TEXTURE0 + i);
+		std::string number;
+		std::string name = textures[i].type;
+		if (name == "texture_diffuse") {
+			number = std::to_string(diffuseNr++);
+		}
+		else if (name == "texture_specular") {
+			number = std::to_string(specularNr++);
+		}
+		else if (name == "texture_normal") {
+			number = std::to_string(normalNr++);
+		}
+		else if (name == "texture_height") {
+			number = std::to_string(heightNr++);
+		}
+		else {
+			std::cout << "ERROR:: TEXTURE::BINDING FAILED\n " << name << "DOES NOT MATCH ANY TEXTURE TYPE. File: " << __FILE__ << std::endl;
+		}
+		// Set current texture to correct sampler slot
+		shader.SetInt(name + number, i);
+		textures[i].Bind();
+	}
+	va.Bind();
+	ib.Bind();
+	glDrawElementsInstanced(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, 0, num);
+	va.Unbind();
+	ib.Unbind();
 	// Reset everything
 	glActiveTexture(GL_TEXTURE0);
 }

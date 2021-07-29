@@ -15,7 +15,11 @@ public:
 	Model(const char* path, bool flip);
 	~Model();
 	void Draw(m_Shader& shader);
+	void DrawInstances(m_Shader& shader, int num);
 	void Delete();
+	// for user side customization
+	// adding additional vertex attribute
+	std::vector<Mesh>& GetMeshes();
 private:
 	// model date
 	std::vector<Mesh> meshes;

@@ -28,6 +28,12 @@ void Model::Draw(m_Shader& shader) {
 	}
 }
 
+void Model::DrawInstances(m_Shader& shader, int num) {
+	for (int i = 0; i < meshes.size(); i++) {
+		meshes[i].DrawInstances(shader, num);
+	}
+}
+
 void Model::Delete() {
 	for (int i = 0; i < meshes.size(); i++) {
 		meshes[i].Delete();
@@ -78,6 +84,9 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene) {
 	}
 }
 
+std::vector<Mesh>& Model::GetMeshes() {
+	return meshes;
+}
 // convert assimp mesh to our own mesh
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene) {
 	std::vector<Vertex> vertices;

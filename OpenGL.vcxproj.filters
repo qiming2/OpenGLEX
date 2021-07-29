@@ -129,6 +129,12 @@
     <ClCompile Include="src\Scene\GeometryIIScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\InstanceScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\InstanceIIScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -188,6 +194,10 @@
     <None Include="res\shaders\geometry_normal_frag.shader" />
     <None Include="res\shaders\geometry_normal_geom.shader" />
     <None Include="res\shaders\geometry_normal_vert.shader" />
+    <None Include="res\shaders\instance_frag.shader" />
+    <None Include="res\shaders\instance_vert.shader" />
+    <None Include="res\shaders\instance_model_frag.shader" />
+    <None Include="res\shaders\instance_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -536,6 +546,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\GeometryIIScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\InstanceScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\InstanceIIScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

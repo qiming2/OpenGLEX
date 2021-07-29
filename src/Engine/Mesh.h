@@ -41,7 +41,10 @@ public:
 	void ChangeTexture(const char* image, unsigned int index);
 	void ChangeTexture(const Texture& image, unsigned int index);
 	void Draw(m_Shader& shader);
+	void DrawInstances(m_Shader& shader, int num);
 	void Delete();
+	// For customization purpose
+	VertexArray& GetVa();
 private:
 	 /*Mesh data
 	 use mesh class to structurize imported model
