@@ -168,11 +168,6 @@
     <ClCompile Include="src\Scene\CubeMapScene.cpp" />
     <ClCompile Include="src\Engine\CubeMap.cpp" />
     <ClCompile Include="src\Scene\FramebufferScene.cpp" />
-    <ClCompile Include="src\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="src\Engine\FrameBuffer.cpp" />
     <ClCompile Include="src\Scene\BlendScene.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui.cpp" />
@@ -261,7 +256,6 @@
     <ClInclude Include="src\Scene\CubeMapScene.h" />
     <ClInclude Include="src\Engine\CubeMap.h" />
     <ClInclude Include="src\Scene\FramebufferScene.h" />
-    <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Engine\FrameBuffer.h" />
     <ClInclude Include="src\Scene\BlendScene.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\aabb.h" />
