@@ -132,6 +132,9 @@
     <ClCompile Include="src\Scene\InstanceIIScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\MSAAScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -195,6 +198,10 @@
     <None Include="res\shaders\instance_vert.shader" />
     <None Include="res\shaders\instance_model_frag.shader" />
     <None Include="res\shaders\instance_model_vert.shader" />
+    <None Include="res\shaders\MSAA_vert.shader" />
+    <None Include="res\shaders\MSAA_frag.shader" />
+    <None Include="res\shaders\screen_quad_ms_frag.shader" />
+    <None Include="res\shaders\screen_quad_ms_vert.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -546,6 +553,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\InstanceIIScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\MSAAScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

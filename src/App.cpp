@@ -41,6 +41,7 @@
 #include "Scene/GeometryIIScene.h"
 #include "Scene/InstanceScene.h"
 #include "Scene/InstanceIIScene.h"
+#include "Scene/MSAAScene.h"
 
 
 
@@ -87,6 +88,7 @@ int main(void)
         menu->Register<Scene::GeometryIIScene>("GeometryII Scene");
         menu->Register<Scene::InstanceScene>("Instance Scene");
         menu->Register<Scene::InstanceIIScene>("InstanceII Scene");
+        menu->Register<Scene::MSAAScene>("MSAA Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();
@@ -183,6 +185,13 @@ static GLFWwindow* init()
     /* Initialize the library */
     if (!glfwInit())
         exit(-1);
+
+    // Usually windowing system has option to provide higher
+    // sample-buffer for MSAA, thus we could achieve MSAA
+    // just by setting window hint and enable it with a
+    // opengl api call, but we can also do off-screen MSAA
+    // glfwWindowHint(GLFW_SAMPLES, 4);
+    // glEnable(GL_MULTISAMPLE);
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);

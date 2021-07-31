@@ -5,6 +5,7 @@ namespace Scene{
 	static float radians = 0.0;
 	static float timeToRotateACycle = 3.0f;
 	static float radiansPerSec = 0.0;
+	static bool MSAA = true;
 	SimpleModelScene::SimpleModelScene():
 		//model("res/Model/Sponza/sponza.mobj"),
 		shader("res/shaders/simple_model_vert.shader", "res/shaders/simple_model_frag.shader"),
@@ -26,6 +27,14 @@ namespace Scene{
 	}
 
 	void SimpleModelScene::OnRendering() {
+		// If uncomment glfwWindowHint in app.cpp page
+		// if MSAA is enabled, it would apply anti-aliasing
+		if (MSAA) {
+			glEnable(GL_MULTISAMPLE);
+		}
+		else {
+			glDisable(GL_MULTISAMPLE);
+		}
 		gl_renderer.Clear();
 		shader.Bind();
 		camera.SetViewProjectMat(&shader);
@@ -46,6 +55,7 @@ namespace Scene{
 	}
 
 	void SimpleModelScene::OnImGuiRendering() {
-		ImGui::SliderFloat("camera far plane", &camera.far, 0.0f, 10000.0f);  
+		ImGui::SliderFloat("camera far plane", &camera.far, 0.0f, 10000.0f);
+		ImGui::Checkbox("MSAA", &MSAA);
 	}
 }

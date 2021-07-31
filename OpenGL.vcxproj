@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\MSAAScene.cpp" />
     <ClCompile Include="src\Scene\InstanceIIScene.cpp" />
     <ClCompile Include="src\Scene\InstanceScene.cpp" />
     <ClCompile Include="src\Scene\GeometryIIScene.cpp" />
@@ -219,6 +220,8 @@
     <None Include="res\shaders\b_vert_transform.shader" />
     <None Include="res\shaders\cube_map_frag.shader" />
     <None Include="res\shaders\cube_map_vert.shader" />
+    <None Include="res\shaders\MSAA_frag.shader" />
+    <None Include="res\shaders\MSAA_vert.shader" />
     <None Include="res\shaders\depth_frag.shader" />
     <None Include="res\shaders\depth_vert.shader" />
     <None Include="res\shaders\envmap_frag.shader" />
@@ -244,11 +247,14 @@
     <None Include="res\shaders\outline_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
     <None Include="res\shaders\screen_quad_frag.shader" />
+    <None Include="res\shaders\screen_quad_ms_frag.shader" />
+    <None Include="res\shaders\screen_quad_ms_vert.shader" />
     <None Include="res\shaders\screen_quad_vert.shader" />
     <None Include="res\shaders\simple_model_frag.shader" />
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\MSAAScene.h" />
     <ClInclude Include="src\Scene\InstanceIIScene.h" />
     <ClInclude Include="src\Scene\InstanceScene.h" />
     <ClInclude Include="src\Scene\GeometryIIScene.h" />
