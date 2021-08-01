@@ -42,9 +42,23 @@ void main() {
 	vec3 diffuseColor = diffF * light.diffuse * objColor;
 
 	// Specular
-	vec3 reflectDir = reflect(-lightDir, normal);
+
+	// Phong implementation
+	// Specular highlight that has a very low shinning component
+	// with an angle between reflectionDir and viewDir should
+	// contribute to the final color, but got nullified
+	// since angle > 90, bling phong can solve this issue
+
+
+	/*vec3 reflectDir = reflect(-lightDir, normal);
+	float specularF = pow(max(dot(reflectDir, viewDir), 0.0), material.shininess);*/
+
+	// bling phong implementation
+	// use halfway dir between view and lightDir instead
+	
 	vec3 viewDir = normalize(viewPos - Pos);
-	float specularF = pow(max(dot(reflectDir, viewDir), 0.0), material.shininess);
+	vec3 halfDir = normalize(lightDir + viewDir);
+	float specularF = pow(max(dot(normal, halfDir), 0.0), 4 * material.shininess);
 	vec3 specularColor = specularF * light.specular * vec3(texture(material.texture_specular, UV)); 
 
 	//vec3 color = vec3(texture(texture1, UV));

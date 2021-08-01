@@ -8,7 +8,8 @@ namespace Scene {
 	MSAAScene::MSAAScene():
 		cube(MeshType::Cube),
 		shader("res/shaders/MSAA_vert.shader", "res/shaders/MSAA_frag.shader"),
-		screen_shaderMS("res/shaders/screen_quad_ms_vert.shader", "res/shaders/screen_quad_ms_frag.shader")
+		screen_shaderMS("res/shaders/screen_quad_ms_vert.shader", "res/shaders/screen_quad_ms_frag.shader"),
+		model(1.0f)
 	{
 
 		glGenFramebuffers(1, &msfb);
