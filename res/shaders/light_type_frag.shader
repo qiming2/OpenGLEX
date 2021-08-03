@@ -85,6 +85,8 @@ vec3 calDirectionalLight(Light light) {
 
 vec3 calPointLight(PointLight light) {
 	float distance = length(light.pos - Pos);
+
+	// quadratic attenuation looks best when we have gamma correction in place
 	float atten = 1.0 / (light.constantAtten + light.linearAtten * distance + light.quadraticAtten * distance * distance);
 
 	dir = normalize(light.pos - Pos);

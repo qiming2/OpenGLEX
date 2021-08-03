@@ -12,6 +12,7 @@
 
 // Phong Shader not bling-phong
 namespace Scene {
+	static bool gamma = false;
 LightScene::LightScene():
 	model(glm::mat4(1.0f)),
 	lightColor(glm::vec3(1.0f, 1.0f, 1.0f)),
@@ -44,6 +45,14 @@ LightScene::LightScene():
 	m_texture_emission = std::make_unique<Texture>("res/Texture/starsky.jpeg", GL_TEXTURE2);
 	
 	glEnable(GL_DEPTH_TEST);
+	// gamma correct final image
+	// however usually the diffuse texture is in sRGB color space
+	// if we want to do linear operations on textures, we first need
+	// convert color values to rgb space
+
+	// two approaches:
+	// 1. glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	
 }
 
 LightScene::~LightScene() {
@@ -83,9 +92,16 @@ void LightScene::OnImGuiRendering() {
 	ImGui::SliderFloat("r", &lightColor[0], 0.0f, 1.0f);
 	ImGui::SliderFloat("g", &lightColor[1], 0.0f, 1.0f);
 	ImGui::SliderFloat("b", &lightColor[2], 0.0f, 1.0f);
+	ImGui::Checkbox("gamma", &gamma);
 }
 
 void LightScene::OnRendering() {
+	if (gamma) {
+		glEnable(GL_FRAMEBUFFER_SRGB);
+	}
+	else {
+		glDisable(GL_FRAMEBUFFER_SRGB);
+	}
 	m_renderer->Clear();
 
 	// Material Uniform

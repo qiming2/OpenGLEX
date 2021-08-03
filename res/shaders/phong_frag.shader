@@ -21,6 +21,7 @@ struct Light
 	vec3 specular;
 };
 
+const float gamma = 2.2;
 #define PI 3.1415926538
 uniform float u_time;
 uniform Light light;
@@ -30,9 +31,12 @@ uniform Material material;
 void main() {
 	vec3 lightDir = normalize(light.pos - Pos);
 	vec3 normal = normalize(Normal);
-	vec3 objColor = vec3(texture(material.texture_container, UV));
+	
+	vec3 objColor = pow(vec3(texture(material.texture_container, UV)), vec3(gamma));
 	// Emission
-	vec3 emissionColor = texture(material.texture_emission, UV).rgb;
+	
+	// gamma correcting on diffuse color
+	vec3 emissionColor = pow(texture(material.texture_emission, UV).rgb, vec3(gamma));
 
 	// Ambient
 	vec3 ambientColor = objColor * light.ambient;
@@ -74,6 +78,9 @@ void main() {
 		color += emissionColor * light.ambient + emissionColor * diffF * light.diffuse - diffuseColor - ambientColor;
 		
 	}
-	out_color = vec4(color.rgb, 1.0);
+
+	// do a manual gamma correction
+	out_color = vec4(pow(color, vec3(1.0/gamma)), 1.0);
+
 }
 

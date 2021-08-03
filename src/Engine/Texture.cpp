@@ -33,6 +33,15 @@ Texture::Texture(const char* image, GLenum activeID)
 			channel_type = GL_RGBA;
 		}
 		Bind();
+		// first channel type should vary depending on what textures we are retrieving
+
+		// for example if it is diffuse texture, usually artists would
+		// tweak it in sRGB space to make it look good, when we are using
+		// it for lighting calculation, we need to raise to the power of the gamma
+		// before doing linear operation
+
+		// for other usages like normal, bump maps, they are not created to represent
+		// colors, thus don't need to convert them to linear space
 		glTexImage2D(GL_TEXTURE_2D, 0, channel_type, width, height, 0, channel_type, GL_UNSIGNED_BYTE, data);
 		// Generate Mipmap for avoiding artifacts when objects are small
 
