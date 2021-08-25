@@ -22,7 +22,7 @@ Texture::Texture(const char* image, GLenum activeID)
 	{
 		// Configure Texture
 		// pass loaded image data to bounded texture object
-		GLenum channel_type;
+		GLenum channel_type = GL_RGB;
 		if (nChannels == 1) {
 			channel_type = GL_RED;
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

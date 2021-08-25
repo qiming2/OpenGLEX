@@ -126,6 +126,14 @@ void Mesh::Delete() {
 	textures.clear();
 }
 
+void Mesh::RawDraw(m_Shader& shader) {
+	va.Bind();
+	ib.Bind();
+	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, 0);
+	va.Unbind();
+	ib.Unbind();
+}
+
 void Mesh::Draw(m_Shader& shader) {
 	// set a convertion for binding textures to
 	// appropriate texture slot

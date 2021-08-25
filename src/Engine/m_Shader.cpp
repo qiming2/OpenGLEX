@@ -34,7 +34,7 @@ m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
 	if (!success)
 	{
 		glGetProgramInfoLog(program, sizeof(log), NULL, log);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << log << std::endl;
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << vertexPath << "\n" << fragmentPath << "\n" << log << std::endl;
 	}
 	// Delete Shader after successful linkage
 	glDeleteShader(vertex);
@@ -80,7 +80,7 @@ m_Shader::m_Shader(const char* vPath, const char* fPath, const char* gPath) {
 	glGetProgramiv(program, GL_LINK_STATUS, &success);
 	if (!success) {
 		glGetProgramInfoLog(program, sizeof(log), NULL, log);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING::FAILED\n" << log << std::endl;
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << vPath << "\n" << fPath << "\n" << gPath << "\n" << log << std::endl;
 	}
 	glDeleteShader(vShader);
 	glDeleteShader(fShader);

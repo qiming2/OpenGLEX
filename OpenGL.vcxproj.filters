@@ -135,6 +135,9 @@
     <ClCompile Include="src\Scene\MSAAScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\ShadowScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -202,6 +205,10 @@
     <None Include="res\shaders\MSAA_frag.shader" />
     <None Include="res\shaders\screen_quad_ms_frag.shader" />
     <None Include="res\shaders\screen_quad_ms_vert.shader" />
+    <None Include="res\shaders\shadow_pass_vert.shader" />
+    <None Include="res\shaders\shadow_pass_frag.shader" />
+    <None Include="res\shaders\shadow_light_vert.shader" />
+    <None Include="res\shaders\shadow_light_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -556,6 +563,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\MSAAScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\ShadowScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

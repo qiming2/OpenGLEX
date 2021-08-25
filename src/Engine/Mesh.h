@@ -42,6 +42,7 @@ public:
 	void ChangeTexture(const Texture& image, unsigned int index);
 	void Draw(m_Shader& shader);
 	void DrawInstances(m_Shader& shader, int num);
+	void RawDraw(m_Shader& shader);
 	void Delete();
 	// For customization purpose
 	VertexArray& GetVa();

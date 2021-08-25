@@ -96,12 +96,13 @@ void LightScene::OnImGuiRendering() {
 }
 
 void LightScene::OnRendering() {
-	if (gamma) {
+	// an opengl way to enable gamma correction
+	/*if (gamma) {
 		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 	else {
 		glDisable(GL_FRAMEBUFFER_SRGB);
-	}
+	}*/
 	m_renderer->Clear();
 
 	// Material Uniform
