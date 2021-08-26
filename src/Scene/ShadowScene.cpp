@@ -9,7 +9,7 @@ namespace Scene {
 	glm::vec3 lightDir = glm::normalize(glm::vec3(0.5f, -0.5f, 0.5f));
 	glm::vec3 lightPos = glm::vec3(0.0f) - lightDir * 10.0f;
 	float near_plane = 1.0f;
-	float far_plane = 20.0f;
+	float far_plane = 100.0f;
 	ShadowScene::ShadowScene() :
 		cube(MeshType::Cube),
 		plane(MeshType::Quad),
@@ -27,9 +27,12 @@ namespace Scene {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, ss_map_w, ss_map_h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		// areas outside specified light space are clamped to be 1.0
+		// which means they are all lit
+		float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 		// Bind texture to framebuffer
 		glBindFramebuffer(GL_FRAMEBUFFER, ddfb);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ddtex, 0);
@@ -71,8 +74,8 @@ namespace Scene {
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		// Plane
 		planeM = glm::mat4(1.0f);
-		planeM = glm::rotate(planeM, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-		planeM = glm::scale(planeM, glm::vec3(20.0f, 20.0f, 20.0f));
+		planeM = glm::rotate(planeM, (float)M_PI * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+		planeM = glm::scale(planeM, glm::vec3(100.0f, 100.0f, 100.0f));
 		// Shadow Pass
 		glViewport(0, 0, ss_map_w, ss_map_h);
 		glBindFramebuffer(GL_FRAMEBUFFER, ddfb);
@@ -88,16 +91,21 @@ namespace Scene {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		gl_renderer.Clear();
 		normalS.Bind();
-		glm::mat4 screenM = glm::rotate(glm::mat4(1.0f), (float)M_PI / 2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-		screenM = glm::scale(screenM, glm::vec3(2.0f, 2.0f, 2.0f));
-		normalS.SetMat4fv("model", screenM);
-
+		normalS.SetVec3fv("dir", lightDir);
+		normalS.SetVec3fv("viewPos", camera.pos);
+		normalS.SetInt("texture1", 2);
+		camera.SetViewProjectMat(normalS);
+		// LightProjectView for testing whether the pixel is
+		// in shadow
+		normalS.SetMat4fv("lightProjectView", lightProjectView);
 		// Always activate texture slot first
 		// then bind texture to that texture slot
-		normalS.SetInt("texture1", 2);
 		glActiveTexture(GL_TEXTURE0 + 2);
 		glBindTexture(GL_TEXTURE_2D, ddtex);
-		screenQ.Draw(normalS);
+		normalS.SetMat4fv("model", model);
+		cube.Draw(normalS);
+		normalS.SetMat4fv("model", planeM);
+		plane.Draw(normalS);
 		
 	}
 
