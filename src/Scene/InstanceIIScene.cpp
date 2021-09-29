@@ -160,7 +160,7 @@ namespace Scene {
 		cm_shader.Bind();
 		cm.Bind();
 		cm_shader.SetMat4fv("projection", camera.getPojection());
-		// don't let skybox rotate
+		// don't let skybox move
 		cm_shader.SetMat4fv("view", glm::mat4(glm::mat3(camera.getView())));
 		model = glm::mat4(1.0f);
 		cm_shader.SetMat4fv("model", model);

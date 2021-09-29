@@ -115,10 +115,10 @@ int main(void)
 				// OnUpdate
 				// Todo Need to change deltaTime
                 DeltaTime = (float) currTime - prevTime;
-				currentScene->OnUpdate(DeltaTime);
+		        currentScene->OnUpdate(DeltaTime);
 
 				// OnRendering
-				currentScene->OnRendering();
+			    currentScene->OnRendering();
                 // Add back button
                 if (currentScene != menu && ImGui::Button("Back"))
                 {
@@ -165,7 +165,7 @@ static void processInput(GLFWwindow* Window)
 
 // If we wish to be notified when a physical key is pressed or released or when it repeats, set a key callback.
 static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    static bool hideCursor = false;
+    /*static bool hideCursor = false;
     
     if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS && hideCursor) {
         hideCursor = false;
@@ -173,7 +173,7 @@ static void glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
 	} else if (key == GLFW_KEY_LEFT_ALT && action == GLFW_PRESS && !hideCursor) {
         hideCursor = true;
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	}
+	}*/
 }
 
 static void glfw_error_callback(int error, const char* description)

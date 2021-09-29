@@ -38,8 +38,8 @@ namespace Scene {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, ddtex, 0);
 		// Since we are only collecting data not drawing to the screen, we need
 		// tell opengl not to draw to or read from any framebuffer
-		glDrawBuffer(GL_NONE);
-		glReadBuffer(GL_NONE);
+		/*glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);*/
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
 		config();

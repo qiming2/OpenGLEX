@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\PointShadowScene.cpp" />
     <ClCompile Include="src\Scene\ShadowScene.cpp" />
     <ClCompile Include="src\Scene\MSAAScene.cpp" />
     <ClCompile Include="src\Scene\InstanceIIScene.cpp" />
@@ -259,6 +260,7 @@
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\PointShadowScene.h" />
     <ClInclude Include="src\Scene\ShadowScene.h" />
     <ClInclude Include="src\Scene\MSAAScene.h" />
     <ClInclude Include="src\Scene\InstanceIIScene.h" />

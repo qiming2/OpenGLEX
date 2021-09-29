@@ -9,3 +9,6 @@ extern float DeltaTime;
 extern int Width;
 extern int Height;
 extern Renderer gl_renderer;
+static std::ostream& operator<<(std::ostream& os, glm::vec4 const& vec) {
+	return os << "x: " << vec.x << " y: " << vec.y << " z: " << vec.z << " w: " << vec.w;
+}

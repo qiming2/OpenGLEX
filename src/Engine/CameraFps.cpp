@@ -8,14 +8,17 @@
 static float xPos = 0.0f;
 static float yPos = 0.0f;
 static float fov = 45.0f;
+static bool hideCursor = false;
+static bool pressed = false;
+static bool changedBack = false;
 static void mouse_callback(GLFWwindow* Window, double xpos, double ypos);
 static void scroll_callback(GLFWwindow* Window, double xoffset, double yoffset);
 
 CameraFps::CameraFps():
 	pos(glm::vec3(0.0f, 0.0f, 0.0f)),
-	target(glm::vec3(0.0f, 0.0f, -1.0f)),
+	target(glm::vec3(1.0f, 0.0f, 0.0f)),
 	up(glm::vec3(0.0f, 1.0f, 0.0f)),
-	yaw(-90.0f),
+	yaw(0.0f),
 	pitch(0.0f),
 	lastX(0.0f),
 	lastY(0.0f),
@@ -43,7 +46,7 @@ CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 	pitch(0.0f),
 	lastX(0.0f),
 	lastY(0.0f),
-	sensitivity(0.2f),
+	sensitivity(2.0f),
 	cameraSpeed(10.0f),
 	width(Width),
 	height(Height),
@@ -55,6 +58,19 @@ CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 
 // projection matrix vector
 const glm::mat4& CameraFps::getPojection() {
+	/*glm::mat4& ret = projection;
+	float aspect = width / height;
+	float radians = fov / 180.0f * M_PI;
+	float sine = sin(radians / 2.0f);
+	
+	float cosine = cos(radians / 2.0f);
+	assert(sine > 0.0f);
+	float cotangent = cosine / sine;
+	ret[0][0] = cotangent / aspect;
+	ret[1][1] = cotangent;
+	ret[2][2] = -(far + near) / (far - near);
+	ret[2][3] = -1;
+	ret[3][2] = -(2 * far * near) / (far - near);*/
 	return projection;
 }
 
@@ -83,11 +99,12 @@ glm::mat4 CameraFps::getView() {
 }
 
 void CameraFps::processInput() {
-	if (!firstTime) {
+	if (!firstTime && !changedBack) {
 		yaw += (xPos - lastX) * sensitivity * DeltaTime;
 		// ypos on computer ranges from bottom from top
 		pitch += (lastY - yPos) * sensitivity * DeltaTime;
 	}
+	changedBack = false;
 	firstTime = false;
 	lastX = xPos;
 	lastY = yPos;
@@ -105,6 +122,24 @@ void CameraFps::processInput() {
 	cameraFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	cameraFront = glm::normalize(cameraFront);
 	if (Window != nullptr) {
+		if (glfwGetKey(Window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS && !pressed) {
+			
+			pressed = true;
+			
+			
+		}
+		else if (glfwGetKey(Window, GLFW_KEY_LEFT_ALT) == GLFW_RELEASE && pressed) {
+			if (hideCursor) {
+				hideCursor = false;
+				glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				changedBack = true;
+			}
+			else {
+				hideCursor = true;
+				glfwSetInputMode(Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			}	
+			pressed = false;
+		}
 		if (glfwGetKey(Window, GLFW_KEY_W) == GLFW_PRESS) {
 			pos += cameraFront * cameraSpeed * DeltaTime;
 		}
@@ -127,6 +162,7 @@ void CameraFps::processInput() {
 void CameraFps::OnImGuiRendering() {
 	ImGui::SliderFloat("camera far plane", &far, 0.0f, 10000.0f);
 	ImGui::SliderFloat("camera speed", &cameraSpeed, 0.0f, 100.0f);
+	ImGui::SliderFloat("Sensitivity", &sensitivity, 0.2f, 5.0f);
 }
 
 

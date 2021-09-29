@@ -1,5 +1,8 @@
+#include <iostream>
+#include <ostream>
 #include "DepthScene.h"
 #include "GeometryUtil.h"
+
 
 namespace Scene {
 
@@ -49,7 +52,7 @@ namespace Scene {
 		ImGui::SliderFloat("camera far plane", &camera.far, 0.0f, 10000.0f);
 		ImGui::SliderFloat("camera speed", &camera.cameraSpeed, 0.0f, 1000.0f);
 	}
-
+	
 	void DepthScene::OnRendering() {
 		// Non-linear depth val, so all most all the objects have depth close to 1.0
 		// more precision close to near plane, low precision at far plane
@@ -62,10 +65,13 @@ namespace Scene {
 		model_m = glm::scale(model_m, glm::vec3(1.0f, 1.0f, 100.0f));
 		shader.SetMat4fv("model", model_m);
 		gl_renderer.Draw(*va, *ib);*/
-
+		
 		model_m = glm::mat4(1.0);
+		glm::vec4 temp = camera.getPojection() * camera.getView() * model_m * glm::vec4(1.0, 1.0, 1.0, 1.0);
+		//std::cout << temp << std::endl;
 		shader.SetMat4fv("model", model_m);
 		model.Draw(shader);
 	}
 
+	
 }
