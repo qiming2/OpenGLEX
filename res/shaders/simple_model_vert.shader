@@ -16,7 +16,7 @@ void main() {
 	UV = uv;
 	Pos = vec3(model * vec4(pos, 1.0));
 
-	Normal = mat3(transpose(inverse(model))) * normal;
+	Normal = mat3(model) * normal;
 
 	gl_Position = projection * view * vec4(Pos, 1.0);
 }

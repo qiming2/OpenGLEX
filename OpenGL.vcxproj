@@ -248,6 +248,9 @@
     <None Include="res\shaders\outline_frag.shader" />
     <None Include="res\shaders\outline_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
+    <None Include="res\shaders\pointShadow_frag.shader" />
+    <None Include="res\shaders\pointShadow_geom.shader" />
+    <None Include="res\shaders\pointShadow_vert.shader" />
     <None Include="res\shaders\screen_quad_frag.shader" />
     <None Include="res\shaders\screen_quad_ms_frag.shader" />
     <None Include="res\shaders\screen_quad_ms_vert.shader" />

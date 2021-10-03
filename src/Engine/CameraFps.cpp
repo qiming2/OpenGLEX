@@ -7,7 +7,7 @@
 
 static float xPos = 0.0f;
 static float yPos = 0.0f;
-static float fov = 45.0f;
+static float fov = 45;
 static bool hideCursor = false;
 static bool pressed = false;
 static bool changedBack = false;
