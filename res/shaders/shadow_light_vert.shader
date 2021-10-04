@@ -20,6 +20,6 @@ void main() {
 	out_data.Pos = vec3(model * vec4(pos, 1.0));
 	out_data.lightSpacePos = lightProjectView * vec4(out_data.Pos, 1.0);
 	out_data.UV = uv;
-	out_data.N = (transpose(inverse(mat3(model)))) * n;
+	out_data.N = mat3(model) * n;
 	gl_Position = projection * view * vec4(out_data.Pos, 1.0);
 }

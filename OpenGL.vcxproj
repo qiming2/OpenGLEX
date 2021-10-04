@@ -259,6 +259,8 @@
     <None Include="res\shaders\shadow_light_vert.shader" />
     <None Include="res\shaders\shadow_pass_frag.shader" />
     <None Include="res\shaders\shadow_pass_vert.shader" />
+    <None Include="res\shaders\shadow_phong_frag.shader" />
+    <None Include="res\shaders\shadow_phong_vert.shader" />
     <None Include="res\shaders\simple_model_frag.shader" />
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>

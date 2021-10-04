@@ -22,7 +22,7 @@ CameraFps::CameraFps():
 	pitch(0.0f),
 	lastX(0.0f),
 	lastY(0.0f),
-	sensitivity(2.0f),
+	sensitivity(10.0f),
 	cameraSpeed(5.0f),
 	width(Width),
 	height(Height),
@@ -162,7 +162,7 @@ void CameraFps::processInput() {
 void CameraFps::OnImGuiRendering() {
 	ImGui::SliderFloat("camera far plane", &far, 0.0f, 10000.0f);
 	ImGui::SliderFloat("camera speed", &cameraSpeed, 0.0f, 100.0f);
-	ImGui::SliderFloat("Sensitivity", &sensitivity, 0.2f, 5.0f);
+	ImGui::SliderFloat("Sensitivity", &sensitivity, 0.2f, 20.0f);
 }
 
 

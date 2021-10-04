@@ -43,6 +43,7 @@
 #include "Scene/InstanceIIScene.h"
 #include "Scene/MSAAScene.h"
 #include "Scene/ShadowScene.h"
+#include "Scene/PointShadowScene.h"
 
 
 
@@ -91,6 +92,7 @@ int main(void)
         menu->Register<Scene::InstanceIIScene>("InstanceII Scene");
         menu->Register<Scene::MSAAScene>("MSAA Scene");
         menu->Register<Scene::ShadowScene>("Shadow Scene");
+        menu->Register<Scene::PointShadowScene>("PointLightShadow Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

@@ -215,6 +215,8 @@
     <None Include="res\shaders\pointShadow_frag.shader" />
     <None Include="res\shaders\pointShadow_geom.shader" />
     <None Include="res\shaders\pointShadow_vert.shader" />
+    <None Include="res\shaders\shadow_phong_vert.shader" />
+    <None Include="res\shaders\shadow_phong_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">

@@ -1,45 +1,48 @@
+//#version 330 core
+//
+//out vec4 fragPos;
+//layout(triangles) in;
+//layout(triangle_strip, max_vertices=18) out;
+//
+//uniform mat4 shadowMatrix[6];
+//void main() {
+//	// for each face we calculate the clip space
+//	// of this vertex as well as outputing
+//	// the world position
+//
+//	// if the vertex is within one of perspective
+//	// frustum, then it won't get culled and would
+//	// be passed down to frag shader
+//	for (int face = 0; face < 6; face++) {
+//		gl_Layer = face;
+//		for (int i = 0; i < 3; i++) {
+//			fragPos = gl_in[i].gl_Position;
+//			gl_Position = shadowMatrix[face] * fragPos;
+//			EmitVertex();
+//		}
+//		EndPrimitive();
+//	}
+//}
+
 #version 330 core
+layout(triangles) in;
+layout(triangle_strip, max_vertices = 18) out;
 
-/////////////////////////// triangle strip with different color /////////////////////
-layout (triangles) in;
-layout (triangle_strip, max_vertices = 18) out;
+uniform mat4 shadowMatrices[6];
 
-uniform mat4 shadowMatrixs[6];
+out vec4 FragPos; // FragPos from GS (output per emitvertex)
 
-
-///////////////////////////////// Take away ////////////////////////
-// Always take care of transformation in world space or view space
-// transformation in clip space would result werid behavior
-
-
-//////////// Simple Explosion with geometry shader
-vec3 getNormal() {
-	vec3 ab = vec3(vs[1].Pos - vs[0].Pos);
-	vec3 bc = vec3(vs[2].Pos - vs[1].Pos);
-	return normalize(cross(ab, bc));
-}
-
-vec4 explode(vec3 position, vec3 normal) {
-	vec3 direction = normal * ((sin(time) + 1) / 2.0) * mag;
-	return vec4(position, 1.0) + vec4(direction, 0.0);
-}
-
-void main() {
-	vec3 normal = getNormal();
-	ge.Normal = normal;
-	mat4 clipM = projection * view;
-
-	ge.Pos = vec3(explode(vs[0].Pos, normal));
-	gl_Position = clipM * vec4(ge.Pos, 1.0);
-	ge.UV = vs[0].UV;
-	EmitVertex();
-	ge.Pos = vec3(explode(vs[1].Pos, normal));
-	gl_Position = clipM * vec4(ge.Pos, 1.0);
-	ge.UV = vs[1].UV;
-	EmitVertex();
-	ge.Pos = vec3(explode(vs[2].Pos, normal));
-	gl_Position = clipM * vec4(ge.Pos, 1.0);
-	ge.UV = vs[2].UV;
-	EmitVertex();
-	EndPrimitive();
+void main()
+{
+	for (int face = 0; face < 6; ++face)
+	{
+		gl_Layer = face; // built-in variable that specifies to which face we render.
+		for (int i = 0; i < 3; ++i) // for each triangle's vertices
+		{
+			FragPos = gl_in[i].gl_Position;
+			gl_Position = shadowMatrices[face] * FragPos;
+			EmitVertex();
+		}
+		EndPrimitive();
+	}
 }
