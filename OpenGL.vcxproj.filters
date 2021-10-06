@@ -141,6 +141,9 @@
     <ClCompile Include="src\Scene\PointShadowScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\NormalMapScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -217,6 +220,8 @@
     <None Include="res\shaders\pointShadow_vert.shader" />
     <None Include="res\shaders\shadow_phong_vert.shader" />
     <None Include="res\shaders\shadow_phong_frag.shader" />
+    <None Include="res\shaders\normal_map_vert.shader" />
+    <None Include="res\shaders\normal_map_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -579,6 +584,9 @@
     <ClInclude Include="src\Scene\PointShadowScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scene\NormalMapScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png">
@@ -612,6 +620,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\Texture\blending_transparent_window.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\brickwall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\brickwall_normal.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
