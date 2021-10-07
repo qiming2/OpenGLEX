@@ -19,6 +19,7 @@ namespace Scene {
 		Texture diffuseMap;
 		CameraFps camera;
 		m_Shader shader;
+		glm::mat4 model;
 	};
 }
 

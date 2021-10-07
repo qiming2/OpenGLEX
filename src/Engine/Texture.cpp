@@ -92,7 +92,7 @@ Texture::~Texture()
 
 void Texture::Bind() const
 {
-	glActiveTexture(m_activeID);
+	glActiveTexture(GL_TEXTURE0 + m_activeID);
 	glBindTexture(GL_TEXTURE_2D, m_RendererID);
 }
 

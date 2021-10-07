@@ -29,8 +29,12 @@ uniform mat4 view;
 void main() {
 	vs.Pos = vec3(model * vec4(pos, 1.0));
 	vs.Normal = normalize(mat3(model) * normal);
-	vec3 T = normalize(tangent);
-	vec3 B = normalize(bitangent);
+	vec3 T = normalize(mat3(model) * tangent);
+	vec3 N = normalize(vs.Normal);
+	vec3 B = normalize(mat3(model) * bitangent);
+	//T = normalize(T - dot(T, N) * N);
+	//vec3 B = cross(N, T);
+	
 	vs.UV = uv;
 	vs.TBN = mat3(T, B, N);
 	gl_Position = projection * view * vec4(vs.Pos, 1.0);

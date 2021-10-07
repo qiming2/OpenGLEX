@@ -44,6 +44,7 @@
 #include "Scene/MSAAScene.h"
 #include "Scene/ShadowScene.h"
 #include "Scene/PointShadowScene.h"
+#include "Scene/NormalMapScene.h"
 
 
 
@@ -93,6 +94,7 @@ int main(void)
         menu->Register<Scene::MSAAScene>("MSAA Scene");
         menu->Register<Scene::ShadowScene>("Shadow Scene");
         menu->Register<Scene::PointShadowScene>("PointLightShadow Scene");
+        menu->Register<Scene::NormalMapScene>("NormalMap Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();
