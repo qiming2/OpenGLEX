@@ -100,6 +100,7 @@ int main(void)
         double prevTime = glfwGetTime();
         double currTime = 0.0;
         glEnable(GL_DEPTH_TEST);
+        //Texture::SetFlip(true);
         while (!glfwWindowShouldClose(Window))
         {
             /* Render here */

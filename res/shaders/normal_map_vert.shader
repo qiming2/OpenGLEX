@@ -16,7 +16,9 @@ out VS_OUT{
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
-
+uniform bool tuto;
+uniform bool hardCode;
+uniform bool normalized;
 // we have two ways to get right
 // light calculation:
 // 1. transform every sampled normal from tangent space to world space
@@ -28,12 +30,44 @@ uniform mat4 view;
 // we choose the first one
 void main() {
 	vs.Pos = vec3(model * vec4(pos, 1.0));
-	vs.Normal = normalize(mat3(model) * normal);
-	vec3 T = normalize(mat3(model) * tangent);
-	vec3 N = normalize(vs.Normal);
-	vec3 B = normalize(mat3(model) * bitangent);
-	//T = normalize(T - dot(T, N) * N);
-	//vec3 B = cross(N, T);
+	vec3 B;
+	vec3 T;
+	if (tuto) {
+		if (hardCode) {
+			vs.Normal = normalize(transpose(inverse(mat3(model))) * vec3(0.0, 0.0, 1.0));
+			T = normalize(transpose(inverse(mat3(model))) * vec3(1.0, 0.0, 0.0));
+
+			B = normalize(transpose(inverse(mat3(model))) * vec3(0.0, 1.0, 0.0));
+		}
+		else {
+			vs.Normal = normalize(transpose(inverse(mat3(model))) * normal);
+			T = normalize(transpose(inverse(mat3(model))) * tangent);
+
+			B = normalize(transpose(inverse(mat3(model))) * bitangent);
+		}
+		
+	}
+	else {
+		if (hardCode) {
+			vs.Normal = normalize(transpose(inverse(mat3(model))) * normal);
+			T = normalize(transpose(inverse(mat3(model))) * vec3(1.0, 0.0, 0.0));
+
+			B = normalize(transpose(inverse(mat3(model))) * vec3(0.0, 0.0, -1.0));
+		}
+		else {
+			vs.Normal = normalize(transpose(inverse(mat3(model))) * normal);
+			T = normalize(transpose(inverse(mat3(model))) * tangent);
+
+			B = normalize(transpose(inverse(mat3(model))) * bitangent);
+		}
+	}
+
+	vec3 N = vs.Normal;
+	if (normalized) {
+		T = normalize(T - dot(T, N) * N);
+		B = cross(N, T);
+	}
+	
 	
 	vs.UV = uv;
 	vs.TBN = mat3(T, B, N);

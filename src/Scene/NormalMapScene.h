@@ -17,6 +17,7 @@ namespace Scene {
 		unsigned int ibo;
 		Texture normalMap;
 		Texture diffuseMap;
+		Texture heightMap;
 		CameraFps camera;
 		m_Shader shader;
 		glm::mat4 model;
