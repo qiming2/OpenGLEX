@@ -640,6 +640,15 @@
     <Image Include="res\Texture\bricks2_normal.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\Texture\toy_box_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\toy_box_disp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Texture\wood.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\shaders\phong_vert.shader" />

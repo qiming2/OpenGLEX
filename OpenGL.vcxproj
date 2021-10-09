@@ -407,7 +407,10 @@
     <Image Include="res\Texture\normal_mapping_normal_map.png" />
     <Image Include="res\Texture\se_1.jpg" />
     <Image Include="res\Texture\starsky.jpeg" />
+    <Image Include="res\Texture\toy_box_disp.png" />
+    <Image Include="res\Texture\toy_box_normal.png" />
     <Image Include="res\Texture\wall.jpg" />
+    <Image Include="res\Texture\wood.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\shaders\phong_vert.shader" />
