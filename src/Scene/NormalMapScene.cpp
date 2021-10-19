@@ -101,12 +101,12 @@ NormalMapScene::NormalMapScene():
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 3, GL_FLOAT, false, sizeof(Vertex), (const void*)(11 * sizeof(float)));
 	//std::cout << sizeof(Vertex) << std::endl;
-
 	glBindVertexArray(0);
+	glDeleteBuffers(1, &vbo);
 }
 
 NormalMapScene::~NormalMapScene() {
-	glDeleteBuffers(1, &vbo);
+	//glDeleteBuffers(1, &vbo);
 	glDeleteBuffers(1, &ibo);
 	glDeleteVertexArrays(1, &vao);
 	shader.Delete();
@@ -123,7 +123,7 @@ void NormalMapScene::OnRendering() {
 	model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 	GLCall(glBindVertexArray(vao));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+	//GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
 	shader.Bind();
 	shader.SetInt("tuto", 0);
 	shader.SetInt("hardCode", hardCode);
@@ -150,6 +150,7 @@ void NormalMapScene::OnRendering() {
 	shader.SetInt("setNorm", 1);
 	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 	glBindVertexArray(0);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void NormalMapScene::OnImGuiRendering() {

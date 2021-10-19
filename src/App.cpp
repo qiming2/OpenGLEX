@@ -45,7 +45,7 @@
 #include "Scene/ShadowScene.h"
 #include "Scene/PointShadowScene.h"
 #include "Scene/NormalMapScene.h"
-
+#include "Scene/HdrBloomScene.h"
 
 
 
@@ -95,6 +95,7 @@ int main(void)
         menu->Register<Scene::ShadowScene>("Shadow Scene");
         menu->Register<Scene::PointShadowScene>("PointLightShadow Scene");
         menu->Register<Scene::NormalMapScene>("NormalMap Scene");
+        menu->Register<Scene::HdrBloomScene>("HdrBloom Scene");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

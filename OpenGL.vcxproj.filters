@@ -144,6 +144,9 @@
     <ClCompile Include="src\Scene\NormalMapScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\HdrBloomScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -222,6 +225,10 @@
     <None Include="res\shaders\shadow_phong_frag.shader" />
     <None Include="res\shaders\normal_map_vert.shader" />
     <None Include="res\shaders\normal_map_frag.shader" />
+    <None Include="res\shaders\hdr_vert.shader" />
+    <None Include="res\shaders\hdr_frag.shader" />
+    <None Include="res\shaders\point_light_vert.shader" />
+    <None Include="res\shaders\point_light_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -585,6 +592,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\NormalMapScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\HdrBloomScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
