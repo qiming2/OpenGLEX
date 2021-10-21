@@ -11,7 +11,7 @@ namespace Scene
 {
 	SceneMenu::SceneMenu(Scene*& currentScene) :
 		m_currentScene(currentScene),
-		m_clear_color(0.1f, 0.1f, 0.1f, 1.0f)
+		m_clear_color(0.0f, 0.0f, 0.0f, 1.0f)
 	{
 		m_renderer = std::make_unique<Renderer>();
 	}

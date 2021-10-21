@@ -1,6 +1,9 @@
 #version 330 core
 
-out vec4 out_color;
+// since we are writing to both render targets (two color buffer)
+// we need to specify which output colors need to go to which render target
+layout(location = 0) out vec4 out_color;
+layout(location = 1) out vec4 out_brightness;
 
 in VS_OUT{
 	vec3 Pos;
@@ -42,6 +45,8 @@ vec3 phong_shade(int i) {
 	return (ambient_color + diffuse_color + specular_color) / (dis * dis);
 }
 
+const vec3 channel_weight = vec3(0.2126, 0.7152, 0.0722);
+
 void main() {
 	vec3 ret = vec3(0.0);
 	for (int i = 0; i < NUM_LIGHTS; i++) {
@@ -50,4 +55,12 @@ void main() {
 
 	//out_color = vec4(1.0, 1.0, 1.0, 1.0);
 	out_color = vec4(ret, 1.0);
+	// Calculate luminance
+	float luminance = dot(ret, channel_weight);
+	if (luminance > 1.0) {
+		out_brightness = vec4(ret, 1.0);
+	}
+	else {
+		out_brightness = vec4(0.0, 0.0, 0.0, 1.0);
+	}
 }

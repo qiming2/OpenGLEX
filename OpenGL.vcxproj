@@ -216,6 +216,8 @@
     <None Include="Dependencies\assimp\include\assimp\vector2.inl" />
     <None Include="Dependencies\assimp\include\assimp\vector3.inl" />
     <None Include="README.md" />
+    <None Include="res\shaders\blur_pass_frag.shader" />
+    <None Include="res\shaders\blur_pass_vert.shader" />
     <None Include="res\shaders\b_frag.shader" />
     <None Include="res\shaders\b_frag_coordinate.shader" />
     <None Include="res\shaders\b_frag_transform.shader" />

@@ -15,15 +15,20 @@ namespace Scene {
 		void OnRendering() override;
 	private:
 		Mesh cube;
+		Mesh quad;
 		unsigned int screen_vao;
 		unsigned int screen_vbo;
 		glm::mat4 model;
-		unsigned int colorBuffer;
+		unsigned int colorBuffer[2];
 		unsigned int hdrfbo;
 
+		unsigned int blurfbo[2];
+		unsigned int blurBuf[2];
 		unsigned int depthrbo;
 		m_Shader shader;
 		m_Shader light_shader;
+		m_Shader light_cube;
+		m_Shader blur_pass;
 		CameraFps camera;
 	};
 

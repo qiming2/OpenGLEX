@@ -2,13 +2,14 @@
 out vec4 out_color;
 in vec2 UV;
 uniform sampler2D texture_hdr;
+uniform sampler2D texture_brightness;
 uniform bool hdr;
 // exposure
 uniform float exposure;
 const float gamma = 2.2;
 void main() {
 	// gamma correct before tone mapping
-	vec3 hdr_color = texture(texture_hdr, UV).rgb;
+	vec3 hdr_color = texture(texture_hdr, UV).rgb + texture(texture_brightness, UV).rgb;
 	if (hdr) {
 		// Several tone mapping
 		// reinhard that balances out the brightness through all color channel
