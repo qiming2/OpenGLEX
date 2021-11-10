@@ -147,6 +147,9 @@
     <ClCompile Include="src\Scene\HdrBloomScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene\DeferredShadingScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -231,6 +234,10 @@
     <None Include="res\shaders\point_light_frag.shader" />
     <None Include="res\shaders\blur_pass_vert.shader" />
     <None Include="res\shaders\blur_pass_frag.shader" />
+    <None Include="res\shaders\gBuffer_vert.shader" />
+    <None Include="res\shaders\gBuffer_frag.shader" />
+    <None Include="res\shaders\screen_quadG_vert.shader" />
+    <None Include="res\shaders\screen_quadG_frag.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -597,6 +604,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\HdrBloomScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\DeferredShadingScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

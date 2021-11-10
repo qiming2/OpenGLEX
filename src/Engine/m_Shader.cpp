@@ -7,7 +7,9 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
+m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath):
+	vPath(vertexPath),
+	fPath(fragmentPath)
 {
 	std::string vCode = readAll(vertexPath);
 	std::string fCode = readAll(fragmentPath);
@@ -44,7 +46,11 @@ m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath)
 	Unbind();
 }
 
-m_Shader::m_Shader(const char* vPath, const char* fPath, const char* gPath) {
+m_Shader::m_Shader(const char* vertexPath, const char* fragPath, const char* geoPath):
+	vPath(vertexPath),
+	fPath(fragPath),
+	gPath(geoPath)
+{
 	// read all shader code from files
 
 	// Since std::string is a temporary object, if using someString.c_str()
@@ -54,9 +60,9 @@ m_Shader::m_Shader(const char* vPath, const char* fPath, const char* gPath) {
 	const char* gcode = readAll(gPath).c_str();*/
 	
 	// Right way is to copy 
-	const std::string& vCode = readAll(vPath);
-	const std::string& fCode = readAll(fPath);
-	const std::string& gCode = readAll(gPath);
+	const std::string& vCode = readAll(vertexPath);
+	const std::string& fCode = readAll(fragPath);
+	const std::string& gCode = readAll(geoPath);
 	const char* vcode = vCode.c_str();
 	const char* fcode = fCode.c_str();
 	const char* gcode = gCode.c_str();
@@ -258,7 +264,7 @@ int m_Shader::GetUniformLocation(const std::string& name)
 	int location = glGetUniformLocation(m_RendererID, name.c_str());
 	if (location == -1)
 	{
-		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << " Unknown Name: " << name << std::endl;
+		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << " Unknown Name: " << name << " File path: " << "\n" << vPath << "\n" << fPath << "\n" << gPath << std::endl;
 	}
 	m_uniformLocation[name] = location;
 	return location;
@@ -278,7 +284,7 @@ int m_Shader::GetUniformBlock(const std::string& name)
 	int location = glGetUniformBlockIndex(m_RendererID, name.c_str());
 	if (location == -1)
 	{
-		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << " Unknown Name: " << name << std::endl;
+		std::cout << "UNIFORM LOCATION UNKNOWN\n" << "File: " << __FILE__ << " AT LINE: " << __LINE__ << " Unknown Name: " << name << " File path: " << vPath << "\n" << fPath << "\n" << gPath << std::endl;
 	}
 	m_uniformLocation[name] = location;
 	return location;

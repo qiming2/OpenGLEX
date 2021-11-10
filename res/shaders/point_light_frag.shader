@@ -52,7 +52,6 @@ void main() {
 	for (int i = 0; i < NUM_LIGHTS; i++) {
 		ret += phong_shade(i);
 	}
-
 	//out_color = vec4(1.0, 1.0, 1.0, 1.0);
 	out_color = vec4(ret, 1.0);
 	// Calculate luminance

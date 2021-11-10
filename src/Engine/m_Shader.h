@@ -34,7 +34,8 @@ private:
 	unsigned int m_RendererID;
 	// Uniform location caches for getting or setting uniform values
 	std::unordered_map<std::string, int> m_uniformLocation;
-
+	// for debugging purposes
+	std::string vPath, fPath, gPath;
 	// Create and compile shader
 	unsigned int CompileShader(const char* code, unsigned int type);
 

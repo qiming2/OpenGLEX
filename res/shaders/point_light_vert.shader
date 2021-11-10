@@ -23,7 +23,7 @@ void main() {
 	else {
 		vs_out.Normal = mat3(model) * normal;
 	}
-	
+	vs_out.Normal = mat3(model) * normal;
 	vs_out.UV = uv;
 	gl_Position = projection * view * vec4(vs_out.Pos, 1.0);
 }

@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\DeferredShadingScene.cpp" />
     <ClCompile Include="src\Scene\HdrBloomScene.cpp" />
     <ClCompile Include="src\Scene\NormalMapScene.cpp" />
     <ClCompile Include="src\Scene\PointShadowScene.cpp" />
@@ -226,6 +227,8 @@
     <None Include="res\shaders\b_vert_transform.shader" />
     <None Include="res\shaders\cube_map_frag.shader" />
     <None Include="res\shaders\cube_map_vert.shader" />
+    <None Include="res\shaders\gBuffer_frag.shader" />
+    <None Include="res\shaders\gBuffer_vert.shader" />
     <None Include="res\shaders\hdr_frag.shader" />
     <None Include="res\shaders\hdr_vert.shader" />
     <None Include="res\shaders\MSAA_frag.shader" />
@@ -261,6 +264,8 @@
     <None Include="res\shaders\pointShadow_vert.shader" />
     <None Include="res\shaders\point_light_frag.shader" />
     <None Include="res\shaders\point_light_vert.shader" />
+    <None Include="res\shaders\screen_quadG_frag.shader" />
+    <None Include="res\shaders\screen_quadG_vert.shader" />
     <None Include="res\shaders\screen_quad_frag.shader" />
     <None Include="res\shaders\screen_quad_ms_frag.shader" />
     <None Include="res\shaders\screen_quad_ms_vert.shader" />
@@ -275,6 +280,7 @@
     <None Include="res\shaders\simple_model_vert.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\DeferredShadingScene.h" />
     <ClInclude Include="src\Scene\HdrBloomScene.h" />
     <ClInclude Include="src\Scene\NormalMapScene.h" />
     <ClInclude Include="src\Scene\PointShadowScene.h" />
