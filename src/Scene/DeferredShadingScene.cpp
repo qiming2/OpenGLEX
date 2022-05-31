@@ -1,12 +1,20 @@
+#include <random>
 #include "DeferredShadingScene.h"
+
+static float lerp(float a, float b, float f) {
+	return a * (1.0f - f) + b * f;
+}
+
 namespace Scene {
 	static const glm::vec3 pColor = { 20.0f, 20.0f, 20.0f };
 	static const glm::vec3 pPos = { 0.0f, 5.0f, 0.0f };
-	DeferredShadingScene::DeferredShadingScene():
+	DeferredShadingScene::DeferredShadingScene() :
 		screenGShader("res/shaders/screen_quadG_vert.shader", "res/shaders/screen_quadG_frag.shader"),
 		gShader("res/shaders/gBuffer_vert.shader", "res/shaders/gBuffer_frag.shader"),
 		cube(MeshType::Cube),
-		normalShader("res/shaders/point_light_vert.shader", "res/shaders/point_light_frag.shader")
+		normalShader("res/shaders/point_light_vert.shader", "res/shaders/point_light_frag.shader"),
+		backpack("res/Model/simple_model/backpack.mobj", false),
+		ssaoShader("res/shaders/ssao_vert.shader", "res/shaders/ssao_frag.shader")
 	{
 		// create fbo
 		glGenFramebuffers(1, &Gfbo);
@@ -18,6 +26,8 @@ namespace Scene {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, Width, Height, 0, GL_RGBA, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pTex, 0);
 
 		glGenTextures(1, &nTex);
@@ -35,7 +45,7 @@ namespace Scene {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, aTex, 0);
 
-		unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+		unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
 		glDrawBuffers(3, attachments);
 
 		// create depth buffer
@@ -52,6 +62,8 @@ namespace Scene {
 		screenGShader.SetInt("normalBuf", 1);
 		screenGShader.SetInt("albedoBuf", 2);
 		
+
+
 		// screen vao and vbo
 		glGenVertexArrays(1, &screenQuadVao);
 		glBindVertexArray(screenQuadVao);
@@ -67,6 +79,64 @@ namespace Scene {
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * sizeof(float), (void*) (2 * sizeof(float)));
 		glBindVertexArray(0);
+
+		// SSAO PART ----------------------------------------
+
+		// Generate Kernel for sampling occulusion factors
+		std::uniform_real_distribution<float> randomFloats(0.0f, 1.0f);
+		std::default_random_engine generator;
+		float scale;
+		for (size_t i = 0; i < 64; ++i) {
+			glm::vec3 sample(
+				randomFloats(generator) * 2.0f - 1.0f, // normalize to [-1.0, 1.0]
+				randomFloats(generator) * 2.0f -1.0f,
+				randomFloats(generator)
+			);
+			sample = glm::normalize(sample);
+			scale = (float)i / 64.0f;
+			scale = lerp(0.1f, 1.0f, scale*scale);
+			sample *= scale;
+			ssaoKernel.push_back(sample);
+		}
+
+		// Random Kernel Rotation
+		
+		for (size_t i = 0; i < 16; ++i) {
+			glm::vec3 noise(
+				randomFloats(generator) * 2.0f - 1.0f,
+				randomFloats(generator) * 2.0f - 1.0f,
+				0.0f
+			);
+			ssaoNoise.push_back(noise);
+		}
+
+		unsigned int noiseTexture;
+		glGenTextures(1, &noiseTexture);
+		glBindTexture(GL_TEXTURE_2D, noiseTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		screenGShader.Bind();
+		screenGShader.SetInt("texNoise", 3);
+
+		// Using SSAO to generate ssao buffer
+		glGenFramebuffers(1, &ssaoFBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+
+		glGenTextures(1, &ssaoColorBuffer);
+		glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, Width, Height, 0, GL_RED, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
+
+		ssaoShader.Bind();
+		ssaoShader.SetInt("posBuf", 0);
+		ssaoShader.SetInt("normalBuf", 1);
+		ssaoShader.SetInt("albedoBuf", 2);
+		ssaoShader.SetInt("texNoise", 3);
 	}					  
 
 	DeferredShadingScene::~DeferredShadingScene()
@@ -75,6 +145,7 @@ namespace Scene {
 		glDeleteTextures(1, &pTex);
 		glDeleteTextures(1, &nTex);
 		glDeleteTextures(1, &aTex);
+		glDeleteTextures(1, &noiseTexture);
 		glDeleteRenderbuffers(1, &depthB);
 		glDeleteVertexArrays(1, &screenQuadVao);
 		glDeleteBuffers(1, &vbo);
@@ -92,7 +163,7 @@ namespace Scene {
 	{
 		// Simple way of combining defer and forward rendering with blit func
 
-		// if it is only pointlights, we could calculate the lowest light we could
+		// if it is only pointlights, we could calculate the nearest light we could
 		// accept, any other pixel that is far away would not be considered in the lighting calculation
 		// however since gpu uses so-called simd and simt, almost always it would execute all branches of if, else if and else statements.
 		// We could also just render a sphere that includes pixels that could be lit for each point light. When using this method, we need to call the front face of the sphere and render back face since the camera could potentially enter the sphere, and we also don't want to apply the light effects twice
@@ -100,21 +171,46 @@ namespace Scene {
 		// Tile-based rendering is the most popular and cutting-edge rendering technique in the industry
 		// which reduces space in register file as well as utilize gpu efficiently
 		glBindFramebuffer(GL_FRAMEBUFFER, Gfbo);
-		gl_renderer.Clear();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		gShader.Bind();
 		model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		model = glm::translate(model, glm::vec3(-4.0f, 0.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		gShader.SetMat4fv("model", model);
 		camera.SetViewProjectMat(gShader);
-		
+		backpack.Draw(gShader);
 
 		for (int i = 0; i < 3; ++i) {
-			model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-			gShader.SetMat4fv("model", model);
-			cube.Draw(gShader);
+			//model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+			//
+			//cube.Draw(gShader);
+			
 
 		}
+		
+		gShader.Unbind();
 
+		// SSAO PASS
+		glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+		glClear(GL_COLOR_BUFFER_BIT);
+		ssaoShader.Bind();
+		glUniform3fv(glGetUniformLocation(ssaoShader.getID(), "samples"), 64, &ssaoKernel[0][0]);
+		ssaoShader.SetMat4fv("view", camera.getView());
+		ssaoShader.SetMat4fv("projection", camera.getProjection());
+		ssaoShader.SetInt("width", Width);
+		ssaoShader.SetInt("height", Height);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, pTex);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, nTex);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, aTex);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, noiseTexture);
+		glBindVertexArray(screenQuadVao);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		// SSAO PASS END
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		gl_renderer.Clear();
 		glBindVertexArray(screenQuadVao);
@@ -130,15 +226,22 @@ namespace Scene {
 		glBindTexture(GL_TEXTURE_2D, nTex);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, aTex);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 		
+		
+
+
+
 		//
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, Gfbo);
+		/*glBindFramebuffer(GL_READ_FRAMEBUFFER, Gfbo);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
 		glBlitFramebuffer(0, 0, Width, Height, 0, 0, Width, Height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		normalShader.Bind();
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
+		/*normalShader.Bind();
 		camera.SetViewProjectMat(normalShader);
 		model = glm::mat4(1.0f);
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -152,7 +255,7 @@ namespace Scene {
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 2.0f));
 		normalShader.SetMat4fv("model", model);
-		cube.Draw(normalShader);
+		cube.Draw(normalShader);*/
 		
 	}
 

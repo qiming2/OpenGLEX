@@ -68,7 +68,7 @@ namespace Scene {
 		glDepthMask(GL_FALSE);
 		skyboxShader.Bind();
 		glActiveTexture(GL_TEXTURE0);
-		skyboxShader.SetMat4fv("projection", camera.getPojection());
+		skyboxShader.SetMat4fv("projection", camera.getProjection());
 		//skyboxShader.SetMat4fv("view", glm::mat4(glm::mat3(camera.getView())));
 		// This is the key of the cube map, since we don't move the cube at all
 		// or in other words, we move the cube with the camera

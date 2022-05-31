@@ -120,7 +120,7 @@ void PointShadowScene::OnRendering() {
 	glViewport(0, 0, Width, Height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	m_phong.Bind();
-	glm::mat4 projection = camera.getPojection();
+	glm::mat4 projection = camera.getProjection();
 	glm::mat4 view = camera.getView();
 	m_phong.SetMat4fv("projection", projection);
 	m_phong.SetMat4fv("view", view);

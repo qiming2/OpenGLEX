@@ -2,6 +2,7 @@
 #include <utility>
 #include <GL/glew.h>
 #include "Renderer.h"
+#include "Scene/SimpleModelScene.h"
 #include "Scene.h"
 
 #define PRIORITY_VAL 1000
@@ -50,6 +51,7 @@ namespace Scene
 				lowestPri = it->second;
 			}
 		}
+		
 		return lowest;
 	}
 

@@ -3,6 +3,7 @@
 #include "CameraFps.h"
 #include "Common.h"
 #include "Mesh.h"
+#include "Model.h"
 namespace Scene {
 	class DeferredShadingScene : public Scene
 	{
@@ -30,8 +31,17 @@ namespace Scene {
 		glm::mat4 model;
 
 		m_Shader normalShader;
+		m_Shader ssaoShader;	
 		// Mesh
 		Mesh cube;
+		Model backpack;
+
+
+		unsigned int ssaoFBO;
+		unsigned int ssaoColorBuffer;
+		std::vector<glm::vec3> ssaoKernel;
+		std::vector<glm::vec3> ssaoNoise;
+		unsigned int noiseTexture;
 	};
 }
 

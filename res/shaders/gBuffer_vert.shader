@@ -17,7 +17,7 @@ uniform mat4 view;
 
 void main() {
 	vs_out.pos = vec3(model * vec4(pos, 1.0));
-	vs_out.normal = mat3(model) * normal;
+	vs_out.normal = transpose(inverse(mat3(model))) * normal;
 	vs_out.uv = uv;
 	// hard code spec color
 	vs_out.spec = 0.5;

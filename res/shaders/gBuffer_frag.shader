@@ -6,6 +6,7 @@ layout(location = 0) out vec3 pos;
 layout(location = 1) out vec3 normal;
 layout(location = 2) out vec4 albedo;
 
+
 uniform sampler2D texture_diffuse1;
 
 in VS_OUT{

@@ -5,18 +5,18 @@
 
 
 
-static float xPos = 0.0f;
-static float yPos = 0.0f;
+static double xPos = 0.0f;
+static double yPos = 0.0f;
 static float fov = 45;
 static bool hideCursor = false;
 static bool pressed = false;
 static bool changedBack = false;
-static void mouse_callback(GLFWwindow* Window, double xpos, double ypos);
-static void scroll_callback(GLFWwindow* Window, double xoffset, double yoffset);
+static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 CameraFps::CameraFps():
-	pos(glm::vec3(0.0f, 0.0f, 0.0f)),
-	target(glm::vec3(1.0f, 0.0f, 0.0f)),
+	pos(glm::vec3(0.0f, 0.0f, 1.0f)),
+	target(glm::vec3(0.0f, 0.0f, 0.0f)),
 	up(glm::vec3(0.0f, 1.0f, 0.0f)),
 	yaw(-90.0f),
 	pitch(0.0f),
@@ -57,7 +57,7 @@ CameraFps::CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up):
 }
 
 // projection matrix vector
-const glm::mat4& CameraFps::getPojection() {
+const glm::mat4& CameraFps::getProjection() {
 	/*glm::mat4& ret = projection;
 	float aspect = width / height;
 	float radians = fov / 180.0f * M_PI;
@@ -99,6 +99,7 @@ glm::mat4 CameraFps::getView() {
 }
 
 void CameraFps::processInput() {
+	glfwGetCursorPos(Window, &xPos, &yPos);
 	if (!firstTime && !changedBack) {
 		yaw += (xPos - lastX) * sensitivity * DeltaTime;
 		// ypos on computer ranges from bottom from top
@@ -164,8 +165,20 @@ void CameraFps::OnImGuiRendering() {
 	ImGui::SliderFloat("camera speed", &cameraSpeed, 0.0f, 100.0f);
 	ImGui::SliderFloat("Sensitivity", &sensitivity, 0.2f, 20.0f);
 }
+static void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	xPos = xpos;
+	yPos = ypos;
+}
 
-
+static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	fov -= yoffset;
+	if (fov > 45.0f) {
+		fov = 45.0f;
+	}
+	else if (fov < 1.0f) {
+		fov = 1.0f;
+	}
+}
 void CameraFps::CameraCallBackInit() {
 	glfwSetCursorPosCallback(Window, mouse_callback);
 	glfwSetScrollCallback(Window, scroll_callback);
@@ -181,17 +194,4 @@ void CameraFps::SetViewProjectMat(m_Shader& m_shader) {
 	m_shader.SetMat4fv("projection", glm::value_ptr(projection));
 }
 
-static void mouse_callback(GLFWwindow* Window, double xpos, double ypos) {
-	xPos = xpos;
-	yPos = ypos;
-}
 
-static void scroll_callback(GLFWwindow* Window, double xoffset, double yoffset) {
-	fov -= yoffset;
-	if (fov > 45.0f) {
-		fov = 45.0f;
-	}
-	else if (fov < 1.0f) {
-		fov = 1.0f;
-	}
-}

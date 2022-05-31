@@ -29,6 +29,7 @@ public:
 	void SetVec3fv(const std::string& name, const glm::vec3& val);
 	
 	void SetUniformBlock(const std::string& name, unsigned int bindPoint);
+	unsigned int getID();
 private:
 	// Render ID
 	unsigned int m_RendererID;

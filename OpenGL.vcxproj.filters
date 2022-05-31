@@ -150,6 +150,9 @@
     <ClCompile Include="src\Scene\DeferredShadingScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -238,6 +241,10 @@
     <None Include="res\shaders\gBuffer_frag.shader" />
     <None Include="res\shaders\screen_quadG_vert.shader" />
     <None Include="res\shaders\screen_quadG_frag.shader" />
+    <None Include="res\shaders\ssao_frag.shader" />
+    <None Include="res\shaders\ssao_vert.shader" />
+    <None Include="src\9.ssao_geometry.vs" />
+    <None Include="src\9.ssao_geometry.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">

@@ -159,7 +159,7 @@ namespace Scene {
 		glDepthMask(GL_FALSE);
 		cm_shader.Bind();
 		cm.Bind();
-		cm_shader.SetMat4fv("projection", camera.getPojection());
+		cm_shader.SetMat4fv("projection", camera.getProjection());
 		// don't let skybox move
 		cm_shader.SetMat4fv("view", glm::mat4(glm::mat3(camera.getView())));
 		model = glm::mat4(1.0f);

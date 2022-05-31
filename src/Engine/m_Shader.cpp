@@ -219,6 +219,11 @@ void m_Shader::SetUniformBlock(const std::string& name, unsigned int bindPoint) 
 	glUniformBlockBinding(m_RendererID, location, bindPoint);
 }
 
+unsigned int m_Shader::getID()
+{
+	return m_RendererID;
+}
+
 unsigned int m_Shader::CompileShader(const char* code, unsigned int type)
 {
 	unsigned int id;

@@ -25,6 +25,7 @@ namespace Scene
 	{
 	public:
 		SceneMenu(Scene*& currentScene);
+		
 		template<typename T>
 		void Register(const std::string& name)
 		{

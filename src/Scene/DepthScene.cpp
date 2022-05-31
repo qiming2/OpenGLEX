@@ -67,7 +67,7 @@ namespace Scene {
 		gl_renderer.Draw(*va, *ib);*/
 		
 		model_m = glm::mat4(1.0);
-		glm::vec4 temp = camera.getPojection() * camera.getView() * model_m * glm::vec4(1.0, 1.0, 1.0, 1.0);
+		glm::vec4 temp = camera.getProjection() * camera.getView() * model_m * glm::vec4(1.0, 1.0, 1.0, 1.0);
 		//std::cout << temp << std::endl;
 		shader.SetMat4fv("model", model_m);
 		model.Draw(shader);

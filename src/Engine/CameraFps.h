@@ -12,7 +12,7 @@ public:
 	CameraFps(glm::vec3 pos, glm::vec3 target, glm::vec3 up);
 	~CameraFps();
 	glm::mat4 getView();
-	const glm::mat4& getPojection();
+	const glm::mat4& getProjection();
 	glm::vec3 pos;
 	glm::vec3 target;
 	glm::vec3 up;
@@ -26,7 +26,9 @@ public:
 	void SetViewProjectMat(m_Shader* const m_shader);
 	void SetViewProjectMat(m_Shader& m_shader);
 	void OnImGuiRendering();
+	float Zoom = 45.0f;
 private:
+	
 	glm::mat4 view;
 	glm::mat4 projection;
 	float yaw;

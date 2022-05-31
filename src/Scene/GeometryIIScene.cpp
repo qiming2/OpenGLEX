@@ -43,7 +43,7 @@ namespace Scene {
 		model = glm::translate(model, glm::vec3(0.0f, -10.0f, -15.0f));
 		//model_m = glm::rotate(model_m, radians, glm::vec3(0.0f, 1.0f, 0.0f));
 		shader.Bind();
-		ub.Subdata(0, sizeof(glm::mat4), (void*) glm::value_ptr(camera.getPojection()));
+		ub.Subdata(0, sizeof(glm::mat4), (void*) glm::value_ptr(camera.getProjection()));
 		ub.Subdata(sizeof(glm::mat4), sizeof(glm::mat4), (void*)glm::value_ptr(camera.getView()));
 		if (explode)
 			shader.SetFloat("time", (float)glfwGetTime());
