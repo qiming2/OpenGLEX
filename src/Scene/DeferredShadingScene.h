@@ -15,16 +15,7 @@ namespace Scene {
 		void OnImGuiRendering() override;
 	private:
 		CameraFps camera;
-		unsigned int Gfbo; // gbuffer fbo
-		unsigned int pTex; // position Texture
-		unsigned int nTex; // normal Texture
-		unsigned int aTex; // albedo Texture
-		unsigned int depthB;
-		// unsigned int sTex; specular intensity, don't need this
-		// since we can just store it in albedo texture
-		unsigned int screenQuadVao;
-		unsigned int vbo;
-		unsigned int ibo;
+		
 		m_Shader gShader;
 		m_Shader screenGShader;
 		// model mat
@@ -37,11 +28,10 @@ namespace Scene {
 		Model backpack;
 
 
-		unsigned int ssaoFBO;
-		unsigned int ssaoColorBuffer;
+		
 		std::vector<glm::vec3> ssaoKernel;
 		std::vector<glm::vec3> ssaoNoise;
-		unsigned int noiseTexture;
+		
 	};
 }
 

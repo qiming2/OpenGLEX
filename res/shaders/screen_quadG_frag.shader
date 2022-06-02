@@ -1,10 +1,11 @@
 #version 330 core
 
-uniform sampler2D posBuf;
-uniform sampler2D normalBuf;
-uniform sampler2D albedoBuf;
-uniform sampler2D texNoise;
+uniform sampler2D gPosition;
+uniform sampler2D gNormal;
+uniform sampler2D gAlbedo;
+uniform sampler2D ssao;
 
+uniform bool useSSAO;
 out vec4 out_color;
 in vec2 UV;
 
@@ -20,13 +21,13 @@ uniform vec3 viewPos;
 uniform DirLight light;
 const vec3 ambient = vec3(0.3, 0.3, 0.3);
 void main() {
-	vec3 pos = texture(posBuf, UV).xyz;
-	vec3 normal = normalize(texture(normalBuf, UV).xyz);
-	vec3 albedo = texture(albedoBuf, UV).rgb;
-	float SSAO_F = texture(texNoise, UV).r;
+	vec3 pos = texture(gPosition, UV).xyz;
+	vec3 normal = normalize(texture(gNormal, UV).xyz);
+	vec3 albedo = texture(gAlbedo, UV).rgb;
+	float SSAO_F = useSSAO ? texture(ssao, UV).r : 1.0;
 
 
-	float spec = texture(albedoBuf, UV).a;
+	float spec = texture(gAlbedo, UV).a;
 	// light calculation
 	vec3 lightDir = normalize(-light.dir);
 	vec3 viewDir = normalize(viewPos - pos);
@@ -39,7 +40,7 @@ void main() {
 	float dotH = pow(max(dot(halfDir, normal), 0.0), 16.0);
 	vec3 specular = light.color * dotH * spec;
 	
-	//out_color = vec4((ambient + diffuse + specular), 1.0);
-	out_color = vec4(SSAO_F, SSAO_F, SSAO_F, 1.0);
+	out_color = vec4((ambient + diffuse + specular), 1.0);
+	//out_color = vec4(SSAO_F, SSAO_F, SSAO_F, 1.0);
 	//out_color = vec4(albedo, 1.0);
 }

@@ -16,10 +16,20 @@ uniform mat4 projection;
 uniform mat4 view;
 
 void main() {
-	vs_out.pos = vec3(model * vec4(pos, 1.0));
+	//vec4 viewPos = view * model * vec4(pos, 1.0);
+	//vs_out.pos = viewPos.xyz;
+	//vs_out.normal = transpose(inverse(mat3(view * model))) * normal;
+	//vs_out.uv = uv;
+	//// hard code spec color
+	//vs_out.spec = 0.5;
+	//gl_Position = projection * viewPos;
+
+
+	vec4 viewPos = model * vec4(pos, 1.0);
+	vs_out.pos = viewPos.xyz;
 	vs_out.normal = transpose(inverse(mat3(model))) * normal;
 	vs_out.uv = uv;
 	// hard code spec color
 	vs_out.spec = 0.5;
-	gl_Position = projection * view * vec4(vs_out.pos, 1.0);
+	gl_Position = projection * view * viewPos;
 }

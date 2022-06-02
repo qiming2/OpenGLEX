@@ -14,7 +14,7 @@ in VS_OUT{
 	vec3 normal;
 	vec2 uv;
 	float spec;
-} vs_in;
+	} vs_in;
 
 void main() {
 	pos = vs_in.pos;
