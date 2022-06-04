@@ -161,7 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Scene\PBRScene.cpp" />
     <ClCompile Include="src\Scene\DeferredShadingScene.cpp" />
     <ClCompile Include="src\Scene\HdrBloomScene.cpp" />
     <ClCompile Include="src\Scene\NormalMapScene.cpp" />
@@ -259,6 +259,8 @@
     <None Include="res\shaders\normal_map_vert.shader" />
     <None Include="res\shaders\outline_frag.shader" />
     <None Include="res\shaders\outline_vert.shader" />
+    <None Include="res\shaders\PBR_frag.shader" />
+    <None Include="res\shaders\PBR_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
     <None Include="res\shaders\pointShadow_frag.shader" />
     <None Include="res\shaders\pointShadow_geom.shader" />
@@ -285,6 +287,7 @@
     <None Include="src\9.ssao_geometry.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\PBRScene.h" />
     <ClInclude Include="src\Scene\DeferredShadingScene.h" />
     <ClInclude Include="src\Scene\HdrBloomScene.h" />
     <ClInclude Include="src\Scene\NormalMapScene.h" />

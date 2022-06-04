@@ -47,6 +47,7 @@
 #include "Scene/NormalMapScene.h"
 #include "Scene/HdrBloomScene.h"
 #include "Scene/DeferredShadingScene.h"
+#include "Scene/PBRScene.h"
 
 
 
@@ -96,7 +97,8 @@ int main(void)
         menu->Register<Scene::PointShadowScene>("PointLightShadow Scene");
         menu->Register<Scene::NormalMapScene>("NormalMap Scene");
         menu->Register<Scene::HdrBloomScene>("HdrBloom Scene");
-        menu->Register<Scene::DeferredShadingScene>("Deferred Rendering");
+        menu->Register<Scene::DeferredShadingScene>("Deferred Scene");
+        menu->Register<Scene::PBRScene>("~~PBR Scene~~");
         // Set first scene as menu
         currentScene = menu;
         double prevTime = glfwGetTime();

@@ -150,7 +150,7 @@
     <ClCompile Include="src\Scene\DeferredShadingScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Main.cpp">
+    <ClCompile Include="src\Scene\PBRScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -245,6 +245,8 @@
     <None Include="res\shaders\ssao_vert.shader" />
     <None Include="src\9.ssao_geometry.vs" />
     <None Include="src\9.ssao_geometry.fs" />
+    <None Include="res\shaders\PBR_frag.shader" />
+    <None Include="res\shaders\PBR_vert.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">
@@ -614,6 +616,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\DeferredShadingScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\PBRScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
