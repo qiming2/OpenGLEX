@@ -11,7 +11,7 @@ uniform mat4 view;
 out VS_IN{
 	vec3 pos;
 	vec3 normal;
-	vec3 uv;
+	vec2 uv;
 } vs_out;
 
 void main() {
@@ -20,7 +20,7 @@ void main() {
 	// we don't need to take transpose of inverse of the model matrix
 	//vs_out.normal = transpose(inverse(mat3(model))) * normal;
 	vs_out.normal = mat3(model) * normal;
-	vs_out uv = uv;
+	vs_out.uv = uv;
 
 	gl_Position = projection * view * vec4(vs_out.pos, 1.0);
 }

@@ -1,6 +1,5 @@
 #version 330 core
-
-out vec4 gl_color;
+out vec4 out_color;
 in VS_IN{
 	vec3 pos;
 	vec3 normal;
@@ -13,11 +12,12 @@ uniform float roughness;
 uniform float ao;
 
 // Lights
-uniform vec3 lightPosition[4];
+uniform vec3 lightPositions[4];
 uniform vec3 lightColors[4];
 
 const float PI = 3.14159265359;
 
+uniform vec3 camPos;
 // ------------------------------ The Rendering Equations -------------------------------
 // Normal distribution approximates the relative surface area of microfacets that align tot the half way vector h
 
@@ -25,13 +25,14 @@ const float PI = 3.14159265359;
 
 // f(n, h, roughness) = a^2/ (PI * (dot(n, h)^2 * (a^2 - 1) +1)^2)
 float NormalDistributionGGX(vec3 n, vec3 h, float r) {
+	float a = r * r;
 	float a2 = a * a;
 	float ndoth = max(dot(n, h), 0.0);
 	float ndoth2 = ndoth * ndoth;
 
 	float denom_right = ndoth2 * (a2 - 1.0) + 1.0;
-	float denom = PI + denom_right * denom_right;
-
+	float denom = PI * denom_right * denom_right;
+	
 	return a2 / denom;
 }
 
@@ -46,7 +47,10 @@ float SchlickGGX(float dotP, float k) {
 	return dotP / (dotP * (1.0 - k) + k);
 }
 
-float GeometrySmith(vec3 n, vec3  v, vec3 l, float k) {
+float GeometrySmith(vec3 n, vec3  v, vec3 l, float roughness) {
+	// direct lighting thus using kdirect func
+	float k = (roughness + 1.0) * (roughness + 1.0) / 8.0;
+
 	float ndotv = max(dot(n, v), 0.0);
 	float ndotl = max(dot(n, l), 0.0);
 
@@ -77,8 +81,70 @@ vec3 FresnelSchlick(float costheta, vec3 F0) {
 }
 
 
+
+
+// Main components that connect everything together
 void main() {
+	// Texture Material PBR
+	// Add texture lookup here
 
+	vec3 N = normalize(vs_in.normal);
+	vec3 V = normalize(camPos - vs_in.pos);
+	
+	// Pre-compute F0 param
+	vec3 F0 = vec3(0.04);
+	F0 = mix(F0, albedo, metallic);
 
-	gl_color = vec4(1.0);
+	// reflectance equation calculating diff and spec color
+	vec3 light_val = vec3(0.0);
+
+	// Add up individual point light radiance contribution
+	for (int i = 0; i < 4; ++i) {
+		vec3 L = normalize(lightPositions[i] - vs_in.pos);
+		vec3 H = normalize(L + V);
+		float dist = length(lightPositions[i] - vs_in.pos);
+		// inverse of square dist attenuation for point light
+		float attenuation = 1.0 / (dist * dist);
+		vec3 light_radiance = attenuation * lightColors[i];
+
+		// Cook Torrance BRDF
+
+		// DFG
+		float D = NormalDistributionGGX(N, H, roughness);
+		// Direct lighting k
+		float G = GeometrySmith(N, V, L, roughness);
+		vec3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
+
+		vec3 numerator = D * F * G;
+		float deno = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // prevent dividing by zero
+		vec3 specular = numerator / deno;
+
+		// Fresnel reflectance indice is specular param
+		vec3 ks = F;
+
+		// In order to maintain the conservation of energy, kd is set to 1.0 - F0
+		// unless the object emits light
+		vec3 kd = vec3(1.0) - ks;
+		
+		// Only non-metals or partial metals should have diffuse light, pure metal does not have any diffuse color
+		kd *= 1.0 - metallic;
+
+		float NdotL = max(dot(N, L), 0.0);
+
+		light_val += (kd * albedo / PI + specular) * light_radiance * NdotL;
+		
+	}
+
+	// Will change this IBL: image based lighting
+	vec3 ambient = vec3(0.03) * albedo * ao;
+
+	vec3 color = ambient + light_val;
+	
+	// tone mapping since we are doing all the calculation in hdr
+	color = color / (color + vec3(1.0));
+
+	// gamma correction since we want all the calculations are linear
+	color = pow(color, vec3(1.0 / 2.2));
+	
+	out_color = vec4(color, 1.0);
 }

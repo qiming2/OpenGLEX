@@ -10,7 +10,10 @@ namespace Scene {
 		void OnUpdate(float deltaTime) override;
 		void OnRendering() override;
 		void OnImGuiRendering() override;
+	private:
+		m_Shader pbrShader;
 	};
+
 
 }
 
