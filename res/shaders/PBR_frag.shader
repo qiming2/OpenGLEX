@@ -3,12 +3,17 @@ out vec4 out_color;
 in VS_IN{
 	vec3 pos;
 	vec3 normal;
-	vec3 uv;
+	vec2 uv;
 } vs_in;
 // Material Params
-uniform vec3 albedo;
-uniform float metallic;
-uniform float roughness;
+uniform sampler2D albedo_tex;
+//uniform sampler2D normal_tex;
+uniform sampler2D metallic_tex;
+uniform sampler2D roughness_tex;
+
+//uniform vec3 albedo;
+//uniform float roughness;
+//uniform float metallic;
 uniform float ao;
 
 // Lights
@@ -87,6 +92,10 @@ vec3 FresnelSchlick(float costheta, vec3 F0) {
 void main() {
 	// Texture Material PBR
 	// Add texture lookup here
+	vec3 albedo = pow(texture(albedo_tex, vs_in.uv).rgb, vec3(2.2));
+	float roughness = texture(roughness_tex, vs_in.uv).r;
+	float metallic = texture(metallic_tex, vs_in.uv).r;
+
 
 	vec3 N = normalize(vs_in.normal);
 	vec3 V = normalize(camPos - vs_in.pos);
@@ -135,7 +144,7 @@ void main() {
 		
 	}
 
-	// Will change this IBL: image based lighting
+	// Will change this when learning IBL: image based lighting
 	vec3 ambient = vec3(0.03) * albedo * ao;
 
 	vec3 color = ambient + light_val;
@@ -146,5 +155,6 @@ void main() {
 	// gamma correction since we want all the calculations are linear
 	color = pow(color, vec3(1.0 / 2.2));
 	
+	//vec3 color_temp = vec3(1.0);
 	out_color = vec4(color, 1.0);
 }

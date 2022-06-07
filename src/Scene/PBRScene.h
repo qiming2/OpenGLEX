@@ -12,6 +12,11 @@ namespace Scene {
 		void OnImGuiRendering() override;
 	private:
 		m_Shader pbrShader;
+		Texture albedo_tex;
+		Texture metallic_tex;
+		Texture roughness_tex;
+		//Texture normal;
+
 	};
 
 

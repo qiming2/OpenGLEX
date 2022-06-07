@@ -2,10 +2,10 @@
 #include "stb_image.h"
 #include "Texture.h"
 
-Texture::Texture(const char* image, GLenum activeID)
+Texture::Texture(const char* image, unsigned int activeID)
 {
 	// Create a texture
-	m_activeID = activeID;
+	m_activeID = GL_TEXTURE0 + activeID;
 	glGenTextures(1, &m_RendererID);
 	
 	
@@ -17,7 +17,7 @@ Texture::Texture(const char* image, GLenum activeID)
 	// Always pad image to a multiple of 4 in width
 	unsigned char* data = stbi_load(image, &width, &height, &nChannels, 0);
 	//maybe used if image width is not multiple of 4, this is very important!
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	if (data)
 	{
 		// Configure Texture
@@ -25,9 +25,9 @@ Texture::Texture(const char* image, GLenum activeID)
 		GLenum channel_type = GL_RGB;
 		if (nChannels == 1) {
 			channel_type = GL_RED;
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			
 		} else if (nChannels == 3) {
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			
 			channel_type = GL_RGB;
 		} else if (nChannels == 4) {
 			channel_type = GL_RGBA;
@@ -75,9 +75,9 @@ Texture::Texture(const char* image, GLenum activeID, const std::string& typeName
 	
 }
 
-void Texture::SetActiveID(GLenum activeID)
+void Texture::SetActiveID(unsigned int activeID)
 {
-	m_activeID = activeID;
+	m_activeID = GL_TEXTURE0 + activeID;
 }
 
 void Texture::Delete() const {
@@ -92,7 +92,7 @@ Texture::~Texture()
 
 void Texture::Bind() const
 {
-	glActiveTexture(GL_TEXTURE0 + m_activeID);
+	glActiveTexture(m_activeID);
 	glBindTexture(GL_TEXTURE_2D, m_RendererID);
 }
 

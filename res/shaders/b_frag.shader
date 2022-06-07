@@ -15,10 +15,11 @@ void main()
 {
     vec2 uv = UV;
     // float alpha = 0.5 - abs(uv.x - 0.5) - abs(uv.y - 0.5);
-    vec4 color1 = texture(texture1, uv);
-    vec4 color2 = texture(texture2, uv);
-    out_color = mix(color1, color2, mixVal);
-    //out_color = color1;
+    float color1 = texture(texture1, uv).r;
+    vec3 color2 = texture(texture2, uv).rgb;
+
+    vec3 color_temp =vec3(color1);
+    out_color = vec4(color_temp, 1.0);
  
 }
  

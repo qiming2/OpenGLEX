@@ -58,8 +58,8 @@ namespace Scene
 
 
 
-        m_texture1 = std::make_unique<Texture>("res/Model/simple_model/diffuse1.jpg", GL_TEXTURE0);
-        m_texture2 = std::make_unique<Texture>("res/Texture/awesomeface.png", GL_TEXTURE1);
+        m_texture1 = std::make_unique<Texture>("res/Material/PBR/pbr_ex/rustediron2_roughness.png", 0);
+        m_texture2 = std::make_unique<Texture>("res/Material/PBR/pbr_ex/rustediron2_roughness.png", 1);
       
         m_texture1->Bind();
         m_texture2->Bind();
