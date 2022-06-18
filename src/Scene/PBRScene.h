@@ -15,7 +15,13 @@ namespace Scene {
 		Texture albedo_tex;
 		Texture metallic_tex;
 		Texture roughness_tex;
-		//Texture normal;
+		Texture normal;
+		
+		m_Shader hdrToMap;
+		Texture diffu_radiance_tex;
+
+		m_Shader cube_shader;
+		m_Shader irradiance_shader;
 
 	};
 

@@ -63,6 +63,39 @@ Texture::Texture(const char* image, unsigned int activeID)
 
 }
 
+static int load_hdr_image(const char* image, unsigned int flag, unsigned int rendererID) {
+	int width, height, nrChannels;
+	float* data = stbi_loadf(image, &width, &height, &nrChannels, 0);
+	
+	if (data) {
+		glBindTexture(GL_TEXTURE_2D, rendererID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
+	}
+	else {
+		std::cout << "FAILED TO LOAD HDR IMAGE: " << image << std::endl;
+	}
+	return 0;
+}
+
+Texture::Texture(const char* image, GLenum activeID, unsigned int flag) {
+	m_activeID = GL_TEXTURE0 + activeID;
+	glGenTextures(1, &m_RendererID);
+
+	if (!(flag & gl_texture_flag::NOT_FLIP_VERTICAL))
+		stbi_set_flip_vertically_on_load(true);
+
+	if (flag & gl_texture_flag::HDR)
+		load_hdr_image(image, flag, m_RendererID);
+	
+}
+
 Texture::Texture(const char* image, GLenum activeID, const std::string& typeName)
 	:Texture(image, activeID)
 {

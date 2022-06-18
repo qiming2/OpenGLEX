@@ -6,6 +6,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+#include "util.h"
 
 m_Shader::m_Shader(const char* vertexPath, const char* fragmentPath):
 	vPath(vertexPath),
@@ -92,6 +93,42 @@ m_Shader::m_Shader(const char* vertexPath, const char* fragPath, const char* geo
 	glDeleteShader(fShader);
 	glDeleteShader(gShader);
 	
+	m_RendererID = program;
+	Unbind();
+}
+
+m_Shader::m_Shader(const char* path)
+{
+	
+	std::string code = readAll(path);
+	std::vector<std::string> shaders_s = k_util::split(code, "#type - delim");
+	const std::string& vCode = shaders_s[0];
+	const std::string& fCode = shaders_s[1];
+	const char* vcode = vCode.c_str();
+	const char* fcode = fCode.c_str();
+
+	unsigned int vShader = CompileShader(vcode, GL_VERTEX_SHADER);
+	unsigned int fShader = CompileShader(fcode, GL_FRAGMENT_SHADER);
+
+	unsigned int program = glCreateProgram();
+
+	glAttachShader(program, vShader);
+	glAttachShader(program, fShader);
+	// Add our geometry shader
+
+	glLinkProgram(program);
+	glValidateProgram(program);
+
+	int success;
+	char log[512];
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(program, sizeof(log), NULL, log);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << vPath << "\n" << fPath << "\n" << gPath << "\n" << log << std::endl;
+	}
+	glDeleteShader(vShader);
+	glDeleteShader(fShader);
+
 	m_RendererID = program;
 	Unbind();
 }

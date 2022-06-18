@@ -207,6 +207,7 @@
     <ClCompile Include="src\Util\stb_image.cpp" />
     <ClCompile Include="src\Scene\StencilScene.cpp" />
     <ClCompile Include="src\Engine\UniformBuffer.cpp" />
+    <ClCompile Include="src\Util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependencies\assimp\include\assimp\color4.inl" />
@@ -226,12 +227,15 @@
     <None Include="res\shaders\b_vert.shader" />
     <None Include="res\shaders\b_vert_coordinate.shader" />
     <None Include="res\shaders\b_vert_transform.shader" />
+    <None Include="res\shaders\cube_map.shader" />
     <None Include="res\shaders\cube_map_frag.shader" />
     <None Include="res\shaders\cube_map_vert.shader" />
     <None Include="res\shaders\gBuffer_frag.shader" />
     <None Include="res\shaders\gBuffer_vert.shader" />
     <None Include="res\shaders\hdr_frag.shader" />
+    <None Include="res\shaders\hdr_to_cubemap.shader" />
     <None Include="res\shaders\hdr_vert.shader" />
+    <None Include="res\shaders\irradiance_map.shader" />
     <None Include="res\shaders\MSAA_frag.shader" />
     <None Include="res\shaders\MSAA_vert.shader" />
     <None Include="res\shaders\depth_frag.shader" />
@@ -259,6 +263,7 @@
     <None Include="res\shaders\normal_map_vert.shader" />
     <None Include="res\shaders\outline_frag.shader" />
     <None Include="res\shaders\outline_vert.shader" />
+    <None Include="res\shaders\PBR.shader" />
     <None Include="res\shaders\PBR_frag.shader" />
     <None Include="res\shaders\PBR_vert.shader" />
     <None Include="res\shaders\phong_frag.shader" />
@@ -411,6 +416,7 @@
     <ClInclude Include="src\Util\GeometryUtil.h" />
     <ClInclude Include="src\Scene\StencilScene.h" />
     <ClInclude Include="src\Engine\UniformBuffer.h" />
+    <ClInclude Include="src\Util\util.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\Texture\awesomeface.png" />

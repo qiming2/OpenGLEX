@@ -11,9 +11,9 @@ uniform sampler2D albedo_tex;
 uniform sampler2D metallic_tex;
 uniform sampler2D roughness_tex;
 
-//uniform vec3 albedo;
-//uniform float roughness;
-//uniform float metallic;
+uniform vec3 albedo_test;
+uniform float roughness_test;
+uniform float metallic_test;
 uniform float ao;
 
 // Lights
@@ -23,6 +23,8 @@ uniform vec3 lightColors[4];
 const float PI = 3.14159265359;
 
 uniform vec3 camPos;
+
+uniform bool use_tex;
 // ------------------------------ The Rendering Equations -------------------------------
 // Normal distribution approximates the relative surface area of microfacets that align tot the half way vector h
 
@@ -92,9 +94,20 @@ vec3 FresnelSchlick(float costheta, vec3 F0) {
 void main() {
 	// Texture Material PBR
 	// Add texture lookup here
-	vec3 albedo = pow(texture(albedo_tex, vs_in.uv).rgb, vec3(2.2));
-	float roughness = texture(roughness_tex, vs_in.uv).r;
-	float metallic = texture(metallic_tex, vs_in.uv).r;
+	vec3 albedo;
+	float roughness;
+	float metallic;
+	if (use_tex) {
+		albedo = pow(texture(albedo_tex, vs_in.uv).rgb, vec3(2.2));
+		roughness = texture(roughness_tex, vs_in.uv).r;
+		metallic = texture(metallic_tex, vs_in.uv).r;
+	}
+	else {
+		albedo = albedo_test;
+		roughness = roughness_test;
+		metallic = metallic_test;
+	}
+	
 
 
 	vec3 N = normalize(vs_in.normal);
