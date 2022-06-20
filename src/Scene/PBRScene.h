@@ -23,6 +23,10 @@ namespace Scene {
 		m_Shader cube_shader;
 		m_Shader irradiance_shader;
 
+		m_Shader specular_shader;
+
+		m_Shader brdf_shader;
+		m_Shader quad_shader;
 	};
 
 

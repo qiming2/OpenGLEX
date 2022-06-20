@@ -254,6 +254,9 @@
     <None Include="res\shaders\cube_map.shader" />
     <None Include="res\shaders\irradiance_map.shader" />
     <None Include="res\shaders\PBR.shader" />
+    <None Include="res\shaders\BRDF.shader" />
+    <None Include="res\shaders\specular_map.shader" />
+    <None Include="res\shaders\quad_map.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\IndexBuffer.h">

@@ -40,6 +40,7 @@ private:
 	std::string vPath, fPath, gPath;
 	// Create and compile shader
 	unsigned int CompileShader(const char* code, unsigned int type);
+	unsigned int CompileShader(const char* code, unsigned int type, const char* filename);
 
 	int GetUniformLocation(const std::string& name);
 	int GetUniformBlock(const std::string& name);

@@ -11,9 +11,9 @@
 //GL_TEXTURE_CUBE_MAP_NEGATIVE_Y	Bottom	3
 //GL_TEXTURE_CUBE_MAP_POSITIVE_Z	Back	4
 //GL_TEXTURE_CUBE_MAP_NEGATIVE_Z	Front 	5
-CubeMap::CubeMap(const std::vector<std::string>& paths, GLenum activeID) {
+CubeMap::CubeMap(const std::vector<std::string>& paths, unsigned int activeID) {
 	glGenTextures(1, &m_RendererID);
-	m_activeID = activeID;
+	m_activeID = GL_TEXTURE0 + activeID;
 	stbi_set_flip_vertically_on_load(Texture::flip);
 	
 	int width, height, nChannels;
@@ -55,9 +55,9 @@ CubeMap::~CubeMap() {
 
 }
 
-void CubeMap::SetActiveID(GLenum activeID)
+void CubeMap::SetActiveID(unsigned int activeID)
 {
-	m_activeID = activeID;
+	m_activeID = GL_TEXTURE0 +	activeID;
 }
 void CubeMap::Delete() {
 	glDeleteTextures(1, &m_RendererID);

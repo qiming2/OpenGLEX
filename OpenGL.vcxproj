@@ -221,6 +221,7 @@
     <None Include="README.md" />
     <None Include="res\shaders\blur_pass_frag.shader" />
     <None Include="res\shaders\blur_pass_vert.shader" />
+    <None Include="res\shaders\BRDF.shader" />
     <None Include="res\shaders\b_frag.shader" />
     <None Include="res\shaders\b_frag_coordinate.shader" />
     <None Include="res\shaders\b_frag_transform.shader" />
@@ -272,6 +273,7 @@
     <None Include="res\shaders\pointShadow_vert.shader" />
     <None Include="res\shaders\point_light_frag.shader" />
     <None Include="res\shaders\point_light_vert.shader" />
+    <None Include="res\shaders\quad_map.shader" />
     <None Include="res\shaders\screen_quadG_frag.shader" />
     <None Include="res\shaders\screen_quadG_vert.shader" />
     <None Include="res\shaders\screen_quad_frag.shader" />
@@ -286,6 +288,7 @@
     <None Include="res\shaders\shadow_phong_vert.shader" />
     <None Include="res\shaders\simple_model_frag.shader" />
     <None Include="res\shaders\simple_model_vert.shader" />
+    <None Include="res\shaders\specular_map.shader" />
     <None Include="res\shaders\ssao_frag.shader" />
     <None Include="res\shaders\ssao_vert.shader" />
     <None Include="src\9.ssao_geometry.fs" />

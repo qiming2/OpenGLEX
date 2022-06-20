@@ -55,9 +55,12 @@ uniform vec3 camPos;
 
 uniform bool use_tex;
 
-// irradiance map
+// IBL maps
 uniform bool use_irradiance_map;
 uniform samplerCube irradiance_map;
+uniform samplerCube prefilter_map;
+uniform sampler2D brdf_map;
+
 
 // ------------------------------ The Rendering Equations -------------------------------
 // Normal distribution approximates the relative surface area of microfacets that align tot the half way vector h
@@ -121,7 +124,10 @@ vec3 FresnelSchlick(float costheta, vec3 F0) {
 	return F0 + (1.0 - F0) * pow(1.0 - costheta, 5.0);
 }
 
-
+vec3 FresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
+{
+	return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
 
 
 // Main components that connect everything together
@@ -146,7 +152,12 @@ void main() {
 
 	vec3 N = normalize(vs_in.normal);
 	vec3 V = normalize(camPos - vs_in.pos);
-	
+	// Added Reflection
+	vec3 R = reflect(-V, N);
+	const float MAX_REFLECTION_LOD = 4.0;
+
+
+
 	// Pre-compute F0 param
 	vec3 F0 = vec3(0.04);
 	F0 = mix(F0, albedo, metallic);
@@ -192,24 +203,48 @@ void main() {
 	}
 
 	vec3 ambient = vec3(-1.0);
-	// Will change this when learning IBL: image based lighting
-	if (use_irradiance_map) {
-		ambient = vec3(0.03) * albedo * ao;
-	}
-	else {
-		// indirect lighting contains both diffuse and specular
-		// thus we need to weigh ambient lighting with fresnelschlick equation
+	vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+	vec3 ks = F;
+	vec3 kd = vec3(1.0) - ks;
+	kd *= (1.0 - metallic);
 
-		// Could use the following fresnel for indirect lighting
-		// since no single half vector can determine the fresnel response
-		// reflective ratio will always be too high, thus we can inject
-		// a roughness term in it
-		// F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
-		
-		vec3 ks = FresnelSchlick(max(dot(N, V), 0.0), F0);
-		vec3 kd = vec3(1.0) - ks;
-		ambient = texture(irradiance_map, N).rgb * albedo * kd * ao;
-	}
+	ambient = texture(irradiance_map, N).rgb * albedo * kd * ao;
+
+
+	vec3 prefilter_color = textureLod(prefilter_map, R, roughness * MAX_REFLECTION_LOD).rgb;
+	vec2 brdf_value = texture(brdf_map, vec2(max(dot(N, V), 0.0), roughness)).rg;
+	vec3 specular_value = prefilter_color * F * brdf_value.x + brdf_value.y * prefilter_color;
+
+	ambient += specular_value * ao;
+	//// Will change this when learning IBL: image based lighting
+	//if (!use_irradiance_map) {
+	//	ambient = vec3(0.03) * albedo * ao;
+	//}
+	//else {
+	//	// indirect lighting contains both diffuse and specular
+	//	// thus we need to weigh ambient lighting with fresnelschlick equation
+
+	//	// Could use the following fresnel for indirect lighting
+	//	// since no single half vector can determine the fresnel response
+	//	// reflective ratio will always be too high, thus we can inject
+	//	// a roughness term in it
+	//	// F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+	//	
+	//	vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+	//	vec3 ks = F;
+	//	vec3 kd = vec3(1.0) - ks;
+	//	kd *= (1.0 - metallic);
+
+	//	ambient = texture(irradiance_map, N).rgb * albedo * kd * ao;
+
+
+	//	vec3 prefilter_color = textureLod(prefilter_map, R, roughness * MAX_REFLECTION_LOD).rgb;
+	//	vec2 brdf_value = texture(brdf_map, vec2(max(dot(N, V), 0.0), roughness)).rg;
+	//	vec3 specular_value = prefilter_color * F * brdf_value.x + brdf_value.y * prefilter_color;
+
+	//	ambient += specular_value * ao;
+
+	//}
 	
 
 	vec3 color = ambient + light_val;

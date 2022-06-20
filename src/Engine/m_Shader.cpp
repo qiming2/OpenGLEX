@@ -107,8 +107,8 @@ m_Shader::m_Shader(const char* path)
 	const char* vcode = vCode.c_str();
 	const char* fcode = fCode.c_str();
 
-	unsigned int vShader = CompileShader(vcode, GL_VERTEX_SHADER);
-	unsigned int fShader = CompileShader(fcode, GL_FRAGMENT_SHADER);
+	unsigned int vShader = CompileShader(vcode, GL_VERTEX_SHADER, path);
+	unsigned int fShader = CompileShader(fcode, GL_FRAGMENT_SHADER, path);
 
 	unsigned int program = glCreateProgram();
 
@@ -288,6 +288,38 @@ unsigned int m_Shader::CompileShader(const char* code, unsigned int type)
 		*/
 		glGetShaderInfoLog(id, sizeof(log), NULL, log);
 		std::cout << "ERROR::" << typeS << "SHADER::COMPILATION_FAILED\n" << log << " File: " << __FILE__ << std::endl;
+	}
+
+	return id;
+}
+
+unsigned int m_Shader::CompileShader(const char* code, unsigned int type, const char* filename)
+{
+	unsigned int id;
+	int success;
+	char log[512];
+
+	// Create Shader of type (GL_VERTEX_SHADER and GL_FRAGMENT_SHADER are usually what we are working on)
+	id = glCreateShader(type);
+	// The last one specifies an array of string lengths
+	glShaderSource(id, 1, &code, NULL);
+	glCompileShader(id);
+	glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		std::string typeS;
+		if (type == GL_VERTEX_SHADER) typeS = "VERTEX";
+		else if (type == GL_FRAGMENT_SHADER) typeS = "FRAGMENT";
+		else if (type == GL_GEOMETRY_SHADER) typeS = "GEOMETRY";
+		else typeS = "UNKNOWN";
+
+		/*	1: id of shader
+			2: log buffer size
+			3: length of returned log buffer
+			4: pointer to log buffer for holding message
+		*/
+		glGetShaderInfoLog(id, sizeof(log), NULL, log);
+		std::cout << "ERROR::" << typeS << "SHADER::COMPILATION_FAILED\n" << log << " File: " << filename << std::endl;
 	}
 
 	return id;

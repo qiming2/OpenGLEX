@@ -26,11 +26,10 @@ in vec3 texDir;
 uniform samplerCube env_map;
 
 void main() {
-	vec3 env_color = texture(env_map, texDir).rgb;
+	vec3 env_color = textureLod(env_map, texDir, 0.0).rgb;
 
 	// Tone mapping
 	env_color = env_color / (env_color + vec3(1.0));
 	env_color = pow(env_color, vec3(1.0 / 2.2));
 	out_color = vec4(env_color, 1.0);
-	gl_FragDepth = 1.0;
 }

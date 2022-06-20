@@ -156,7 +156,7 @@ void main() {
 		light_val += (kd * albedo / PI + specular) * light_radiance * NdotL;
 		
 	}
-
+	F = 
 	// Will change this when learning IBL: image based lighting
 	vec3 ambient = vec3(0.03) * albedo * ao;
 
