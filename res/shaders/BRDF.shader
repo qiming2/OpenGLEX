@@ -3,22 +3,21 @@
 layout(location = 0) in vec3 pos;
 layout(location = 1) in vec2 uv;
 
-out vec2 UV;
+out vec2 TexCoords;
 
 void main() {
-	UV = uv;
+	TexCoords = uv;
 	gl_Position = vec4(pos, 1.0);
 }
 
 #type - delim
 
-out vec2 out_frag;
-in vec2 UV;
+#version 330 core
+out vec2 FragColor;
+in vec2 TexCoords;
 
 const float PI = 3.14159265359;
-// ----------------------------------------------------------------------------
-// @Reference(qiming): http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
-// efficient VanDerCorpus calculation.
+
 float RadicalInverse_VdC(uint bits)
 {
 	bits = (bits << 16u) | (bits >> 16u);
@@ -29,25 +28,27 @@ float RadicalInverse_VdC(uint bits)
 	return float(bits) * 2.3283064365386963e-10; // / 0x100000000
 }
 
-vec2 Hammpersley(uint i, uint N) {
-	return vec2(float(i) / float(N), RadicalInverse_VdC);
+vec2 Hammersley(uint i, uint N)
+{
+	return vec2(float(i) / float(N), RadicalInverse_VdC(i));
 }
 
-vec3 ImportanceSampleGGX(vec3 Xi, vec3 N, float roughness) {
-	float a = rouhgness * roughness;
+vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
+{
+	float a = roughness * roughness;
 	float phi = 2.0 * PI * Xi.x;
-	float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a*a - 1.0) * Xi.y));
+	float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a * a - 1.0) * Xi.y));
 	float sinTheta = sqrt(1 - cosTheta * cosTheta);
 
 	vec3 H;
 	H.x = sinTheta * cos(phi);
-	H.z = sinTheta * sin(phi);
-	H.y = cosTheta;
+	H.y = sinTheta * sin(phi);
+	H.z = cosTheta;
 
 	vec3 up = abs(N.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
 	vec3 tangent = normalize(cross(up, N));
 	vec3 bitangent = normalize(cross(N, tangent));
-	
+
 	vec3 sample_vec = H.x * tangent + H.y * bitangent + H.z * N;
 	return sample_vec;
 }
@@ -55,10 +56,10 @@ vec3 ImportanceSampleGGX(vec3 Xi, vec3 N, float roughness) {
 float GeometrySchlickGGX(float NdotV, float roughness) {
 	float a = roughness;
 	float k = (a * a) / 2.0;
-	
+
 	float nom = NdotV;
 	float denom = NdotV * (1.0 - k) + k;
-	
+
 	return nom / denom;
 }
 
@@ -72,8 +73,8 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
 }
 
 void main() {
-	float NdotV = UV.x;
-	float roughness = UV.y;
+	float NdotV = TexCoords.x;
+	float roughness = TexCoords.y;
 
 	vec3 V;
 	V.x = sqrt(1.0 - NdotV * NdotV);
@@ -84,10 +85,10 @@ void main() {
 	float bias = 0.0;
 
 	vec3 N = vec3(0.0, 0.0, 1.0);
-	
+
 	const uint SAMPLE_COUNT = 1024u;
-	for (uint i = 0; i < SAMPLE_COUNT; ++i) {
-		vec2 Xi = Hammerlsey(i, SAMPLE_COUNT);
+	for (uint i = 0u; i < SAMPLE_COUNT; ++i) {
+		vec2 Xi = Hammersley(i, SAMPLE_COUNT);
 		vec3 H = ImportanceSampleGGX(Xi, N, roughness);
 		vec3 L = normalize(2.0 * dot(H, V) * H - V);
 
@@ -106,8 +107,8 @@ void main() {
 		}
 	}
 
-	scale /= (float)SAMPLE_COUNT;
-	bias /= (float)SAMPLE_COUNT;
-	out_frag = vec2(scale, bias);
+	scale /= float(SAMPLE_COUNT);
+	bias /= float(SAMPLE_COUNT);
+	FragColor = vec2(scale, bias);
 
 }

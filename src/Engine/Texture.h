@@ -22,7 +22,7 @@ public:
 	void Delete() const;
 	std::string path;
 	std::string type;
-private:
 	unsigned int m_RendererID;
+private:
 	GLenum m_activeID;
 };

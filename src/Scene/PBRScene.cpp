@@ -52,7 +52,7 @@ static unsigned int specular_map_resolution = 128;
 
 
 // fresnel response integration
-static unsigned int brdf_tex;
+static unsigned int brdfLUTTexture;
 namespace Scene {
 
 	
@@ -68,7 +68,7 @@ namespace Scene {
         cube_shader("res/shaders/cube_map.shader"),
         irradiance_shader("res/shaders/irradiance_map.shader"),
         specular_shader("res/shaders/specular_map.shader"),
-        brdf_shader("res/shaders/specular_map.shader"),
+        brdf_shader("res/shaders/BRDF.shader"),
         quad_shader("res/shaders/quad_map.shader")
     {
         // Important gl attribute
@@ -172,73 +172,30 @@ namespace Scene {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         /////////////////////////////////////////////// Specular Map //////////////////////////////////
-        // pre-compute prefilter-specular map
+
         glGenTextures(1, &prefilterMap);
         glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
-        for (unsigned int i = 0; i < 6; ++i)
-        {
+        for (unsigned int i = 0; i < 6; ++i) {
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, specular_map_resolution, specular_map_resolution, 0, GL_RGB, GL_FLOAT, nullptr);
         }
+
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // be sure to set minification filter to mip_linear 
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // generate mipmaps for the cubemap so OpenGL automatically allocates the required memory.
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        // @NOTE(qiming): need to generate mipmaps for different roughness levels 
         glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
-        //glGenTextures(1, &prefilterMap);
-        //glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
-        //for (unsigned int i = 0; i < 6; ++i) {
-        //    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, specular_map_resolution, specular_map_resolution, 0, GL_RGB, GL_FLOAT, nullptr);
-        //}
-
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        //glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        //// @NOTE(qiming): need to generate mipmaps for different roughness levels 
-        //glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-
         specular_shader.Bind();
-        specular_shader.SetInt("environmentMap", 0);
-        specular_shader.SetMat4fv("projection", capture_projection);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env_cube_map);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFbo);
-        unsigned int maxMipLevels = 5;
-        for (unsigned int mip = 0; mip < maxMipLevels; ++mip)
-        {
-            // reisze framebuffer according to mip-level size.
-            unsigned int mipWidth = static_cast<unsigned int>(specular_map_resolution * std::pow(0.5, mip));
-            unsigned int mipHeight = static_cast<unsigned int>(specular_map_resolution * std::pow(0.5, mip));
-            glBindRenderbuffer(GL_RENDERBUFFER, captureRbo);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
-            glViewport(0, 0, mipWidth, mipHeight);
-
-            float roughness = (float)mip / (float)(maxMipLevels - 1);
-            specular_shader.SetFloat("roughness", roughness);
-            for (unsigned int i = 0; i < 6; ++i)
-            {
-                specular_shader.SetMat4fv("view", capture_view[i]);
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterMap, mip);
-
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                renderCube();
-            }
-        }
-
-       /* specular_shader.Bind();
         specular_shader.SetInt("environmentMap", 0);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, env_cube_map);
         specular_shader.SetMat4fv("projection", capture_projection);
         glBindFramebuffer(GL_FRAMEBUFFER, captureFbo);
         unsigned int mip_max_level = 5;
-        unsigned int mipWidth = specular_map_resolution;
-        unsigned int mipHeight = specular_map_resolution;
+        unsigned int mipWidth = specular_map_resolution * 2;
+        unsigned int mipHeight = specular_map_resolution * 2;
         for (unsigned int i = 0; i < mip_max_level; ++i) {
             mipWidth = static_cast<unsigned int>(mipWidth * 0.5f);
             mipHeight = static_cast<unsigned int>(mipHeight * 0.5f);
@@ -255,20 +212,20 @@ namespace Scene {
                 renderCube();
             }
 
-        }*/
-        glGenTextures(1,&brdf_tex);
-        glBindTexture(GL_TEXTURE_2D, brdf_tex);
+        }
+        glGenTextures(1,&brdfLUTTexture);
+        glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, capture_resolution, capture_resolution, 0, GL_RG, GL_FLOAT, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         glBindFramebuffer(GL_FRAMEBUFFER, captureFbo);
         glBindRenderbuffer(GL_RENDERBUFFER, captureRbo);
 
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, capture_resolution, capture_resolution);
-        glFramebufferTexture2D = (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdf_tex, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
 
         glViewport(0, 0, capture_resolution, capture_resolution);
         brdf_shader.Bind();
@@ -276,6 +233,32 @@ namespace Scene {
         // In Ndc
         renderQuad();
 
+
+        //glGenTextures(1, &brdfLUTTexture);
+
+        //// pre-allocate enough memory for the LUT texture.
+        //glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
+        //// be sure to set wrapping mode to GL_CLAMP_TO_EDGE
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        //// then re-configure capture framebuffer object and render screen-space quad with BRDF shader.
+        //glBindFramebuffer(GL_FRAMEBUFFER, captureFbo);
+        //glBindRenderbuffer(GL_RENDERBUFFER, captureRbo);
+        //glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
+
+        //glViewport(0, 0, 512, 512);
+        //brdf_shader.Bind();
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //renderQuad();
+
+        /// <summary>
+        /// ////////////////////////////////////////
+        /// </summary>
         glViewport(0, 0, Width, Height);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -296,6 +279,8 @@ namespace Scene {
         /*glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glFrontFace(GL_CCW);*/
+
+
         glDepthFunc(GL_LEQUAL);
 		gl_renderer.Clear();
 		pbrShader.Bind();
@@ -310,7 +295,7 @@ namespace Scene {
         glActiveTexture(GL_TEXTURE0 + 5);
         glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
         glActiveTexture(GL_TEXTURE0 + 6);
-        glBindTexture(GL_TEXTURE_2D, brdf_tex);
+        glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
 
 
         pbrShader.SetInt("use_tex", use_pbr_tex);
@@ -341,12 +326,12 @@ namespace Scene {
 		}
 
 
-		// render light source (simply re-render sphere at light positions)
-		// this looks a bit off as we use the same shader, but it'll make their positions obvious and 
-		// keeps the codeprint small.
+		 /*render light source (simply re-render sphere at light positions)
+		 this looks a bit off as we use the same shader, but it'll make their positions obvious and 
+		 keeps the codeprint small.
         
-        // Can send a bunch of vec3 to the gpu
-        //glUniform3fv(glGetUniformLocation(pbrShader.getID(), "lightPositions"), 4, &lightPositions[0][0]);
+         Can send a bunch of vec3 to the gpu*/
+        glUniform3fv(glGetUniformLocation(pbrShader.getID(), "lightPositions"), 4, &lightPositions[0][0]);
         pbrShader.Bind();
 		for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
 		{
@@ -371,11 +356,11 @@ namespace Scene {
         glBindTexture(GL_TEXTURE_CUBE_MAP, env_cube_map);
         renderCube();
 
-        quad_shader.Bind();
+        /*quad_shader.Bind();
         quad_shader.SetInt("brdf_map", 0);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, brdf_tex);
-        renderQuad();
+        glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
+        renderQuad();*/
         //glDisable(GL_CULL_FACE);
 	}
 	void PBRScene::OnImGuiRendering() {

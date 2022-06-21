@@ -211,40 +211,40 @@ void main() {
 	ambient = texture(irradiance_map, N).rgb * albedo * kd * ao;
 
 
-	vec3 prefilter_color = textureLod(prefilter_map, R, roughness * MAX_REFLECTION_LOD).rgb;
+	/*vec3 prefilter_color = textureLod(prefilter_map, R, roughness * MAX_REFLECTION_LOD).rgb;
 	vec2 brdf_value = texture(brdf_map, vec2(max(dot(N, V), 0.0), roughness)).rg;
 	vec3 specular_value = prefilter_color * F * brdf_value.x + brdf_value.y * prefilter_color;
 
-	ambient += specular_value * ao;
-	//// Will change this when learning IBL: image based lighting
-	//if (!use_irradiance_map) {
-	//	ambient = vec3(0.03) * albedo * ao;
-	//}
-	//else {
-	//	// indirect lighting contains both diffuse and specular
-	//	// thus we need to weigh ambient lighting with fresnelschlick equation
+	ambient += specular_value * ao;*/
+	// Will change this when learning IBL: image based lighting
+	if (!use_irradiance_map) {
+		ambient = vec3(0.03) * albedo * ao;
+	}
+	else {
+		// indirect lighting contains both diffuse and specular
+		// thus we need to weigh ambient lighting with fresnelschlick equation
 
-	//	// Could use the following fresnel for indirect lighting
-	//	// since no single half vector can determine the fresnel response
-	//	// reflective ratio will always be too high, thus we can inject
-	//	// a roughness term in it
-	//	// F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
-	//	
-	//	vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
-	//	vec3 ks = F;
-	//	vec3 kd = vec3(1.0) - ks;
-	//	kd *= (1.0 - metallic);
+		// Could use the following fresnel for indirect lighting
+		// since no single half vector can determine the fresnel response
+		// reflective ratio will always be too high, thus we can inject
+		// a roughness term in it
+		// F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+		
+		vec3 F = FresnelSchlickRoughness(max(dot(N, V), 0.0), F0, roughness);
+		vec3 ks = F;
+		vec3 kd = vec3(1.0) - ks;
+		kd *= (1.0 - metallic);
 
-	//	ambient = texture(irradiance_map, N).rgb * albedo * kd * ao;
+		ambient = texture(irradiance_map, N).rgb * albedo * kd * ao;
 
 
-	//	vec3 prefilter_color = textureLod(prefilter_map, R, roughness * MAX_REFLECTION_LOD).rgb;
-	//	vec2 brdf_value = texture(brdf_map, vec2(max(dot(N, V), 0.0), roughness)).rg;
-	//	vec3 specular_value = prefilter_color * F * brdf_value.x + brdf_value.y * prefilter_color;
+		vec3 prefilter_color = textureLod(prefilter_map, R, roughness * MAX_REFLECTION_LOD).rgb;
+		vec2 brdf_value = texture(brdf_map, vec2(max(dot(N, V), 0.0), roughness)).rg;
+		vec3 specular_value = prefilter_color * F * brdf_value.x + brdf_value.y * prefilter_color;
 
-	//	ambient += specular_value * ao;
+		ambient += specular_value * ao;
 
-	//}
+	}
 	
 
 	vec3 color = ambient + light_val;

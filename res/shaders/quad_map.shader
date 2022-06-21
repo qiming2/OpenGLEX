@@ -3,7 +3,7 @@
 layout(location = 0) in vec3 pos;
 layout(location = 1) in vec2 uv;
 
-out vec2 UVTexCoords;
+out vec2 TexCoords;
 
 void main() {
 	TexCoords = uv;
@@ -11,8 +11,8 @@ void main() {
 }
 
 #type - delim
-
-out vec2 FragColor;
+#version 330 core
+out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D brdf_map;
